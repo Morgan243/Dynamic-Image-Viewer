@@ -1,8 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+ #include <QtGui>
 #include <QMainWindow>
 #include <QFileSystemModel>
+#include <QSplitter>>
 //#include "imageviewer.h"
 class QAction;
 class QLabel;
@@ -21,7 +22,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void ShowPicture();
     
 private slots:
     void on_chkBx_FitToWindow_stateChanged(int arg1);
@@ -36,6 +36,8 @@ private slots:
 
     void on_listView_availImages_activated(const QModelIndex &index);
 
+    void openImage(QString fileName);
+
     void fitToWindow(bool fitToWindow);
 
     void normalSize();
@@ -46,16 +48,25 @@ private slots:
 
     double zoomOut();
 
-     void adjustScrollBar(QScrollBar *scrollBar, double factor);
+    void adjustScrollBar(QScrollBar *scrollBar, double factor);
+
+    void on_listView_availImages_clicked(const QModelIndex &index);
+
 private:
-    //ImageViewer imageviewer;
+    double scaleFactor;
+    QString imagePath;
+
     QFileSystemModel *dirModel;
     QFileSystemModel *fileModel;
 
-    //QLabel *label_imageView;
-   // QScrollArea *scrollArea;
+    //pointer to images as loaded
+    QGraphicsPixmapItem *item;
 
-    double scaleFactor;
+    //where images are shown
+    QGraphicsView *graphicsView_imageView;
+
+    QSplitter *splitter;
+
     Ui::MainWindow *ui;
 };
 

@@ -6,39 +6,30 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QString path = "/home/morgan/Documents/Pictures";
+    imagePath = "/home/morgan/Documents/Pictures";
     fileModel = new QFileSystemModel(this);
     fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files | QDir::AllDirs);
-    fileModel->setRootPath(path);
-
-    //ui->label_imageView = new QLabel;
-    ui->label_imageView->setBackgroundRole(QPalette::Base);
-    ui->label_imageView->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    //ui->label_imageView->setScaledContents(true);
-
-
-   // scrollArea = new QScrollArea;
-    ui->scrollArea_imageView->setBackgroundRole(QPalette::Dark);
-    //ui->scrollArea_imageView->setWidget(ui->label_imageView);
-    //ui->scrollArea_imageView->setWidgetResizable(true);
-    //setCentralWidget(ui->scrollArea_imageView);
-    //setWindowTitle("Morgan's Dynamic Image Viewer");
-    //ui->label_imageView->show();
-    //ui->scrollArea_imageView->show();
+    fileModel->setRootPath(imagePath);
 
     ui->listView_availImages->setModel(fileModel);
-    ui->listView_availImages->setRootIndex(fileModel->setRootPath(path));
+    ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
+
+    QGraphicsScene *scene = new QGraphicsScene();
+    graphicsView_imageView = new QGraphicsView(scene);
+    ui->horizontalLayout->addWidget(graphicsView_imageView);
+
+    //graphicsView_imageView->
+
+    splitter = new QSplitter();
+    splitter->addWidget(ui->groupBox_options);
+    splitter->addWidget(graphicsView_imageView);
+
+    setCentralWidget(splitter);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-void MainWindow::ShowPicture()
-{
-    //this->imageviewer.show();
-    ui->label_imageView->show();
 }
 
 void MainWindow::on_chkBx_FitToWindow_stateChanged(int arg1)
@@ -54,6 +45,7 @@ void MainWindow::on_chkBx_FitToWindow_stateChanged(int arg1)
 void MainWindow::on_pushBtn_ZoomIn_clicked()
 {
     ui->doubleSpinBx_scaleFactor->setValue(zoomIn());
+    //graphicsView_imageView->resize();
 }
 
 void MainWindow::on_pushBtn_ZoomOut_clicked()
@@ -67,17 +59,8 @@ void MainWindow::on_actionOpen_Image_triggered()
     QString fileName = QFileDialog::getOpenFileName(this,
                                     tr("Open File"), QDir::currentPath());
 
-    QImage image(fileName);
-    //imageLabel->setPixmap(QPixmap::fromImage(image));
-    ui->label_imageView->setPixmap(QPixmap::fromImage(image));
-    scaleFactor = 1.0;
-    fitToWindow(false);
 
-    ui->textBrowser_ImageInfo->setText(fileName);
-    ui->textBrowser_ImageInfo->append("GPS CoOrd:");
-    ui->textBrowser_ImageInfo->append("Time:");
-    ui->textBrowser_ImageInfo->append("Altitude:");
-
+    openImage(fileName);
 }
 
 void MainWindow::on_doubleSpinBx_scaleFactor_valueChanged(double arg1)
@@ -85,14 +68,31 @@ void MainWindow::on_doubleSpinBx_scaleFactor_valueChanged(double arg1)
     //imageviewer.setScale(arg1);
 }
 
-void MainWindow::on_listView_availImages_activated(const QModelIndex &index)
+void MainWindow::openImage(QString fileName)
 {
+    QImage image(fileName);
+    //imageLabel->setPixmap(QPixmap::fromImage(image));
+    //ui->label_imageView->setPixmap(QPixmap::fromImage(image));
+    scaleFactor = 1.0;
+    fitToWindow(false);
 
+    //is this a possible memory leak? (not freeing pointer memory)
+    item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
+
+    //ui->graphicsView_imageView->
+    graphicsView_imageView->scene()->clear();
+    graphicsView_imageView->scene()->addItem(item);
+    graphicsView_imageView->show();
+
+    ui->textBrowser_ImageInfo->setText(fileName);
+    ui->textBrowser_ImageInfo->append("GPS CoOrd:");
+    ui->textBrowser_ImageInfo->append("Time:");
+    ui->textBrowser_ImageInfo->append("Altitude:");
 }
 
 void MainWindow::fitToWindow(bool fitToWindow)
 {
-    ui->scrollArea_imageView->setWidgetResizable(fitToWindow);
+    //ui->scrollArea_imageView->setWidgetResizable(fitToWindow);
     if (!fitToWindow) {
         normalSize();
     }
@@ -100,7 +100,7 @@ void MainWindow::fitToWindow(bool fitToWindow)
 
 void MainWindow::normalSize()
 {
-    ui->label_imageView->adjustSize();
+    //ui->label_imageView->adjustSize();
     scaleFactor = 1.0;
 }
 
@@ -118,17 +118,25 @@ double MainWindow::zoomOut()
 
 void MainWindow::scaleImage(double factor)
 {
-    Q_ASSERT(ui->label_imageView->pixmap());
     scaleFactor *= factor;
-
-    ui->label_imageView->resize(scaleFactor * ui->label_imageView->pixmap()->size());
-
-    adjustScrollBar(ui->scrollArea_imageView->horizontalScrollBar(), factor);
-    adjustScrollBar(ui->scrollArea_imageView->verticalScrollBar(), factor);
+    graphicsView_imageView->scale(factor, factor);
 }
 
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 {
     scrollBar->setValue(int(factor * scrollBar->value()
                             + ((factor - 1) * scrollBar->pageStep()/2)));
+}
+
+void MainWindow::on_listView_availImages_activated(const QModelIndex &index)
+{
+    QString select = ui->listView_availImages->model()->index(0,0,index).data(Qt::DisplayRole).toString();
+    ui->textBrowser_imageInfo_priority->append(select);
+    ui->textBrowser_imageInfo_priority->append("hello");
+}
+
+void MainWindow::on_listView_availImages_clicked(const QModelIndex &index)
+{
+    QString select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
+    openImage(select);
 }

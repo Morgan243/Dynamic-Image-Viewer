@@ -7,8 +7,10 @@ int main(int argc, char *argv[])
  //  ImageViewer imageviewer;
 //   imageviewer.show();
     MainWindow w;
+
     w.show();
-    w.ShowPicture();
+
+    //w.ShowPicture();
 
     return a.exec();
 }
