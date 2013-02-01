@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>922</width>
-    <height>781</height>
+    <width>841</width>
+    <height>853</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,151 +32,108 @@
       <property name="title">
        <string>Options and Information</string>
       </property>
-      <widget class="QDoubleSpinBox" name="doubleSpinBx_scaleFactor">
-       <property name="geometry">
-        <rect>
-         <x>273</x>
-         <y>49</y>
-         <width>59</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.200000000000000</double>
-       </property>
-       <property name="value">
-        <double>1.000000000000000</double>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushBtn_ZoomOut">
-       <property name="geometry">
-        <rect>
-         <x>383</x>
-         <y>49</y>
-         <width>80</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Zoom Out</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_AvailableImages">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>80</y>
-         <width>109</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Available Images</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_priorityImages">
-       <property name="geometry">
-        <rect>
-         <x>460</x>
-         <y>80</y>
-         <width>96</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Priority Images</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushBtn_ZoomIn">
-       <property name="geometry">
-        <rect>
-         <x>142</x>
-         <y>49</y>
-         <width>80</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Zoom In</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="chkBx_FitToWindow">
-       <property name="geometry">
-        <rect>
-         <x>11</x>
-         <y>24</y>
-         <width>98</width>
-         <height>19</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Fit To Window</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushBtn_remove">
-       <property name="geometry">
-        <rect>
-         <x>280</x>
-         <y>260</y>
-         <width>91</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Remove</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushBtn_add">
-       <property name="geometry">
-        <rect>
-         <x>279</x>
-         <y>230</y>
-         <width>91</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Add</string>
-       </property>
-      </widget>
-      <widget class="QSplitter" name="splitter">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>98</y>
-         <width>256</width>
-         <height>611</height>
-        </rect>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <widget class="QListView" name="listView_availImages"/>
-       <widget class="QWidget" name="widget" native="true">
-        <widget class="QLabel" name="label_ImageInformation">
-         <property name="geometry">
-          <rect>
-           <x>70</x>
-           <y>0</y>
-           <width>117</width>
-           <height>16</height>
-          </rect>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="3">
+        <widget class="QPushButton" name="pushBtn_ZoomOut">
+         <property name="text">
+          <string>Zoom Out</string>
          </property>
+        </widget>
+       </item>
+       <item row="6" column="3" colspan="2">
+        <widget class="QTextBrowser" name="textBrowser_imageInfo_priority"/>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="label_AvailableImages">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Available Images</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QPushButton" name="pushBtn_add">
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" rowspan="2" colspan="2">
+        <widget class="QListView" name="listView_availImages">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>550</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="pushBtn_ZoomIn">
+         <property name="text">
+          <string>Zoom In</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="chkBx_FitToWindow">
+         <property name="text">
+          <string>Fit To Window</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3" rowspan="2" colspan="2">
+        <widget class="QListView" name="listView_priorityImages"/>
+       </item>
+       <item row="2" column="4">
+        <widget class="QLabel" name="label_priorityImages">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Priority Images</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3" colspan="2">
+        <widget class="QLabel" name="label_imageInfo_priority">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Image Information</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QDoubleSpinBox" name="doubleSpinBx_scaleFactor">
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.200000000000000</double>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QTextBrowser" name="textBrowser_ImageInfo"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_ImageInformation">
          <property name="font">
           <font>
            <weight>75</weight>
@@ -188,66 +145,36 @@
           <string>Image Information</string>
          </property>
         </widget>
-        <widget class="QTextBrowser" name="textBrowser_ImageInfo">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>21</y>
-           <width>256</width>
-           <height>231</height>
-          </rect>
-         </property>
-        </widget>
-       </widget>
-      </widget>
-      <widget class="QSplitter" name="splitter_2">
-       <property name="geometry">
-        <rect>
-         <x>380</x>
-         <y>100</y>
-         <width>256</width>
-         <height>611</height>
-        </rect>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <widget class="QListView" name="listView_priorityImages"/>
-       <widget class="QWidget" name="widget_2" native="true">
-        <widget class="QLabel" name="label_imageInfo_priority">
-         <property name="geometry">
-          <rect>
-           <x>70</x>
-           <y>0</y>
-           <width>117</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
+       </item>
+       <item row="4" column="2">
+        <widget class="QPushButton" name="pushBtn_remove">
          <property name="text">
-          <string>Image Information</string>
+          <string>Remove</string>
          </property>
         </widget>
-        <widget class="QTextBrowser" name="textBrowser_imageInfo_priority">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>20</y>
-           <width>261</width>
-           <height>192</height>
-          </rect>
-         </property>
-        </widget>
-        <zorder>label_imageInfo_priority</zorder>
-        <zorder>textBrowser_imageInfo_priority</zorder>
-        <zorder>listView_priorityImages</zorder>
-       </widget>
-      </widget>
+       </item>
+      </layout>
+      <zorder>splitter</zorder>
+      <zorder>doubleSpinBx_scaleFactor</zorder>
+      <zorder>pushBtn_ZoomOut</zorder>
+      <zorder>pushBtn_ZoomIn</zorder>
+      <zorder>chkBx_FitToWindow</zorder>
+      <zorder>splitter</zorder>
+      <zorder>label_AvailableImages</zorder>
+      <zorder>listView_priorityImages</zorder>
+      <zorder>pushBtn_remove</zorder>
+      <zorder>listView_availImages</zorder>
+      <zorder>label_priorityImages</zorder>
+      <zorder>pushBtn_add</zorder>
+      <zorder>label_AvailableImages</zorder>
+      <zorder>listView_priorityImages</zorder>
+      <zorder>listView_availImages</zorder>
+      <zorder>label_priorityImages</zorder>
+      <zorder>pushBtn_add</zorder>
+      <zorder>textBrowser_imageInfo_priority</zorder>
+      <zorder>textBrowser_ImageInfo</zorder>
+      <zorder>label_imageInfo_priority</zorder>
+      <zorder>label_ImageInformation</zorder>
      </widget>
     </item>
    </layout>
@@ -257,7 +184,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>922</width>
+     <width>841</width>
      <height>21</height>
     </rect>
    </property>
@@ -266,6 +193,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen_Image"/>
+    <addaction name="actionOpen_Directory"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -273,6 +201,11 @@
   <action name="actionOpen_Image">
    <property name="text">
     <string>Open Image</string>
+   </property>
+  </action>
+  <action name="actionOpen_Directory">
+   <property name="text">
+    <string>Open Directory</string>
    </property>
   </action>
  </widget>

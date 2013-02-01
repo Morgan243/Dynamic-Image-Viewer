@@ -52,6 +52,12 @@ private slots:
 
     void on_listView_availImages_clicked(const QModelIndex &index);
 
+    void on_actionOpen_Directory_triggered();
+
+    void on_pushBtn_add_clicked();
+
+    void on_pushBtn_remove_clicked();
+
 private:
     double scaleFactor;
     QString imagePath;
@@ -66,6 +72,8 @@ private:
     QGraphicsView *graphicsView_imageView;
 
     QSplitter *splitter;
+
+    QStandardItemModel *stdModel;
 
     Ui::MainWindow *ui;
 };

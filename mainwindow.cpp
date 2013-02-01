@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
     splitter->addWidget(ui->groupBox_options);
     splitter->addWidget(graphicsView_imageView);
 
+    stdModel = new QStandardItemModel(this);
+
     setCentralWidget(splitter);
 }
 
@@ -139,4 +141,32 @@ void MainWindow::on_listView_availImages_clicked(const QModelIndex &index)
 {
     QString select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
     openImage(select);
+}
+
+void MainWindow::on_actionOpen_Directory_triggered()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                "/home",
+                                                QFileDialog::ShowDirsOnly
+                                                | QFileDialog::DontResolveSymlinks);
+
+    imagePath = dir;
+    fileModel->setRootPath(imagePath);
+
+    ui->listView_availImages->setModel(fileModel);
+    ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
+}
+
+void MainWindow::on_pushBtn_add_clicked()
+{
+    QString select = ui->listView_availImages->currentIndex().data().toString();
+    QStandardItem* items = new QStandardItem(select);
+    stdModel->appendRow(items);
+    ui->listView_priorityImages->setModel(stdModel);
+}
+
+void MainWindow::on_pushBtn_remove_clicked()
+{
+    ui->listView_priorityImages->model()->removeRow(
+                ui->listView_priorityImages->currentIndex().row());
 }
