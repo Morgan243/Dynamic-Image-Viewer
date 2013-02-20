@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>841</width>
-    <height>853</height>
+    <width>880</width>
+    <height>820</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,32 +63,12 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0" rowspan="2" colspan="2">
-        <widget class="QListView" name="listView_availImages">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>550</height>
-          </size>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="1">
         <widget class="QPushButton" name="pushBtn_ZoomIn">
          <property name="text">
           <string>Zoom In</string>
          </property>
         </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="chkBx_FitToWindow">
-         <property name="text">
-          <string>Fit To Window</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3" rowspan="2" colspan="2">
-        <widget class="QListView" name="listView_priorityImages"/>
        </item>
        <item row="2" column="4">
         <widget class="QLabel" name="label_priorityImages">
@@ -153,19 +133,41 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="4">
+        <widget class="QCheckBox" name="chkBx_FitToWindow">
+         <property name="text">
+          <string>Fit To Window</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="chkBx_autSelectLatest">
+         <property name="text">
+          <string>Auto Select Latest</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3" rowspan="2" colspan="2">
+        <widget class="QListView" name="listView_priorityImages"/>
+       </item>
+       <item row="3" column="0" rowspan="2" colspan="2">
+        <widget class="QListView" name="listView_availImages">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>550</height>
+          </size>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+         </property>
+        </widget>
+       </item>
       </layout>
-      <zorder>splitter</zorder>
       <zorder>doubleSpinBx_scaleFactor</zorder>
       <zorder>pushBtn_ZoomOut</zorder>
       <zorder>pushBtn_ZoomIn</zorder>
-      <zorder>chkBx_FitToWindow</zorder>
-      <zorder>splitter</zorder>
-      <zorder>label_AvailableImages</zorder>
-      <zorder>listView_priorityImages</zorder>
       <zorder>pushBtn_remove</zorder>
-      <zorder>listView_availImages</zorder>
-      <zorder>label_priorityImages</zorder>
-      <zorder>pushBtn_add</zorder>
       <zorder>label_AvailableImages</zorder>
       <zorder>listView_priorityImages</zorder>
       <zorder>listView_availImages</zorder>
@@ -175,6 +177,8 @@
       <zorder>textBrowser_ImageInfo</zorder>
       <zorder>label_imageInfo_priority</zorder>
       <zorder>label_ImageInformation</zorder>
+      <zorder>chkBx_FitToWindow</zorder>
+      <zorder>chkBx_autSelectLatest</zorder>
      </widget>
     </item>
    </layout>
@@ -184,7 +188,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>841</width>
+     <width>880</width>
      <height>21</height>
     </rect>
    </property>

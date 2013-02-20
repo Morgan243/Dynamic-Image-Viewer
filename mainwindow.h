@@ -58,6 +58,10 @@ private slots:
 
     void on_pushBtn_remove_clicked();
 
+    void on_chkBx_autSelectLatest_stateChanged(int arg1);
+
+    void on_listView_availImages_indexesMoved(const QModelIndexList &indexes);
+
 private:
     double scaleFactor;
     QString imagePath;
@@ -70,6 +74,9 @@ private:
 
     //where images are shown
     QGraphicsView *graphicsView_imageView;
+
+    //selected index for available images
+    QModelIndex availImagesIndex;
 
     QSplitter *splitter;
 

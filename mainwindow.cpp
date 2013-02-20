@@ -26,7 +26,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     stdModel = new QStandardItemModel(this);
 
+
+
     setCentralWidget(splitter);
+
+    //availImagesIndex = ui->listView_availImages->rootIndex();
+    availImagesIndex = ui->listView_availImages->model()->index(0,0);
+    ui->listView_availImages->selectionModel()->setCurrentIndex(availImagesIndex,QItemSelectionModel::SelectCurrent);
 }
 
 MainWindow::~MainWindow()
@@ -68,6 +74,7 @@ void MainWindow::on_actionOpen_Image_triggered()
 void MainWindow::on_doubleSpinBx_scaleFactor_valueChanged(double arg1)
 {
     //imageviewer.setScale(arg1);
+    scaleImage(arg1/scaleFactor);
 }
 
 void MainWindow::openImage(QString fileName)
@@ -94,16 +101,15 @@ void MainWindow::openImage(QString fileName)
 
 void MainWindow::fitToWindow(bool fitToWindow)
 {
-    //ui->scrollArea_imageView->setWidgetResizable(fitToWindow);
-    if (!fitToWindow) {
+    if (!fitToWindow)
+    {
         normalSize();
     }
 }
 
 void MainWindow::normalSize()
 {
-    //ui->label_imageView->adjustSize();
-    scaleFactor = 1.0;
+    scaleImage(1.0/scaleFactor);
 }
 
 double MainWindow::zoomIn()
@@ -169,4 +175,30 @@ void MainWindow::on_pushBtn_remove_clicked()
 {
     ui->listView_priorityImages->model()->removeRow(
                 ui->listView_priorityImages->currentIndex().row());
+}
+
+void MainWindow::on_chkBx_autSelectLatest_stateChanged(int arg1)
+{
+    if(arg1)
+    {
+        //availImagesIndex = ui->listView_availImages->
+        //availImagesIndex = ui->listView_availImages->rootIndex();
+
+       // ui->listView_availImages->setCurrentIndex(availImagesIndex);
+         //ui->listView_availImages->setCurrentIndex();
+        //availImagesIndex = ui->listView_availImages->model()->index(0,0);
+        //ui->listView_availImages->setCurrentIndex(availImagesIndex);
+        ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
+        ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
+    }
+
+}
+
+void MainWindow::on_listView_availImages_indexesMoved(const QModelIndexList &indexes)
+{
+    //ui->listView_availImages->selectionModel()->selectedIndexes()
+
+    QString select = ui->listView_availImages->model()->index(0,0,indexes.first()).data(Qt::DisplayRole).toString();
+    ui->textBrowser_imageInfo_priority->append(select);
+    ui->textBrowser_imageInfo_priority->append("hello");
 }
