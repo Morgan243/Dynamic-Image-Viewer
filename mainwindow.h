@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QFileSystemModel>
 #include <QSplitter>>
+#include <qlistview.h>
 //#include "imageviewer.h"
 class QAction;
 class QLabel;
@@ -62,8 +63,14 @@ private slots:
 
     void on_listView_availImages_indexesMoved(const QModelIndexList &indexes);
 
+    void availImageList_selectionChange(const QItemSelection & selected, const QItemSelection & deselected);
+
+    void filesInserted(const QModelIndex & parent, int start, int end );
 private:
     double scaleFactor;
+    int imgWidth, imgHeight;
+    bool scaleToWindow;
+
     QString imagePath;
 
     QFileSystemModel *dirModel;
@@ -81,6 +88,8 @@ private:
     QSplitter *splitter;
 
     QStandardItemModel *stdModel;
+
+    QItemSelectionModel *availImg_sm;
 
     Ui::MainWindow *ui;
 };

@@ -29,10 +29,20 @@
         <height>16777215</height>
        </size>
       </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
       <property name="title">
        <string>Options and Information</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="4">
+        <widget class="QCheckBox" name="chkBx_FitToWindow">
+         <property name="text">
+          <string>Fit To Window</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="3">
         <widget class="QPushButton" name="pushBtn_ZoomOut">
          <property name="text">
@@ -41,7 +51,14 @@
         </widget>
        </item>
        <item row="6" column="3" colspan="2">
-        <widget class="QTextBrowser" name="textBrowser_imageInfo_priority"/>
+        <widget class="QTextBrowser" name="textBrowser_imageInfo_priority">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>150</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item row="2" column="0" colspan="2">
         <widget class="QLabel" name="label_AvailableImages">
@@ -109,8 +126,64 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="2">
+        <widget class="QPushButton" name="pushBtn_remove">
+         <property name="text">
+          <string>Remove</string>
+         </property>
+        </widget>
+       </item>
        <item row="6" column="0" colspan="2">
-        <widget class="QTextBrowser" name="textBrowser_ImageInfo"/>
+        <widget class="QTextBrowser" name="textBrowser_ImageInfo">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>150</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="chkBx_autSelectLatest">
+         <property name="text">
+          <string>Auto Select Latest</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3" rowspan="2" colspan="2">
+        <widget class="QListView" name="listView_priorityImages">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>450</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" rowspan="2" colspan="2">
+        <widget class="QListView" name="listView_availImages">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>450</height>
+          </size>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+         </property>
+        </widget>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="label_ImageInformation">
@@ -123,43 +196,6 @@
          </property>
          <property name="text">
           <string>Image Information</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QPushButton" name="pushBtn_remove">
-         <property name="text">
-          <string>Remove</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="4">
-        <widget class="QCheckBox" name="chkBx_FitToWindow">
-         <property name="text">
-          <string>Fit To Window</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="chkBx_autSelectLatest">
-         <property name="text">
-          <string>Auto Select Latest</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3" rowspan="2" colspan="2">
-        <widget class="QListView" name="listView_priorityImages"/>
-       </item>
-       <item row="3" column="0" rowspan="2" colspan="2">
-        <widget class="QListView" name="listView_availImages">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>550</height>
-          </size>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
          </property>
         </widget>
        </item>

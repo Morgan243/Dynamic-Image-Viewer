@@ -1,12 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
  #include <QtGui>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    imagePath = "/home/morgan/Documents/Pictures";
+    imagePath = "/home/morgan/Documents/Pictures/DynImgTest/WatchFolder";
     fileModel = new QFileSystemModel(this);
     fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files | QDir::AllDirs);
     fileModel->setRootPath(imagePath);
@@ -26,13 +27,28 @@ MainWindow::MainWindow(QWidget *parent) :
 
     stdModel = new QStandardItemModel(this);
 
-
+    scaleToWindow = false;
 
     setCentralWidget(splitter);
 
     //availImagesIndex = ui->listView_availImages->rootIndex();
     availImagesIndex = ui->listView_availImages->model()->index(0,0);
     ui->listView_availImages->selectionModel()->setCurrentIndex(availImagesIndex,QItemSelectionModel::SelectCurrent);
+    int something = -1;
+
+    availImg_sm = ui->listView_availImages->selectionModel();
+    connect(availImg_sm,SIGNAL(selectionChanged(const QItemSelection & , const QItemSelection & )),this, SLOT(availImageList_selectionChange(const QItemSelection & , const QItemSelection & )));
+
+    bool isConnect = connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(filesInserted(QModelIndex,int,int)));
+
+    if(isConnect)
+    {
+        something = 0;
+    }
+    else
+    {
+        something =1;
+    }
 }
 
 MainWindow::~MainWindow()
@@ -43,11 +59,15 @@ MainWindow::~MainWindow()
 void MainWindow::on_chkBx_FitToWindow_stateChanged(int arg1)
 {
     if(arg1)
+    {
         fitToWindow(true);
      //imageviewer.fitToWindow(true);
+    }
     else
+    {
         fitToWindow(false);
      //imageviewer.fitToWindow(false);
+    }
 }
 
 void MainWindow::on_pushBtn_ZoomIn_clicked()
@@ -88,6 +108,9 @@ void MainWindow::openImage(QString fileName)
     //is this a possible memory leak? (not freeing pointer memory)
     item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
 
+    imgWidth = image.width();
+    imgHeight = image.height();
+
     //ui->graphicsView_imageView->
     graphicsView_imageView->scene()->clear();
     graphicsView_imageView->scene()->addItem(item);
@@ -101,9 +124,32 @@ void MainWindow::openImage(QString fileName)
 
 void MainWindow::fitToWindow(bool fitToWindow)
 {
+    scaleToWindow = fitToWindow;
+
     if (!fitToWindow)
     {
         normalSize();
+    }
+    else
+    {
+        normalSize();
+        QRect geometry = graphicsView_imageView->geometry();
+        float imgRatio = (float)imgWidth/(float)imgHeight;
+        float viewRatio = (float)geometry.width()/(float)geometry.height();
+        double tmpFactor = 0.0;
+        if(imgRatio<viewRatio)
+        {
+            //scale to the height
+            tmpFactor = (double)geometry.height()/(double)imgHeight;
+            scaleImage(tmpFactor/scaleFactor);
+        }
+        else
+        {
+            //scale to the width
+            tmpFactor = (double)geometry.width()/(double)imgWidth;
+            scaleImage(tmpFactor/scaleFactor);
+        }
+
     }
 }
 
@@ -201,4 +247,16 @@ void MainWindow::on_listView_availImages_indexesMoved(const QModelIndexList &ind
     QString select = ui->listView_availImages->model()->index(0,0,indexes.first()).data(Qt::DisplayRole).toString();
     ui->textBrowser_imageInfo_priority->append(select);
     ui->textBrowser_imageInfo_priority->append("hello");
+}
+
+void MainWindow::availImageList_selectionChange(const QItemSelection & selected, const QItemSelection & deselected)
+{
+    QString select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
+    openImage(select);
+}
+
+void MainWindow::filesInserted(const QModelIndex &parent, int start, int end)
+{
+    ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
+    ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
 }
