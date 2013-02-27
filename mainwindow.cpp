@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    imgLoaded = false;
     ui->setupUi(this);
     imagePath = "/home/morgan/Documents/Pictures/DynImgTest/WatchFolder";
     fileModel = new QFileSystemModel(this);
@@ -19,8 +20,6 @@ MainWindow::MainWindow(QWidget *parent) :
     graphicsView_imageView = new QGraphicsView(scene);
     ui->horizontalLayout->addWidget(graphicsView_imageView);
 
-    //graphicsView_imageView->
-
     splitter = new QSplitter();
     splitter->addWidget(ui->groupBox_options);
     splitter->addWidget(graphicsView_imageView);
@@ -28,10 +27,10 @@ MainWindow::MainWindow(QWidget *parent) :
     stdModel = new QStandardItemModel(this);
 
     scaleToWindow = false;
+    scaleFactor = 1.0;
 
     setCentralWidget(splitter);
 
-    //availImagesIndex = ui->listView_availImages->rootIndex();
     availImagesIndex = ui->listView_availImages->model()->index(0,0);
     ui->listView_availImages->selectionModel()->setCurrentIndex(availImagesIndex,QItemSelectionModel::SelectCurrent);
     int something = -1;
@@ -56,16 +55,39 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+
+void MainWindow::on_chkBx_autSelectLatest_stateChanged(int arg1)
+{
+    if(arg1)
+    {
+        //availImagesIndex = ui->listView_availImages->
+        //availImagesIndex = ui->listView_availImages->rootIndex();
+
+       // ui->listView_availImages->setCurrentIndex(availImagesIndex);
+         //ui->listView_availImages->setCurrentIndex();
+        //availImagesIndex = ui->listView_availImages->model()->index(0,0);
+        //ui->listView_availImages->setCurrentIndex(availImagesIndex);
+        ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
+        ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
+    }
+
+}
+
 void MainWindow::on_chkBx_FitToWindow_stateChanged(int arg1)
 {
     if(arg1)
     {
-        fitToWindow(true);
+        if(imgLoaded)
+            fitToWindow(true);
+        scaleToWindow = true;
      //imageviewer.fitToWindow(true);
     }
     else
     {
-        fitToWindow(false);
+        if(imgLoaded)
+            fitToWindow(false);
+        scaleToWindow = true;
      //imageviewer.fitToWindow(false);
     }
 }
@@ -102,8 +124,9 @@ void MainWindow::openImage(QString fileName)
     QImage image(fileName);
     //imageLabel->setPixmap(QPixmap::fromImage(image));
     //ui->label_imageView->setPixmap(QPixmap::fromImage(image));
-    scaleFactor = 1.0;
-    fitToWindow(false);
+    //scaleFactor = 1.0;
+    imgLoaded = true;
+
 
     //is this a possible memory leak? (not freeing pointer memory)
     item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
@@ -111,11 +134,10 @@ void MainWindow::openImage(QString fileName)
     imgWidth = image.width();
     imgHeight = image.height();
 
-    //ui->graphicsView_imageView->
     graphicsView_imageView->scene()->clear();
     graphicsView_imageView->scene()->addItem(item);
     graphicsView_imageView->show();
-
+    fitToWindow(scaleToWindow);
     ui->textBrowser_ImageInfo->setText(fileName);
     ui->textBrowser_ImageInfo->append("GPS CoOrd:");
     ui->textBrowser_ImageInfo->append("Time:");
@@ -125,7 +147,14 @@ void MainWindow::openImage(QString fileName)
 void MainWindow::fitToWindow(bool fitToWindow)
 {
     scaleToWindow = fitToWindow;
+    //QRect geometry = graphicsView_imageView->geometry();
+    if(fitToWindow)
+    {
+        graphicsView_imageView->fitInView(0,0, imgWidth, imgHeight);
+        //graphicsView_imageView->ensureVisible(0,0,imgWidth,imgHeight,0,0);
+    }
 
+#if 0
     if (!fitToWindow)
     {
         normalSize();
@@ -133,10 +162,11 @@ void MainWindow::fitToWindow(bool fitToWindow)
     else
     {
         normalSize();
-        QRect geometry = graphicsView_imageView->geometry();
+
         float imgRatio = (float)imgWidth/(float)imgHeight;
         float viewRatio = (float)geometry.width()/(float)geometry.height();
         double tmpFactor = 0.0;
+
         if(imgRatio<viewRatio)
         {
             //scale to the height
@@ -149,8 +179,14 @@ void MainWindow::fitToWindow(bool fitToWindow)
             tmpFactor = (double)geometry.width()/(double)imgWidth;
             scaleImage(tmpFactor/scaleFactor);
         }
+       //graphicsView_imageView->adjustSize();
 
     }
+#endif
+    //graphicsView_imageView->ensureVisible(item,50,50);
+    //graphicsView_imageView->setSceneRect(0,0, geometry.width(), geometry.height());
+
+    //graphicsView_imageView->scroll(-10000, -10000);
 }
 
 void MainWindow::normalSize()
@@ -191,8 +227,8 @@ void MainWindow::on_listView_availImages_activated(const QModelIndex &index)
 
 void MainWindow::on_listView_availImages_clicked(const QModelIndex &index)
 {
-    QString select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
-    openImage(select);
+   // QString select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
+    //openImage(select);
 }
 
 void MainWindow::on_actionOpen_Directory_triggered()
@@ -223,30 +259,13 @@ void MainWindow::on_pushBtn_remove_clicked()
                 ui->listView_priorityImages->currentIndex().row());
 }
 
-void MainWindow::on_chkBx_autSelectLatest_stateChanged(int arg1)
-{
-    if(arg1)
-    {
-        //availImagesIndex = ui->listView_availImages->
-        //availImagesIndex = ui->listView_availImages->rootIndex();
-
-       // ui->listView_availImages->setCurrentIndex(availImagesIndex);
-         //ui->listView_availImages->setCurrentIndex();
-        //availImagesIndex = ui->listView_availImages->model()->index(0,0);
-        //ui->listView_availImages->setCurrentIndex(availImagesIndex);
-        ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
-        ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
-    }
-
-}
-
 void MainWindow::on_listView_availImages_indexesMoved(const QModelIndexList &indexes)
 {
     //ui->listView_availImages->selectionModel()->selectedIndexes()
 
     QString select = ui->listView_availImages->model()->index(0,0,indexes.first()).data(Qt::DisplayRole).toString();
     ui->textBrowser_imageInfo_priority->append(select);
-    ui->textBrowser_imageInfo_priority->append("hello");
+
 }
 
 void MainWindow::availImageList_selectionChange(const QItemSelection & selected, const QItemSelection & deselected)

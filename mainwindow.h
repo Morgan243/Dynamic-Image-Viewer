@@ -69,7 +69,7 @@ private slots:
 private:
     double scaleFactor;
     int imgWidth, imgHeight;
-    bool scaleToWindow;
+    bool scaleToWindow, imgLoaded;
 
     QString imagePath;
 
