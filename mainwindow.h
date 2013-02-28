@@ -1,11 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
- #include <QtGui>
+#include <QtGui>
 #include <QMainWindow>
 #include <QFileSystemModel>
-#include <QSplitter>>
+#include <QSplitter>
 #include <qlistview.h>
-//#include "imageviewer.h"
 class QAction;
 class QLabel;
 class QMenu;
@@ -51,7 +50,7 @@ private slots:
 
     void adjustScrollBar(QScrollBar *scrollBar, double factor);
 
-    void on_listView_availImages_clicked(const QModelIndex &index);
+
 
     void on_actionOpen_Directory_triggered();
 
@@ -66,6 +65,10 @@ private slots:
     void availImageList_selectionChange(const QItemSelection & selected, const QItemSelection & deselected);
 
     void filesInserted(const QModelIndex & parent, int start, int end );
+
+    void splitterResize(int pos, int index);
+
+    void resizeEvent(QResizeEvent *);
 private:
     double scaleFactor;
     int imgWidth, imgHeight;

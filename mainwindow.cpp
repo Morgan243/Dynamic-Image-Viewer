@@ -6,48 +6,53 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    //easy way to keep things from happening until an image is loaded
     imgLoaded = false;
     ui->setupUi(this);
+
+    //Set up the file model for the directory view (avail images)
     imagePath = "/home/morgan/Documents/Pictures/DynImgTest/WatchFolder";
     fileModel = new QFileSystemModel(this);
     fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files | QDir::AllDirs);
     fileModel->setRootPath(imagePath);
 
+    //make the filemodel the available images listview's base model
     ui->listView_availImages->setModel(fileModel);
     ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
 
+    //Create graphics scene (where images are shown)
     QGraphicsScene *scene = new QGraphicsScene();
     graphicsView_imageView = new QGraphicsView(scene);
+
+    //add the graphics view to the layout
     ui->horizontalLayout->addWidget(graphicsView_imageView);
 
+    //add a splitter between the ui and the image
     splitter = new QSplitter();
     splitter->addWidget(ui->groupBox_options);
     splitter->addWidget(graphicsView_imageView);
+
+    connect(splitter, SIGNAL(splitterMoved(int,int)), this, SLOT(splitterResize(int,int)));
 
     stdModel = new QStandardItemModel(this);
 
     scaleToWindow = false;
     scaleFactor = 1.0;
 
+    //do this or nothing shows up!
     setCentralWidget(splitter);
 
-    availImagesIndex = ui->listView_availImages->model()->index(0,0);
-    ui->listView_availImages->selectionModel()->setCurrentIndex(availImagesIndex,QItemSelectionModel::SelectCurrent);
-    int something = -1;
+    //not sure what this was for....
+    //availImagesIndex = ui->listView_availImages->model()->index(0,0);
+    //ui->listView_availImages->selectionModel()->setCurrentIndex(availImagesIndex,QItemSelectionModel::SelectCurrent);
 
+    //set up a selection model to be able to alter list view selection programmatically
     availImg_sm = ui->listView_availImages->selectionModel();
     connect(availImg_sm,SIGNAL(selectionChanged(const QItemSelection & , const QItemSelection & )),this, SLOT(availImageList_selectionChange(const QItemSelection & , const QItemSelection & )));
 
-    bool isConnect = connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(filesInserted(QModelIndex,int,int)));
+    //connect rowsInserted signal to the filesInserted slot
+    connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(filesInserted(QModelIndex,int,int)));
 
-    if(isConnect)
-    {
-        something = 0;
-    }
-    else
-    {
-        something =1;
-    }
 }
 
 MainWindow::~MainWindow()
@@ -56,18 +61,12 @@ MainWindow::~MainWindow()
 }
 
 
-
 void MainWindow::on_chkBx_autSelectLatest_stateChanged(int arg1)
 {
+    //if the box is checked
     if(arg1)
     {
-        //availImagesIndex = ui->listView_availImages->
-        //availImagesIndex = ui->listView_availImages->rootIndex();
-
-       // ui->listView_availImages->setCurrentIndex(availImagesIndex);
-         //ui->listView_availImages->setCurrentIndex();
-        //availImagesIndex = ui->listView_availImages->model()->index(0,0);
-        //ui->listView_availImages->setCurrentIndex(availImagesIndex);
+        //select the top item in the list
         ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
         ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
     }
@@ -76,26 +75,27 @@ void MainWindow::on_chkBx_autSelectLatest_stateChanged(int arg1)
 
 void MainWindow::on_chkBx_FitToWindow_stateChanged(int arg1)
 {
+    //if checked
     if(arg1)
     {
         if(imgLoaded)
             fitToWindow(true);
+
         scaleToWindow = true;
-     //imageviewer.fitToWindow(true);
     }
+    //else, not checked
     else
     {
         if(imgLoaded)
             fitToWindow(false);
+
         scaleToWindow = true;
-     //imageviewer.fitToWindow(false);
     }
 }
 
 void MainWindow::on_pushBtn_ZoomIn_clicked()
 {
     ui->doubleSpinBx_scaleFactor->setValue(zoomIn());
-    //graphicsView_imageView->resize();
 }
 
 void MainWindow::on_pushBtn_ZoomOut_clicked()
@@ -105,39 +105,42 @@ void MainWindow::on_pushBtn_ZoomOut_clicked()
 
 void MainWindow::on_actionOpen_Image_triggered()
 {
-    //QString imageName = imageviewer.open();
+    //open of a file selection dialog
     QString fileName = QFileDialog::getOpenFileName(this,
                                     tr("Open File"), QDir::currentPath());
 
-
+    //open the image
     openImage(fileName);
 }
 
 void MainWindow::on_doubleSpinBx_scaleFactor_valueChanged(double arg1)
 {
-    //imageviewer.setScale(arg1);
+    //scale to the spin box value
     scaleImage(arg1/scaleFactor);
 }
 
 void MainWindow::openImage(QString fileName)
 {
     QImage image(fileName);
-    //imageLabel->setPixmap(QPixmap::fromImage(image));
-    //ui->label_imageView->setPixmap(QPixmap::fromImage(image));
-    //scaleFactor = 1.0;
-    imgLoaded = true;
 
+    imgLoaded = true;
 
     //is this a possible memory leak? (not freeing pointer memory)
     item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
 
+    //for quick access
     imgWidth = image.width();
     imgHeight = image.height();
 
+    //clear the scene, add the image, and show it
     graphicsView_imageView->scene()->clear();
     graphicsView_imageView->scene()->addItem(item);
     graphicsView_imageView->show();
+
+    //scale window if needed
     fitToWindow(scaleToWindow);
+
+    //show some example text in the text box
     ui->textBrowser_ImageInfo->setText(fileName);
     ui->textBrowser_ImageInfo->append("GPS CoOrd:");
     ui->textBrowser_ImageInfo->append("Time:");
@@ -225,11 +228,7 @@ void MainWindow::on_listView_availImages_activated(const QModelIndex &index)
     ui->textBrowser_imageInfo_priority->append("hello");
 }
 
-void MainWindow::on_listView_availImages_clicked(const QModelIndex &index)
-{
-   // QString select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
-    //openImage(select);
-}
+
 
 void MainWindow::on_actionOpen_Directory_triggered()
 {
@@ -278,4 +277,14 @@ void MainWindow::filesInserted(const QModelIndex &parent, int start, int end)
 {
     ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
     ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
+}
+
+void MainWindow::splitterResize(int pos, int index)
+{
+    fitToWindow(scaleToWindow);
+}
+
+void MainWindow::resizeEvent(QResizeEvent *)
+{
+    fitToWindow(scaleToWindow);
 }
