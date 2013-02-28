@@ -69,6 +69,8 @@ private slots:
     void splitterResize(int pos, int index);
 
     void resizeEvent(QResizeEvent *);
+    void on_chkBox_reverseSort_stateChanged(int arg1);
+
 private:
     double scaleFactor;
     int imgWidth, imgHeight;

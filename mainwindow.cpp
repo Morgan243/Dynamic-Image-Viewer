@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files | QDir::AllDirs);
     fileModel->setRootPath(imagePath);
 
+
+
     //make the filemodel the available images listview's base model
     ui->listView_availImages->setModel(fileModel);
     ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
@@ -287,4 +289,12 @@ void MainWindow::splitterResize(int pos, int index)
 void MainWindow::resizeEvent(QResizeEvent *)
 {
     fitToWindow(scaleToWindow);
+}
+
+void MainWindow::on_chkBox_reverseSort_stateChanged(int arg1)
+{
+    if(arg1)
+        fileModel->sort(0,Qt::DescendingOrder);
+    else
+        fileModel->sort(0,Qt::AscendingOrder);
 }
