@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>850</width>
-    <height>720</height>
+    <width>767</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -162,22 +162,6 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="3" rowspan="2" colspan="2">
-        <widget class="QListView" name="listView_priorityImages">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>450</height>
-          </size>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="0" rowspan="2" colspan="2">
         <widget class="QListView" name="listView_availImages">
          <property name="sizePolicy">
@@ -189,7 +173,7 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>450</height>
+           <height>350</height>
           </size>
          </property>
          <property name="editTriggers">
@@ -211,6 +195,29 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="3" rowspan="2" colspan="2">
+        <widget class="QListView" name="listView_priorityImages">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>350</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QCheckBox" name="chkBox_reverseSort">
+         <property name="text">
+          <string>Reverse Listing</string>
+         </property>
+        </widget>
+       </item>
       </layout>
       <zorder>doubleSpinBx_scaleFactor</zorder>
       <zorder>pushBtn_ZoomOut</zorder>
@@ -227,6 +234,7 @@
       <zorder>label_ImageInformation</zorder>
       <zorder>chkBx_FitToWindow</zorder>
       <zorder>chkBx_autSelectLatest</zorder>
+      <zorder>chkBox_reverseSort</zorder>
      </widget>
     </item>
    </layout>
@@ -236,8 +244,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>850</width>
-     <height>21</height>
+     <width>767</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
