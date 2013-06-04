@@ -5,6 +5,7 @@
 #include <QFileSystemModel>
 #include <QSplitter>
 #include <qlistview.h>
+#include <QtXml/QXmlStreamReader>
 class QAction;
 class QLabel;
 class QMenu;
@@ -97,6 +98,8 @@ private:
     QItemSelectionModel *availImg_sm;
 
     Ui::MainWindow *ui;
+
+
 };
 
 #endif // MAINWINDOW_H
