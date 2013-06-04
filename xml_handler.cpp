@@ -10,6 +10,8 @@ xml_Handler::xml_Handler(QString config_path)
     : config_domDoc("ConfigML")
 {
 
+    printf("Creating XML handler...\n");
+
     //load file into DOM
     if(!file_into_DOM(config_domDoc, config_path))
     {

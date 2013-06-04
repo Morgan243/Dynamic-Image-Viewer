@@ -1,7 +1,7 @@
 #ifndef XML_HANDLER_H
 #define XML_HANDLER_H
 #include <QFileSystemModel>
-#include <QtXml/QXmlStreamReader>
+//#include <QtXml/QXmlStreamReader>
 #include <QDomDocument>
 
 struct Configuration

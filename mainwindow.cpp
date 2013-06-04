@@ -4,19 +4,20 @@
  #include <QtGui>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    xmlHandler("div_config")
 {
     //easy way to keep things from happening until an image is loaded
     imgLoaded = false;
     ui->setupUi(this);
+
+
 
     //Set up the file model for the directory view (avail images)
     imagePath = "/home/morgan/Documents/Pictures/DynImgTest/WatchFolder";
     fileModel = new QFileSystemModel(this);
     fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files | QDir::AllDirs);
     fileModel->setRootPath(imagePath);
-
-
 
     //make the filemodel the available images listview's base model
     ui->listView_availImages->setModel(fileModel);
