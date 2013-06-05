@@ -5,13 +5,13 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    xmlHandler("div_config")
+    config_parser("div_config.xml")
 {
     //easy way to keep things from happening until an image is loaded
     imgLoaded = false;
     ui->setupUi(this);
 
-
+    config_parser.ParseConfig();
 
     //Set up the file model for the directory view (avail images)
     imagePath = "/home/morgan/Documents/Pictures/DynImgTest/WatchFolder";
@@ -230,8 +230,6 @@ void MainWindow::on_listView_availImages_activated(const QModelIndex &index)
     ui->textBrowser_imageInfo_priority->append(select);
     ui->textBrowser_imageInfo_priority->append("hello");
 }
-
-
 
 void MainWindow::on_actionOpen_Directory_triggered()
 {

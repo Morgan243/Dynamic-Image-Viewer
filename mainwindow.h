@@ -9,7 +9,8 @@
 #include <QGraphicsPixmapItem>
 #include <QScrollBar>
 #include <qlistview.h>
-#include "xml_handler.h"
+#include "config_parser.h"
+//#include "xml_handler.h"
 
 class QAction;
 class QLabel;
@@ -104,7 +105,7 @@ private:
 
     Ui::MainWindow *ui;
 
-    xml_Handler xmlHandler;
+    Config_Parser config_parser;
 };
 
 #endif // MAINWINDOW_H
