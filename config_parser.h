@@ -33,9 +33,9 @@ class Config_Parser : public xml_Handler
 private:
     Configuration config;
 
-    void Parse_watchDir();
-    void Parse_priorityDir();
-    void Parse_options();
+    void Parse_watchDir(QDomElement docElem);
+    void Parse_priorityDir(QDomElement docElem);
+    void Parse_options(QDomElement docElem);
 public:
 
     Config_Parser();

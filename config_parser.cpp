@@ -29,6 +29,15 @@ Configuration Config_Parser::ParseConfig()
 {
     QDomElement docElem = domDoc.documentElement();
 
+    Parse_watchDir(docElem);
+
+    Parse_priorityDir(docElem);
+
+    return config;
+}
+
+void Config_Parser::Parse_watchDir(QDomElement docElem)
+{
     QDomNodeList watchDir_list = docElem.elementsByTagName("watchDir");
 
     for(int i = 0; i < watchDir_list.count(); i++)
@@ -51,6 +60,30 @@ Configuration Config_Parser::ParseConfig()
             entries = entries.nextSibling();
         }
     }
+}
 
-    return config;
+void Config_Parser::Parse_priorityDir(QDomElement docElem)
+{
+    QDomNodeList watchDir_list = docElem.elementsByTagName("priorityDir");
+
+    for(int i = 0; i < watchDir_list.count(); i++)
+    {
+        QDomElement el = watchDir_list.at(i).toElement();
+        //docElem = watchDir_list.at(i).toElement();
+
+        QDomNode entries = el.firstChild();
+
+        while(!entries.isNull())
+        {
+            QDomElement peData = entries.toElement();
+            QString tagName = peData.tagName();
+
+            if(tagName == "path")
+            {
+                config.priority_dir.push_back(peData.text());
+                std::cout<<"New Priority Dir: "<<qPrintable(config.priority_dir.back())<<std::endl;
+            }
+            entries = entries.nextSibling();
+        }
+    }
 }
