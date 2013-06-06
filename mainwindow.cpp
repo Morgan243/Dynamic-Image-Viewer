@@ -11,12 +11,20 @@ MainWindow::MainWindow(QWidget *parent) :
     imgLoaded = false;
     ui->setupUi(this);
 
-    config_parser.ParseConfig();
+    main_config = config_parser.ParseConfig();
+
+    ui->label_AvailableImages
+            ->setToolTip("Path:" + main_config.watch_dir.at(0));
+    ui->label_priorityImages->setToolTip("hello");
+
+    //path for the watch directory (just first watchDir in xml)
+    imagePath = main_config.watch_dir.at(0);
 
     //Set up the file model for the directory view (avail images)
-    imagePath = "/home/morgan/Documents/Pictures/DynImgTest/WatchFolder";
     fileModel = new QFileSystemModel(this);
     fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files | QDir::AllDirs);
+
+
     fileModel->setRootPath(imagePath);
 
     //make the filemodel the available images listview's base model

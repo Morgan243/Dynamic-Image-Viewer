@@ -105,6 +105,8 @@ private:
 
     Ui::MainWindow *ui;
 
+    Configuration main_config;
+
     Config_Parser config_parser;
 };
 
