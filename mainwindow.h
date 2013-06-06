@@ -3,9 +3,15 @@
 #include <QtGui>
 #include <QMainWindow>
 #include <QFileSystemModel>
+#include <QFileDialog>
 #include <QSplitter>
+#include <QGraphicsView>
+#include <QGraphicsPixmapItem>
+#include <QScrollBar>
 #include <qlistview.h>
-#include <QtXml/QXmlStreamReader>
+#include "config_parser.h"
+//#include "xml_handler.h"
+
 class QAction;
 class QLabel;
 class QMenu;
@@ -99,7 +105,7 @@ private:
 
     Ui::MainWindow *ui;
 
-
+    Config_Parser config_parser;
 };
 
 #endif // MAINWINDOW_H
