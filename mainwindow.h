@@ -32,6 +32,8 @@ public:
     
 private slots:
 
+    void load_config();
+
     //general methods: UI and basic options
     void adjustScrollBar(QScrollBar *scrollBar, double factor);
 
@@ -68,7 +70,6 @@ private slots:
     void on_actionOpen_Image_triggered();
 
     void on_doubleSpinBx_scaleFactor_valueChanged(double arg1);
-
 
     void openImage(QString fileName);
 

@@ -16,10 +16,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     xml_handler.cpp \
-    config_parser.cpp
+    config_parser.cpp \
+    image_analyzer.cpp
 
 HEADERS  += mainwindow.h \
     xml_handler.h \
-    config_parser.h
+    config_parser.h \
+    image_analyzer.h
 
 FORMS    += mainwindow.ui
