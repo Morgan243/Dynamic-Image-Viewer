@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     config_parser("div_config.xml")
 {
     //easy way to keep things from happening until an image is loaded
-    imgLoaded = false;
+    //imageView->imgLoaded = false;
     ui->setupUi(this);
 
     load_config();
@@ -38,8 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     stdModel = new QStandardItemModel(this);
 
-    scaleToWindow = false;
-    scaleFactor = 1.0;
+    //scaleToWindow = false;
+    //scaleFactor = 1.0;
 
     //do this or nothing shows up!
     setCentralWidget(splitter);
@@ -94,29 +94,29 @@ void MainWindow::on_chkBx_FitToWindow_stateChanged(int arg1)
     //if checked
     if(arg1)
     {
-        if(imgLoaded)
-            fitToWindow(true);
+        if(imageView->imgLoaded)
+            imageView->fitToWindow(true);
 
-        scaleToWindow = true;
+            imageView->scaleToWindow = true;
     }
     //else, not checked
     else
     {
-        if(imgLoaded)
-            fitToWindow(false);
+        if(imageView->imgLoaded)
+           imageView->fitToWindow(false);
 
-        scaleToWindow = true;
+        imageView->scaleToWindow = true;
     }
 }
 
 void MainWindow::on_pushBtn_ZoomIn_clicked()
 {
-    ui->doubleSpinBx_scaleFactor->setValue(zoomIn());
+    ui->doubleSpinBx_scaleFactor->setValue(imageView->zoomIn());
 }
 
 void MainWindow::on_pushBtn_ZoomOut_clicked()
 {
-    ui->doubleSpinBx_scaleFactor->setValue(zoomOut());
+    ui->doubleSpinBx_scaleFactor->setValue(imageView->zoomOut());
 }
 
 void MainWindow::on_actionOpen_Image_triggered()
@@ -126,109 +126,15 @@ void MainWindow::on_actionOpen_Image_triggered()
                                     tr("Open File"), QDir::currentPath());
 
     //open the image
-    openImage(fileName);
+    imageView->openImage(fileName);
 }
 
 void MainWindow::on_doubleSpinBx_scaleFactor_valueChanged(double arg1)
 {
     //scale to the spin box value
-    scaleImage(arg1/scaleFactor);
+    imageView->scaleImage(arg1/imageView->scaleFactor);
 }
 
-void MainWindow::openImage(QString fileName)
-{
-    QImage image(fileName);
-
-    imgLoaded = true;
-
-    //is this a possible memory leak? (not freeing pointer memory)
-    item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
-
-    //for quick access
-    imgWidth = image.width();
-    imgHeight = image.height();
-
-    //clear the scene, add the image, and show it
-    imageView->scene()->clear();
-    imageView->scene()->addItem(item);
-    imageView->show();
-
-    //scale window if needed
-    fitToWindow(scaleToWindow);
-
-    //show some example text in the text box
-    ui->textBrowser_ImageInfo->setText(fileName);
-    ui->textBrowser_ImageInfo->append("GPS CoOrd:");
-    ui->textBrowser_ImageInfo->append("Time:");
-    ui->textBrowser_ImageInfo->append("Altitude:");
-}
-
-void MainWindow::fitToWindow(bool fitToWindow)
-{
-    scaleToWindow = fitToWindow;
-    //QRect geometry = graphicsView_imageView->geometry();
-    if(fitToWindow)
-    {
-        imageView->fitInView(0,0, imgWidth, imgHeight);
-    }
-
-#if 0
-    if (!fitToWindow)
-    {
-        normalSize();
-    }
-    else
-    {
-        normalSize();
-
-        float imgRatio = (float)imgWidth/(float)imgHeight;
-        float viewRatio = (float)geometry.width()/(float)geometry.height();
-        double tmpFactor = 0.0;
-
-        if(imgRatio<viewRatio)
-        {
-            //scale to the height
-            tmpFactor = (double)geometry.height()/(double)imgHeight;
-            scaleImage(tmpFactor/scaleFactor);
-        }
-        else
-        {
-            //scale to the width
-            tmpFactor = (double)geometry.width()/(double)imgWidth;
-            scaleImage(tmpFactor/scaleFactor);
-        }
-       //graphicsView_imageView->adjustSize();
-
-    }
-#endif
-    //graphicsView_imageView->ensureVisible(item,50,50);
-    //graphicsView_imageView->setSceneRect(0,0, geometry.width(), geometry.height());
-
-    //graphicsView_imageView->scroll(-10000, -10000);
-}
-
-void MainWindow::normalSize()
-{
-    scaleImage(1.0/scaleFactor);
-}
-
-double MainWindow::zoomIn()
-{
-    scaleImage(1.25);
-    return this->scaleFactor;
-}
-
-double MainWindow::zoomOut()
-{
-    scaleImage(.8);
-    return this->scaleFactor;
-}
-
-void MainWindow::scaleImage(double factor)
-{
-    scaleFactor *= factor;
-    imageView->scale(factor, factor);
-}
 
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 {
@@ -283,7 +189,7 @@ void MainWindow::on_listView_availImages_indexesMoved(const QModelIndexList &ind
 void MainWindow::availImageList_selectionChange(const QItemSelection & selected, const QItemSelection & deselected)
 {
     QString select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
-    openImage(select);
+    imageView->openImage(select);
 }
 
 void MainWindow::filesInserted(const QModelIndex &parent, int start, int end)
@@ -294,12 +200,12 @@ void MainWindow::filesInserted(const QModelIndex &parent, int start, int end)
 
 void MainWindow::splitterResize(int pos, int index)
 {
-    fitToWindow(scaleToWindow);
+    imageView->fitToWindow(imageView->scaleToWindow);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *)
 {
-    fitToWindow(scaleToWindow);
+    imageView->fitToWindow(imageView->scaleToWindow);
 }
 
 void MainWindow::on_chkBox_reverseSort_stateChanged(int arg1)

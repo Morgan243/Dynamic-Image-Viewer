@@ -72,34 +72,13 @@ private slots:
 
     void on_doubleSpinBx_scaleFactor_valueChanged(double arg1);
 
-    void openImage(QString fileName);
-
-    void fitToWindow(bool fitToWindow);
-
-    void normalSize();
-
-    void scaleImage(double factor);
-
-    double zoomIn();
-
-    double zoomOut();
-
 
 private:
-    double scaleFactor;
-    int imgWidth, imgHeight;
-    bool scaleToWindow, imgLoaded;
 
     QString imagePath;
 
     QFileSystemModel *dirModel;
     QFileSystemModel *fileModel;
-
-    //pointer to images as loaded
-    QGraphicsPixmapItem *item;
-
-    //where images are shown
-    QGraphicsView *graphicsView_imageView;
 
     Image_Analyzer *imageView;
 
