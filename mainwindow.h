@@ -10,6 +10,7 @@
 #include <QScrollBar>
 #include <qlistview.h>
 #include "config_parser.h"
+#include "image_analyzer.h"
 //#include "xml_handler.h"
 
 class QAction;
@@ -99,6 +100,8 @@ private:
 
     //where images are shown
     QGraphicsView *graphicsView_imageView;
+
+    Image_Analyzer *imageView;
 
     //selected index for available images
     QModelIndex availImagesIndex;

@@ -24,15 +24,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Create graphics scene (where images are shown)
     QGraphicsScene *scene = new QGraphicsScene();
-    graphicsView_imageView = new QGraphicsView(scene);
+    imageView = new Image_Analyzer(scene);
 
     //add the graphics view to the layout
-    ui->horizontalLayout->addWidget(graphicsView_imageView);
+    ui->horizontalLayout->addWidget(imageView);
 
     //add a splitter between the ui and the image
     splitter = new QSplitter();
     splitter->addWidget(ui->groupBox_options);
-    splitter->addWidget(graphicsView_imageView);
+    splitter->addWidget(imageView);
 
     connect(splitter, SIGNAL(splitterMoved(int,int)), this, SLOT(splitterResize(int,int)));
 
@@ -149,9 +149,9 @@ void MainWindow::openImage(QString fileName)
     imgHeight = image.height();
 
     //clear the scene, add the image, and show it
-    graphicsView_imageView->scene()->clear();
-    graphicsView_imageView->scene()->addItem(item);
-    graphicsView_imageView->show();
+    imageView->scene()->clear();
+    imageView->scene()->addItem(item);
+    imageView->show();
 
     //scale window if needed
     fitToWindow(scaleToWindow);
@@ -169,8 +169,7 @@ void MainWindow::fitToWindow(bool fitToWindow)
     //QRect geometry = graphicsView_imageView->geometry();
     if(fitToWindow)
     {
-        graphicsView_imageView->fitInView(0,0, imgWidth, imgHeight);
-        //graphicsView_imageView->ensureVisible(0,0,imgWidth,imgHeight,0,0);
+        imageView->fitInView(0,0, imgWidth, imgHeight);
     }
 
 #if 0
@@ -228,7 +227,7 @@ double MainWindow::zoomOut()
 void MainWindow::scaleImage(double factor)
 {
     scaleFactor *= factor;
-    graphicsView_imageView->scale(factor, factor);
+    imageView->scale(factor, factor);
 }
 
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
