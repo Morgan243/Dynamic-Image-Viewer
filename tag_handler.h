@@ -40,8 +40,11 @@ public:
     void loadTag(QString fileName);
     void parseTag();
 
-    GPS_CoOrd convert_degMinSec(QString ratio);
+    void convert_degMinSec(QString ratio, GPS_CoOrd &coord);
     QString getDegMinSec(GPS_CoOrd coord);
+
+    void clearGPSdata();
+    void clearGPSdata(GPS_data &gpsData);
 };
 
 #endif // TAG_HANDLER_H

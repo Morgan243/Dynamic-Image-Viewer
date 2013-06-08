@@ -18,6 +18,7 @@ void Tag_Handler::loadTag(QString fileName)
     catch(Exiv2::AnyError& e)
     {
         std::cout<<e.what()<<std::endl;
+        clearGPSdata();
     }
 
     if(exif_data.empty())
@@ -29,6 +30,7 @@ void Tag_Handler::loadTag(QString fileName)
 
 void Tag_Handler::parseTag()
 {
+    bool gps_found = false;
     Exiv2::ExifData::const_iterator end = exif_data.end();
 
     std::cout<<"HI\n";
@@ -55,28 +57,40 @@ void Tag_Handler::parseTag()
         if(i->key() == "Exif.GPSInfo.GPSLatitude" )
         {
             gps.lat_ratio = QString::fromStdString(i->value().toString());
-            gps.lat_coord = convert_degMinSec(gps.lat_ratio);
+            convert_degMinSec(gps.lat_ratio, gps.lat_coord);
+            gps_found = true;
         }
         else if(i->key() == "Exif.GPSInfo.GPSLongitude" )
         {
             gps.long_ratio = QString::fromStdString(i->value().toString());
-            gps.long_coord = convert_degMinSec(gps.long_ratio);
+            convert_degMinSec(gps.long_ratio, gps.long_coord);
+            gps_found = true;
         }
+        else if(i->key() == "Exif.GPSInfo.GPSLatitudeRef")
+        {
+            gps.lat_coord.ref = QString::fromStdString(i->value().toString());
+        }
+        else if(i->key() == "Exif.GPSInfo.GPSLongitudeRef")
+        {
+            gps.long_coord.ref = QString::fromStdString(i->value().toString());
+        }
+    }
 
+    if(!gps_found)
+    {
+        clearGPSdata(gps);
     }
 }
 
-GPS_CoOrd Tag_Handler::convert_degMinSec(QString ratio)
+void Tag_Handler::convert_degMinSec(QString ratio, GPS_CoOrd &coord)
 {
-    GPS_CoOrd converted;
     Exiv2::RationalValue::AutoPtr rv(new Exiv2::RationalValue);
     rv->read(ratio.toStdString());
 
-    converted.degrees = rv->toFloat(0);
-    converted.minutes = rv->toFloat(1);
-    converted.seconds = rv->toFloat(2);
+    coord.degrees = rv->toFloat(0);
+    coord.minutes = rv->toFloat(1);
+    coord.seconds = rv->toFloat(2);
 
-    return converted;
 }
 
 QString Tag_Handler::getDegMinSec(GPS_CoOrd coord)
@@ -91,3 +105,27 @@ QString Tag_Handler::getDegMinSec(GPS_CoOrd coord)
     //parsed.append(QString("%l  %l  %l").arg(coord.degrees, coord.minutes, coord.seconds));
     return parsed;
 }
+
+void Tag_Handler::clearGPSdata()
+{
+    clearGPSdata(gps);
+}
+
+void Tag_Handler::clearGPSdata(GPS_data &gpsData)
+{
+
+    gpsData.lat_coord.ref = '-';
+    gpsData.lat_coord.degrees = 0.0;
+    gpsData.lat_coord.minutes = 0.0;
+    gpsData.lat_coord.seconds = 0.0;
+
+    gpsData.long_coord.ref = '-';
+    gpsData.long_coord.degrees = 0.0;
+    gpsData.long_coord.minutes = 0.0;
+    gpsData.long_coord.seconds = 0.0;
+
+    gpsData.lat_ratio = "--NOT SET--";
+    gpsData.long_ratio = "--NOT SET--";
+}
+
+
