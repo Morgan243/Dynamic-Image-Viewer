@@ -98,8 +98,7 @@ void MainWindow::on_chkBx_FitToWindow_stateChanged(int arg1)
             imageView->fitToWindow(true);
 
             imageView->scaleToWindow = true;
-            imageView->scaleFactor = 1.0;
-            ui->doubleSpinBx_scaleFactor->setValue(1.0);
+            ui->doubleSpinBx_scaleFactor->setEnabled(false);
     }
     //else, not checked
     else
@@ -107,7 +106,16 @@ void MainWindow::on_chkBx_FitToWindow_stateChanged(int arg1)
         if(imageView->imgLoaded)
            imageView->fitToWindow(false);
 
-        imageView->scaleToWindow = true;
+        imageView->scaleToWindow = false;
+
+        ui->doubleSpinBx_scaleFactor->setEnabled(true);
+        //imageView->normalSize();
+
+        //imageView->scaleImage(.2);
+        //imageView->normalGeometry();
+        imageView->resetTransform();
+     //   imageView->scaleImage(imageView->scaleFactor);
+        imageView->scale(imageView->scaleFactor,imageView->scaleFactor);
     }
 }
 

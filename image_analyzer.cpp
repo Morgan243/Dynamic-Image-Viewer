@@ -45,6 +45,8 @@ void Image_Analyzer::fitToWindow(bool fitToWindow)
         this->fitInView(0,0, imgWidth, imgHeight);
     }
 
+
+
 #if 0
     if (!fitToWindow)
     {
