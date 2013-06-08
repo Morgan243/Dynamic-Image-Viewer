@@ -193,7 +193,9 @@ void MainWindow::availImageList_selectionChange(const QItemSelection & selected,
     QString select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
     imageView->openImage(select);
     ui->textBrowser_ImageInfo->setText("LAT: " + imageView->tagger.gps.lat_ratio);
-    ui->textBrowser_ImageInfo->append("LONG: " + imageView->tagger.gps.long_ratio);
+    ui->textBrowser_ImageInfo->append(">> [" + imageView->tagger.getDegMinSec(imageView->tagger.gps.lat_coord) +"]");
+    ui->textBrowser_ImageInfo->append("\nLONG: " + imageView->tagger.gps.long_ratio);
+    ui->textBrowser_ImageInfo->append(">> [" + imageView->tagger.getDegMinSec(imageView->tagger.gps.long_coord) +"]");
 }
 
 void MainWindow::filesInserted(const QModelIndex &parent, int start, int end)

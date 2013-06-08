@@ -53,9 +53,41 @@ void Tag_Handler::parseTag()
 
 
         if(i->key() == "Exif.GPSInfo.GPSLatitude" )
+        {
             gps.lat_ratio = QString::fromStdString(i->value().toString());
+            gps.lat_coord = convert_degMinSec(gps.lat_ratio);
+        }
         else if(i->key() == "Exif.GPSInfo.GPSLongitude" )
+        {
             gps.long_ratio = QString::fromStdString(i->value().toString());
+            gps.long_coord = convert_degMinSec(gps.long_ratio);
+        }
 
     }
+}
+
+GPS_CoOrd Tag_Handler::convert_degMinSec(QString ratio)
+{
+    GPS_CoOrd converted;
+    Exiv2::RationalValue::AutoPtr rv(new Exiv2::RationalValue);
+    rv->read(ratio.toStdString());
+
+    converted.degrees = rv->toFloat(0);
+    converted.minutes = rv->toFloat(1);
+    converted.seconds = rv->toFloat(2);
+
+    return converted;
+}
+
+QString Tag_Handler::getDegMinSec(GPS_CoOrd coord)
+{
+    QString parsed;
+    QString deg = QString::number(coord.degrees);
+    QString min = QString::number(coord.minutes);
+    QString sec = QString::number(coord.seconds);
+
+    parsed = deg + "  " + min + "  " + sec;
+    //parsed.append(QString("%l").arg(coord.degrees));
+    //parsed.append(QString("%l  %l  %l").arg(coord.degrees, coord.minutes, coord.seconds));
+    return parsed;
 }
