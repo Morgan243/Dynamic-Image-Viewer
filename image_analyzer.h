@@ -29,8 +29,6 @@ public:
     double zoomOut();
 
     void scaleImage(double factor);
-
-
 };
 
 #endif // IMAGE_ANALYZER_H

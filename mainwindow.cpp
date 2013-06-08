@@ -98,6 +98,8 @@ void MainWindow::on_chkBx_FitToWindow_stateChanged(int arg1)
             imageView->fitToWindow(true);
 
             imageView->scaleToWindow = true;
+            imageView->scaleFactor = 1.0;
+            ui->doubleSpinBx_scaleFactor->setValue(1.0);
     }
     //else, not checked
     else
@@ -112,11 +114,13 @@ void MainWindow::on_chkBx_FitToWindow_stateChanged(int arg1)
 void MainWindow::on_pushBtn_ZoomIn_clicked()
 {
     ui->doubleSpinBx_scaleFactor->setValue(imageView->zoomIn());
+    ui->chkBx_FitToWindow->setChecked(false);
 }
 
 void MainWindow::on_pushBtn_ZoomOut_clicked()
 {
     ui->doubleSpinBx_scaleFactor->setValue(imageView->zoomOut());
+    ui->chkBx_FitToWindow->setChecked(false);
 }
 
 void MainWindow::on_actionOpen_Image_triggered()
