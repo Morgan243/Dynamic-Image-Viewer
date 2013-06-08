@@ -11,6 +11,8 @@
 #include <qlistview.h>
 #include "config_parser.h"
 #include "image_analyzer.h"
+
+// #include <QExifImageHeader>
 //#include "xml_handler.h"
 
 class QAction;

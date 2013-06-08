@@ -2,6 +2,8 @@
 #define IMAGE_ANALYZER_H
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
+#include "tag_handler.h"
+
 class Image_Analyzer : public QGraphicsView
 {
 private:
@@ -14,6 +16,8 @@ private:
 public:
     double scaleFactor;
     bool scaleToWindow, imgLoaded;
+
+    Tag_Handler tagger;
 
     Image_Analyzer();
     Image_Analyzer(QGraphicsScene* scene);

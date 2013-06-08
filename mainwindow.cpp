@@ -38,15 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     stdModel = new QStandardItemModel(this);
 
-    //scaleToWindow = false;
-    //scaleFactor = 1.0;
-
     //do this or nothing shows up!
     setCentralWidget(splitter);
-
-    //not sure what this was for....
-    //availImagesIndex = ui->listView_availImages->model()->index(0,0);
-    //ui->listView_availImages->selectionModel()->setCurrentIndex(availImagesIndex,QItemSelectionModel::SelectCurrent);
 
     //set up a selection model to be able to alter list view selection programmatically
     availImg_sm = ui->listView_availImages->selectionModel();
@@ -109,12 +102,7 @@ void MainWindow::on_chkBx_FitToWindow_stateChanged(int arg1)
         imageView->scaleToWindow = false;
 
         ui->doubleSpinBx_scaleFactor->setEnabled(true);
-        //imageView->normalSize();
-
-        //imageView->scaleImage(.2);
-        //imageView->normalGeometry();
         imageView->resetTransform();
-     //   imageView->scaleImage(imageView->scaleFactor);
         imageView->scale(imageView->scaleFactor,imageView->scaleFactor);
     }
 }
@@ -139,6 +127,8 @@ void MainWindow::on_actionOpen_Image_triggered()
 
     //open the image
     imageView->openImage(fileName);
+    ui->textBrowser_ImageInfo->setText("LAT: " + imageView->tagger.gps.lat_ratio);
+    ui->textBrowser_ImageInfo->append("LONG: " + imageView->tagger.gps.long_ratio);
 }
 
 void MainWindow::on_doubleSpinBx_scaleFactor_valueChanged(double arg1)
@@ -202,6 +192,8 @@ void MainWindow::availImageList_selectionChange(const QItemSelection & selected,
 {
     QString select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
     imageView->openImage(select);
+    ui->textBrowser_ImageInfo->setText("LAT: " + imageView->tagger.gps.lat_ratio);
+    ui->textBrowser_ImageInfo->append("LONG: " + imageView->tagger.gps.long_ratio);
 }
 
 void MainWindow::filesInserted(const QModelIndex &parent, int start, int end)

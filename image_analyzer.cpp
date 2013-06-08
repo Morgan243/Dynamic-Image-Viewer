@@ -11,6 +11,7 @@ void Image_Analyzer::openImage(QString fileName)
 {
     QImage image(fileName);
 
+
     imgLoaded = true;
 
     //is this a possible memory leak? (not freeing pointer memory)
@@ -28,11 +29,8 @@ void Image_Analyzer::openImage(QString fileName)
     //scale window if needed
     fitToWindow(scaleToWindow);
 
-    //show some example text in the text box
-//    ui->textBrowser_ImageInfo->setText(fileName);
-//    ui->textBrowser_ImageInfo->append("GPS CoOrd:");
-//    ui->textBrowser_ImageInfo->append("Time:");
-//    ui->textBrowser_ImageInfo->append("Altitude:");
+    tagger.loadTag(fileName);
+    tagger.parseTag();
 
 }
 
@@ -44,8 +42,6 @@ void Image_Analyzer::fitToWindow(bool fitToWindow)
     {
         this->fitInView(0,0, imgWidth, imgHeight);
     }
-
-
 
 #if 0
     if (!fitToWindow)
