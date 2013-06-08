@@ -21,12 +21,13 @@ private:
     Exiv2::Image::AutoPtr image;
 
 public:
+    bool dumpAllExif;
     GPS_data gps;
 
     Tag_Handler();
+    Tag_Handler(bool dumpExif); //true to output entire exif on parse
     void loadTag(QString fileName);
     void parseTag();
-    GPS_data getGPS();
 };
 
 #endif // TAG_HANDLER_H

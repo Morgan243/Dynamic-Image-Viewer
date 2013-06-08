@@ -2,15 +2,23 @@
 
 Tag_Handler::Tag_Handler()
 {
+    dumpAllExif = true;
 }
 
 void Tag_Handler::loadTag(QString fileName)
 {
-    image = Exiv2::ImageFactory::open(fileName.toStdString());
+    try
+    {
+        image = Exiv2::ImageFactory::open(fileName.toStdString());
 
-    image->readMetadata();
+        image->readMetadata();
 
-    exif_data = image->exifData();
+        exif_data = image->exifData();
+    }
+    catch(Exiv2::AnyError& e)
+    {
+        std::cout<<e.what()<<std::endl;
+    }
 
     if(exif_data.empty())
     {
@@ -27,27 +35,27 @@ void Tag_Handler::parseTag()
 
     for(Exiv2::ExifData::const_iterator i = exif_data.begin(); i != end; ++i)
     {
-        const char* tn = i->typeName();
-        std::cout << std::setw(44) << std::setfill(' ') << std::left
-                  << i->key() << " "
-                  << "0x" << std::setw(4) << std::setfill('0') << std::right
-                  << std::hex << i->tag() << " "
-                  << std::setw(9) << std::setfill(' ') << std::left
-                  << (tn ? tn : "Unknown") << " "
-                  << std::dec << std::setw(3)
-                  << std::setfill(' ') << std::right
-                  << i->count() << "  "
-                  << std::dec << i->value()
-                  << "\n";
+        if(dumpAllExif)
+        {
+            const char* tn = i->typeName();
+            std::cout << std::setw(44) << std::setfill(' ') << std::left
+                      << i->key() << " "
+                      << "0x" << std::setw(4) << std::setfill('0') << std::right
+                      << std::hex << i->tag() << " "
+                      << std::setw(9) << std::setfill(' ') << std::left
+                      << (tn ? tn : "Unknown") << " "
+                      << std::dec << std::setw(3)
+                      << std::setfill(' ') << std::right
+                      << i->count() << "  "
+                      << std::dec << i->value()
+                      << "\n";
+        }
+
 
         if(i->key() == "Exif.GPSInfo.GPSLatitude" )
-            //gps.lat_ratio.fromStdString(i->value().toString());
             gps.lat_ratio = QString::fromStdString(i->value().toString());
         else if(i->key() == "Exif.GPSInfo.GPSLongitude" )
             gps.long_ratio = QString::fromStdString(i->value().toString());
 
     }
-
-    std::cout<<"LAT: "<<qPrintable(gps.lat_ratio)<<std::endl;
-    std::cout<<"LONG: "<<qPrintable(gps.long_ratio)<<std::endl;
 }
