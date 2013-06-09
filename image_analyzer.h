@@ -4,6 +4,7 @@
 #include <QGraphicsPixmapItem>
 #include <QPointF>
 #include <QMouseEvent>
+#include <QHash>
 #include "tag_handler.h"
 
 class Image_Analyzer : public QGraphicsView
@@ -13,6 +14,9 @@ class Image_Analyzer : public QGraphicsView
 public:
     double scaleFactor;
     bool scaleToWindow, imgLoaded;
+
+    //image filenames as keys, list of points (for marks) as value
+    QHash<QString, QVector<QPointF> > image_marks;
 
     Tag_Handler tagger;
 
@@ -34,12 +38,18 @@ public:
 
     QString getFormattedTag();
 
+    void drawMarks(QVector<QPointF> points);
+
+    void drawMark(QPointF point);
+
 signals:
     public slots:
         void mousePressEvent(QMouseEvent * e);
 
 private:
     int imgWidth, imgHeight;
+    double mark_rad;
+    QString file_in_view;
 
     //pointer to images as loaded
     QGraphicsPixmapItem *item;

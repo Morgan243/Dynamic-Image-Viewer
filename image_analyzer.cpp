@@ -6,12 +6,14 @@ Image_Analyzer::Image_Analyzer(QGraphicsScene *scene)
     image_scene = scene;
     imgLoaded = scaleToWindow = false;
     scaleFactor = 1.0;
+    mark_rad = 75;
 }
 
 void Image_Analyzer::openImage(QString fileName)
 {
     QImage image(fileName);
 
+    file_in_view = fileName;
 
     imgLoaded = true;
 
@@ -32,6 +34,10 @@ void Image_Analyzer::openImage(QString fileName)
 
     tagger.loadTag(fileName);
     tagger.parseTag();
+
+    //if file has been marked, load the marks
+    if(image_marks.contains(fileName))
+        drawMarks(image_marks[fileName]);
 
 }
 
@@ -121,14 +127,30 @@ void Image_Analyzer::mousePressEvent(QMouseEvent *e)
 {
     double rad = 75;
 
-    QPen pen(QColor blue());
-
     QPointF pt = mapToScene(e->pos());
 
-    for(int i = 0; i < 15; i++)
+    if(e->buttons() & Qt::LeftButton)
     {
-        image_scene->addEllipse(pt.x()-(rad+i), pt.y()-(rad+i), (rad+i)*2.0, (rad+i)*2.0,
-                                QColor(255, 0, 0),
+        image_marks[file_in_view].push_back(pt);
+
+        drawMark(pt);
+    }
+}
+
+void Image_Analyzer::drawMark(QPointF point)
+{
+    for(double i = 0; i < 15; i+=.25)
+    {
+        image_scene->addEllipse(point.x()-(mark_rad+i), point.y()-(mark_rad+i), (mark_rad+i)*2.0, (mark_rad+i)*2.0,
+                                QColor(255, (int)i<<2, 0),
                                 QBrush());
+    }
+}
+
+void Image_Analyzer::drawMarks(QVector<QPointF> points)
+{
+    for(int i = 0; i < points.count(); i++)
+    {
+        drawMark(points.at(i));
     }
 }
