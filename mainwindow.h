@@ -11,7 +11,9 @@
 #include <qlistview.h>
 #include "config_parser.h"
 #include "image_analyzer.h"
-
+#include <unistd.h>
+#include <sys/stat.h>
+#include <errno.h>
 // #include <QExifImageHeader>
 //#include "xml_handler.h"
 
@@ -74,10 +76,13 @@ private slots:
 
     void on_doubleSpinBx_scaleFactor_valueChanged(double arg1);
 
+    void addPriorityLink(QString watchFilename);
+
 
 private:
 
     QString imagePath;
+    QString priorityPath;
 
     QFileSystemModel *dirModel;
     QFileSystemModel *fileModel;

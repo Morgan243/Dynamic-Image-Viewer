@@ -33,8 +33,6 @@ void Tag_Handler::parseTag()
     bool gps_found = false;
     Exiv2::ExifData::const_iterator end = exif_data.end();
 
-    std::cout<<"HI\n";
-
     for(Exiv2::ExifData::const_iterator i = exif_data.begin(); i != end; ++i)
     {
         if(dumpAllExif)
@@ -52,7 +50,6 @@ void Tag_Handler::parseTag()
                       << std::dec << i->value()
                       << "\n";
         }
-
 
         if(i->key() == "Exif.GPSInfo.GPSLatitude" )
         {

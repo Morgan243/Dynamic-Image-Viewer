@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Set up the file model for the directory view (avail images)
     fileModel = new QFileSystemModel(this);
-    fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files | QDir::AllDirs);
+    fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
     fileModel->setRootPath(imagePath);
 
     //make the filemodel the available images listview's base model
@@ -68,6 +68,39 @@ void MainWindow::load_config()
 
     //path for the watch directory (just first watchDir in xml)
     imagePath = main_config.watch_dir.at(0);
+
+    //path for priority directory
+    priorityPath = main_config.priority_dir.at(0);
+
+    //check if the paths are the same
+    if(imagePath == priorityPath)
+    {
+        struct stat st;
+        std::cout<<"Watch path and priority path are the same!"<<std::endl;
+        std::cout<<"Checking for priority directory in "<<qPrintable(imagePath)<<std::endl;
+
+        //set priority path
+        priorityPath = priorityPath + "/priority";
+
+        //check if the priority directory already exists
+        if (stat(QString(imagePath+"/"+"priority").toStdString().c_str(), &st) == 0 && S_ISDIR(st.st_mode))
+        {
+            std::cout<<"Priority directory exists, priority links will be stored in:\n";
+            std::cout<<qPrintable(priorityPath)<<std::endl;
+        }
+        else
+        {
+             std::cout<<"Creating priority directory in "<<qPrintable(imagePath)<<std::endl;
+
+            //create directory
+             if (mkdir(priorityPath.toStdString().c_str(), 0777) != 0 && errno != EEXIST)
+             {
+                 std::cout<<"Error making priority directory ("<<qPrintable(priorityPath)<<")"<<std::endl;
+             }
+             else
+                 std::cout<<"Directory created!"<<std::endl;
+        }
+    }
 }
 
 void MainWindow::on_chkBx_autSelectLatest_stateChanged(int arg1)
@@ -223,4 +256,10 @@ void MainWindow::on_chkBox_reverseSort_stateChanged(int arg1)
         fileModel->sort(0,Qt::DescendingOrder);
     else
         fileModel->sort(0,Qt::AscendingOrder);
+}
+
+void MainWindow::addPriorityLink(QString watchFilename)
+{
+    QString watchFilePath =  imagePath +"/" + watchFilename;
+    QString priorityLinkPath = priorityPath +"/" + watchFilename;
 }
