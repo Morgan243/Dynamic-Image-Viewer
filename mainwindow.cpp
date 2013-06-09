@@ -22,6 +22,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->listView_availImages->setModel(fileModel);
     ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
 
+    priorityFileModel = new QFileSystemModel(this);
+    priorityFileModel->setFilter((QDir::NoDotAndDotDot | QDir::Files));
+    priorityFileModel->setRootPath(priorityPath);
+
+    ui->listView_priorityImages->setModel(priorityFileModel);
+    ui->listView_priorityImages->setRootIndex(priorityFileModel->setRootPath(priorityPath));
+
     //Create graphics scene (where images are shown)
     QGraphicsScene *scene = new QGraphicsScene();
     imageView = new Image_Analyzer(scene);
@@ -48,6 +55,10 @@ MainWindow::MainWindow(QWidget *parent) :
     //connect rowsInserted signal to the filesInserted slot
     connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(filesInserted(QModelIndex,int,int)));
 
+    priorityImg_sm = ui->listView_priorityImages->selectionModel();
+    connect(priorityImg_sm, SIGNAL(selectionChanged(const QItemSelection & , const QItemSelection &)), this, SLOT(priorityImageList_selectionChange(const QItemSelection & , const QItemSelection & )));
+
+    connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(priorityFilesInserted(QModelIndex,int,int)));
 }
 
 MainWindow::~MainWindow()
@@ -202,9 +213,10 @@ void MainWindow::on_actionOpen_Directory_triggered()
 void MainWindow::on_pushBtn_add_clicked()
 {
     QString select = ui->listView_availImages->currentIndex().data().toString();
-    QStandardItem* items = new QStandardItem(select);
-    stdModel->appendRow(items);
-    ui->listView_priorityImages->setModel(stdModel);
+//    QStandardItem* items = new QStandardItem(select);
+//    stdModel->appendRow(items);
+//    ui->listView_priorityImages->setModel(stdModel);
+    addPriorityLink(select);
 }
 
 void MainWindow::on_pushBtn_remove_clicked()
@@ -234,10 +246,28 @@ void MainWindow::availImageList_selectionChange(const QItemSelection & selected,
     ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
 }
 
+void MainWindow::priorityImageList_selectionChange(const QItemSelection & selected, const QItemSelection & deselected)
+{
+    QString output;
+    QString select = imagePath +"/" + ui->listView_priorityImages->currentIndex().data().toString();
+
+    //open the image
+    imageView->openImage(select);
+
+    //set the image information box
+    ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
+}
+
 void MainWindow::filesInserted(const QModelIndex &parent, int start, int end)
 {
     ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
     ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
+}
+
+void MainWindow::priorityFilesInserted(const QModelIndex & parent, int start, int end )
+{
+    ui->listView_priorityImages->setRootIndex(fileModel->index(fileModel->rootPath()));
+    ui->listView_priorityImages->setCurrentIndex(fileModel->index(0,0,ui->listView_priorityImages->rootIndex()));
 }
 
 void MainWindow::splitterResize(int pos, int index)
@@ -260,6 +290,13 @@ void MainWindow::on_chkBox_reverseSort_stateChanged(int arg1)
 
 void MainWindow::addPriorityLink(QString watchFilename)
 {
+    //keep same filenames across the paths
     QString watchFilePath =  imagePath +"/" + watchFilename;
     QString priorityLinkPath = priorityPath +"/" + watchFilename;
+    if(symlink(watchFilePath.toStdString().c_str(), priorityLinkPath.toStdString().c_str()) != 0 && errno != EEXIST)
+    {
+        std::cout<<"Could not create symlink"<<qPrintable(priorityLinkPath)<<std::endl;
+    }
+    else if(errno == EEXIST)
+        std::cout<<"Priority link already exists!"<<std::endl;
 }

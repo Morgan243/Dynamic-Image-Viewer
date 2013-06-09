@@ -56,6 +56,10 @@ private slots:
 
     void filesInserted(const QModelIndex & parent, int start, int end );
 
+    void priorityImageList_selectionChange(const QItemSelection & selected, const QItemSelection & deselected);
+
+    void priorityFilesInserted(const QModelIndex & parent, int start, int end );
+
     void splitterResize(int pos, int index);
 
     void resizeEvent(QResizeEvent *);
@@ -87,6 +91,8 @@ private:
     QFileSystemModel *dirModel;
     QFileSystemModel *fileModel;
 
+    QFileSystemModel *priorityFileModel;
+
     Image_Analyzer *imageView;
 
     //selected index for available images
@@ -97,6 +103,7 @@ private:
     QStandardItemModel *stdModel;
 
     QItemSelectionModel *availImg_sm;
+    QItemSelectionModel *priorityImg_sm;
 
     Ui::MainWindow *ui;
 
