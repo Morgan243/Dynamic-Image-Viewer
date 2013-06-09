@@ -127,8 +127,9 @@ void MainWindow::on_actionOpen_Image_triggered()
 
     //open the image
     imageView->openImage(fileName);
-    ui->textBrowser_ImageInfo->setText("LAT: " + imageView->tagger.gps.lat_ratio);
-    ui->textBrowser_ImageInfo->append("LONG: " + imageView->tagger.gps.long_ratio);
+
+    //set the image information box
+    ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
 }
 
 void MainWindow::on_doubleSpinBx_scaleFactor_valueChanged(double arg1)
@@ -193,25 +194,11 @@ void MainWindow::availImageList_selectionChange(const QItemSelection & selected,
     QString output;
     QString select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
 
+    //open the image
     imageView->openImage(select);
 
-
-
-    ui->textBrowser_ImageInfo->setText("LAT: " + imageView->tagger.gps.lat_ratio);
-
-    output = ">> (";
-    output.append(imageView->tagger.gps.lat_coord.ref);
-    ui->textBrowser_ImageInfo->append(output
-                                      +") [" + imageView->tagger.getDegMinSec(imageView->tagger.gps.lat_coord) +"]");
-
-
-
-    ui->textBrowser_ImageInfo->append("\nLONG: " + imageView->tagger.gps.long_ratio);
-
-    output = ">> (";
-    output.append(imageView->tagger.gps.long_coord.ref);
-    ui->textBrowser_ImageInfo->append(output
-                                      +") [" + imageView->tagger.getDegMinSec(imageView->tagger.gps.long_coord) +"]");
+    //set the image information box
+    ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
 }
 
 void MainWindow::filesInserted(const QModelIndex &parent, int start, int end)

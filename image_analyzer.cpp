@@ -3,6 +3,7 @@
 Image_Analyzer::Image_Analyzer(QGraphicsScene *scene)
     :QGraphicsView(scene) //init parent class
 {
+    image_scene = scene;
     imgLoaded = scaleToWindow = false;
     scaleFactor = 1.0;
 }
@@ -99,4 +100,35 @@ void Image_Analyzer::scaleImage(double factor)
 {
     scaleFactor *= factor;
     this->scale(factor, factor);
+}
+
+QString Image_Analyzer::getFormattedTag()
+{
+    QString formattedTag;
+
+    formattedTag = "LAT:" + tagger.gps.lat_ratio;
+    formattedTag = formattedTag + "\n>> (" + tagger.gps.lat_coord.ref
+                    +") [" + tagger.getDegMinSec(tagger.gps.lat_coord) + "]";
+
+    formattedTag = formattedTag + "\n\nLONG: " + tagger.gps.long_ratio;
+    formattedTag = formattedTag + "\n>> (" + tagger.gps.long_coord.ref +
+            +") [" + tagger.getDegMinSec(tagger.gps.long_coord) + "]";
+
+    return formattedTag;
+}
+
+void Image_Analyzer::mousePressEvent(QMouseEvent *e)
+{
+    double rad = 75;
+
+    QPen pen(QColor blue());
+
+    QPointF pt = mapToScene(e->pos());
+
+    for(int i = 0; i < 15; i++)
+    {
+        image_scene->addEllipse(pt.x()-(rad+i), pt.y()-(rad+i), (rad+i)*2.0, (rad+i)*2.0,
+                                QColor(255, 0, 0),
+                                QBrush());
+    }
 }

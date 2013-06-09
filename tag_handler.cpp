@@ -127,5 +127,3 @@ void Tag_Handler::clearGPSdata(GPS_data &gpsData)
     gpsData.lat_ratio = "--NOT SET--";
     gpsData.long_ratio = "--NOT SET--";
 }
-
-
