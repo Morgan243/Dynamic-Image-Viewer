@@ -13,7 +13,7 @@ void Tag_Handler::loadTag(QString fileName)
 
         image->readMetadata();
 
-        exif_data = image->exifData();
+        exif_data = &image->exifData();
     }
     catch(Exiv2::AnyError& e)
     {
@@ -21,7 +21,7 @@ void Tag_Handler::loadTag(QString fileName)
         clearGPSdata();
     }
 
-    if(exif_data.empty())
+    if(exif_data->empty())
     {
         std::cout<<"Exif tag empty!\n";
         return;
@@ -31,11 +31,11 @@ void Tag_Handler::loadTag(QString fileName)
 void Tag_Handler::parseTag()
 {
     bool gps_found = false;
-    Exiv2::ExifData::const_iterator end = exif_data.end();
+    Exiv2::ExifData::const_iterator end = exif_data->end();
 
-    for(Exiv2::ExifData::const_iterator i = exif_data.begin(); i != end; ++i)
+    for(Exiv2::ExifData::const_iterator i = exif_data->begin(); i != end; ++i)
     {
-        if(dumpAllExif)
+        if(0)//(dumpAllExif)
         {
             const char* tn = i->typeName();
             std::cout << std::setw(44) << std::setfill(' ') << std::left
@@ -70,6 +70,21 @@ void Tag_Handler::parseTag()
         else if(i->key() == "Exif.GPSInfo.GPSLongitudeRef")
         {
             gps.long_coord.ref = QString::fromStdString(i->value().toString());
+        }
+        else if(i->key() == "Exif.Photo.UserComment")
+        {
+            const char* tn = i->typeName();
+            std::cout << std::setw(44) << std::setfill(' ') << std::left
+                      << i->key() << " "
+                      << "0x" << std::setw(4) << std::setfill('0') << std::right
+                      << std::hex << i->tag() << " "
+                      << std::setw(9) << std::setfill(' ') << std::left
+                      << (tn ? tn : "Unknown") << " "
+                      << std::dec << std::setw(3)
+                      << std::setfill(' ') << std::right
+                      << i->count() << "  "
+                      << std::dec << i->value()
+                      << "\n";
         }
     }
 
@@ -123,4 +138,147 @@ void Tag_Handler::clearGPSdata(GPS_data &gpsData)
 
     gpsData.lat_ratio = "--NOT SET--";
     gpsData.long_ratio = "--NOT SET--";
+}
+
+void Tag_Handler::clearComment(QString fileName)
+{
+    //load the file metadata
+    loadTag(fileName);
+
+    //reset the comment section
+    (*exif_data)["Exif.Photo.UserComment"] = "";
+
+    //write it back to tag
+    image->writeMetadata();
+}
+
+QVector<QPointF> Tag_Handler::readPointsFromComment(QString fileName)
+{
+    //load up the images tag
+    loadTag(fileName);
+
+    //get the current contents
+    QString comment = QString::fromStdString((*exif_data)["Exif.Photo.UserComment"].toString());
+
+    int left_paren, comma, right_paren = 0;
+    float temp_x, temp_y;
+    QVector<QPointF> points;
+
+    //while we are working from a valid left paren
+    while((left_paren = comment.toStdString().find('(', right_paren)) != std::string::npos)
+    {
+        //find comma after left paren
+        comma = comment.toStdString().find(',', left_paren);
+
+        //find right paren after comma
+        right_paren = comment.toStdString().find(')', comma);
+
+        //grab x value out
+        temp_x = atof(comment.toStdString().substr(left_paren+1, comma-1).c_str());
+
+        //grab y value out
+        temp_y = atof(comment.toStdString().substr(comma+1, right_paren-1).c_str());
+
+        points.push_back(QPointF(temp_x,temp_y));
+
+    }
+
+    return points;
+}
+
+void Tag_Handler::addPointToComment(QString fileName, qreal x, qreal y)
+{
+    //load up the images tag
+    loadTag(fileName);
+
+    //get the current contents
+    QString comment = QString::fromStdString((*exif_data)["Exif.Photo.UserComment"].toString());
+
+    //append the new point to current contents
+    comment = comment + "(" + QString::number(x) +"," + QString::number(y) + ")";
+
+    std::cout<<"Updating comment to: "<< qPrintable(comment);
+
+    //set updated contents
+    (*exif_data)["Exif.Photo.UserComment"]
+          = comment.toStdString().c_str();
+
+    //write back contents
+    image->writeMetadata();
+}
+
+
+void Tag_Handler::removePointInComment(QString fileName, qreal x, qreal y)
+{
+    //load up the images tag
+    loadTag(fileName);
+
+    //get the current contents
+    QString comment = QString::fromStdString((*exif_data)["Exif.Photo.UserComment"].toString());
+
+    if(!comment.contains("("+QString::number(x) + "," + QString::number(y)+")"))
+    {
+        std::cout<<"Could not remove point ("<<x<<","<<y<<"), it doesnt exist!"<<std::endl;
+    }
+    else
+    {
+        comment.remove("("+QString::number(x) + "," + QString::number(y)+")");
+        std::cout<<"Removing ("<<x<<","<<y<<")"<<std::endl;
+
+        //set updated contents
+        (*exif_data)["Exif.Photo.UserComment"]
+              = comment.toStdString().c_str();
+
+        //write back contents
+        image->writeMetadata();
+    }
+}
+
+void Tag_Handler::addPointToComment(QString fileName, QPointF point)
+{
+    //load up the images tag
+    loadTag(fileName);
+
+    //get the current contents
+    QString comment = QString::fromStdString((*exif_data)["Exif.Photo.UserComment"].toString());
+
+    //append the new point to current contents
+    comment = comment + "(" + QString::number(point.x()) +"," + QString::number(point.y()) + ")";
+
+    std::cout<<"Updating comment to: "<< qPrintable(comment);
+
+    //set updated contents
+    (*exif_data)["Exif.Photo.UserComment"]
+          = comment.toStdString().c_str();
+
+    //write back contents
+    image->writeMetadata();
+}
+
+void Tag_Handler::removePointInComment(QString fileName, QPointF point)
+{
+    //load up the images tag
+    loadTag(fileName);
+
+    //get the current contents
+    QString comment = QString::fromStdString((*exif_data)["Exif.Photo.UserComment"].toString());
+
+    qreal x = point.x(), y = point.y();
+
+    if(!comment.contains("("+QString::number(x) + "," + QString::number(y)+")"))
+    {
+        std::cout<<"Could not remove point ("<<x<<","<<y<<"), it doesnt exist!"<<std::endl;
+    }
+    else
+    {
+        comment.remove("("+QString::number(x) + "," + QString::number(y)+")");
+        std::cout<<"Removing ("<<x<<","<<y<<")"<<std::endl;
+
+        //set updated contents
+        (*exif_data)["Exif.Photo.UserComment"]
+              = comment.toStdString().c_str();
+
+        //write back contents
+        image->writeMetadata();
+    }
 }

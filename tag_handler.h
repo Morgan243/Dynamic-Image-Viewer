@@ -6,6 +6,8 @@
 #include "libexif/exif-ifd.h"
 #include "libexif/exif-loader.h"
 
+#include <QVector>
+#include <QPointF>
 #include <string>
 #include <QString>
 
@@ -28,7 +30,7 @@ struct GPS_data
 class Tag_Handler
 {
 private:
-    Exiv2::ExifData exif_data;
+    Exiv2::ExifData *exif_data;
     Exiv2::Image::AutoPtr image;
 
 public:
@@ -45,6 +47,15 @@ public:
 
     void clearGPSdata();
     void clearGPSdata(GPS_data &gpsData);
+
+    void clearComment(QString fileName);
+    QVector<QPointF> readPointsFromComment(QString fileName);
+    void addPointToComment(QString fileName, qreal x, qreal y);
+    void removePointInComment(QString fileName, qreal x, qreal y);
+
+    void addPointToComment(QString fileName, QPointF point);
+    void removePointInComment(QString fileName, QPointF point);
+
 };
 
 #endif // TAG_HANDLER_H

@@ -23,6 +23,8 @@ class QMenu;
 class QScrollArea;
 class QScrollBar;
 
+enum ImageSource {watch, priority};
+
 namespace Ui {
 class MainWindow;
 }
@@ -82,6 +84,14 @@ private slots:
 
     void addPriorityLink(QString watchFilename);
 
+
+    void on_listView_availImages_clicked(const QModelIndex &index);
+
+    void putSelectedImageToDisplay(ImageSource source);
+
+    void on_listView_priorityImages_clicked(const QModelIndex &index);
+
+    void on_actionFrom_ALL_triggered();
 
 private:
 

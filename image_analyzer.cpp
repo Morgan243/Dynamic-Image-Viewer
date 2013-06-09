@@ -35,9 +35,25 @@ void Image_Analyzer::openImage(QString fileName)
     tagger.loadTag(fileName);
     tagger.parseTag();
 
+    QVector<QPointF> points = tagger.readPointsFromComment(fileName);
+
+    if(points.count() > MAX_MARKS)
+    {
+        std::cout<< "Removing extra marks..."<<std::endl;
+        while(points.count() > MAX_MARKS)
+        {
+            tagger.removePointInComment(fileName, points.at(0));
+
+            points.remove(0);
+        }
+    }
+
+    drawMarks(points);
+    //drawMarks(tagger.readPointsFromComment(fileName));
+
     //if file has been marked, load the marks
-    if(image_marks.contains(fileName))
-        drawMarks(image_marks[fileName]);
+//    if(image_marks.contains(fileName))
+//        drawMarks(image_marks[fileName]);
 
 }
 
@@ -129,11 +145,57 @@ void Image_Analyzer::mousePressEvent(QMouseEvent *e)
 
     QPointF pt = mapToScene(e->pos());
 
+    //if left button pressed
     if(e->buttons() & Qt::LeftButton)
     {
-        image_marks[file_in_view].push_back(pt);
+        //has the max been reached yet?
+        if(image_marks[file_in_view].count() < MAX_MARKS)
+        {
+            //still under the max marks, add a mark
+            image_marks[file_in_view].push_back(pt);
+
+            //add it to the comment tag of the image
+            tagger.addPointToComment(file_in_view, pt.x(), pt.y());
+        }
+        else //to many mark points, remove the first in
+        {
+            //remove from comment
+            tagger.removePointInComment(file_in_view,
+                                        image_marks[file_in_view].at(0).x(),
+                                        image_marks[file_in_view].at(0).y());
+
+            //remove the front element
+            image_marks[file_in_view].remove(0);
+
+            //cache new point to dictionary
+            image_marks[file_in_view].push_back(pt);
+
+            //put the new point in the tag
+            tagger.addPointToComment(file_in_view, pt.x(), pt.y());
+        }
 
         drawMark(pt);
+    }
+    else if (e->buttons() & Qt::RightButton)
+    {
+        tagger.clearComment(file_in_view);
+
+        openImage(file_in_view);
+    }
+}
+
+void Image_Analyzer::wheelEvent(QWheelEvent *event)
+{
+    if (event->modifiers().testFlag(Qt::ControlModifier))
+    {
+        //setResizeAnchor(QGraphicsView::AnchorUnderMouse);
+        centerOn( mapToScene(event->pos()));
+
+        scaleImage(1.0 + event->delta()/1800.0);
+    }
+    else
+    {
+        QGraphicsView::wheelEvent(event);
     }
 }
 

@@ -114,6 +114,8 @@ void MainWindow::load_config()
     }
 }
 
+
+//--Signals and slots for gui interfaces--
 void MainWindow::on_chkBx_autSelectLatest_stateChanged(int arg1)
 {
     //if the box is checked
@@ -182,18 +184,10 @@ void MainWindow::on_doubleSpinBx_scaleFactor_valueChanged(double arg1)
     imageView->scaleImage(arg1/imageView->scaleFactor);
 }
 
-
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 {
     scrollBar->setValue(int(factor * scrollBar->value()
                             + ((factor - 1) * scrollBar->pageStep()/2)));
-}
-
-void MainWindow::on_listView_availImages_activated(const QModelIndex &index)
-{
-    QString select = ui->listView_availImages->model()->index(0,0,index).data(Qt::DisplayRole).toString();
-    ui->textBrowser_imageInfo_priority->append(select);
-    ui->textBrowser_imageInfo_priority->append("hello");
 }
 
 void MainWindow::on_actionOpen_Directory_triggered()
@@ -212,10 +206,10 @@ void MainWindow::on_actionOpen_Directory_triggered()
 
 void MainWindow::on_pushBtn_add_clicked()
 {
+    //get image name
     QString select = ui->listView_availImages->currentIndex().data().toString();
-//    QStandardItem* items = new QStandardItem(select);
-//    stdModel->appendRow(items);
-//    ui->listView_priorityImages->setModel(stdModel);
+
+    //add a sym link to it in the priority directory
     addPriorityLink(select);
 }
 
@@ -223,51 +217,6 @@ void MainWindow::on_pushBtn_remove_clicked()
 {
     ui->listView_priorityImages->model()->removeRow(
                 ui->listView_priorityImages->currentIndex().row());
-}
-
-void MainWindow::on_listView_availImages_indexesMoved(const QModelIndexList &indexes)
-{
-    //ui->listView_availImages->selectionModel()->selectedIndexes()
-
-    QString select = ui->listView_availImages->model()->index(0,0,indexes.first()).data(Qt::DisplayRole).toString();
-    ui->textBrowser_imageInfo_priority->append(select);
-
-}
-
-void MainWindow::availImageList_selectionChange(const QItemSelection & selected, const QItemSelection & deselected)
-{
-    QString output;
-    QString select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
-
-    //open the image
-    imageView->openImage(select);
-
-    //set the image information box
-    ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
-}
-
-void MainWindow::priorityImageList_selectionChange(const QItemSelection & selected, const QItemSelection & deselected)
-{
-    QString output;
-    QString select = imagePath +"/" + ui->listView_priorityImages->currentIndex().data().toString();
-
-    //open the image
-    imageView->openImage(select);
-
-    //set the image information box
-    ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
-}
-
-void MainWindow::filesInserted(const QModelIndex &parent, int start, int end)
-{
-    ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
-    ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
-}
-
-void MainWindow::priorityFilesInserted(const QModelIndex & parent, int start, int end )
-{
-    ui->listView_priorityImages->setRootIndex(fileModel->index(fileModel->rootPath()));
-    ui->listView_priorityImages->setCurrentIndex(fileModel->index(0,0,ui->listView_priorityImages->rootIndex()));
 }
 
 void MainWindow::splitterResize(int pos, int index)
@@ -288,6 +237,66 @@ void MainWindow::on_chkBox_reverseSort_stateChanged(int arg1)
         fileModel->sort(0,Qt::AscendingOrder);
 }
 
+//remove userComment tag from all images
+void MainWindow::on_actionFrom_ALL_triggered()
+{
+}
+
+
+
+//WATCH list view specific signals
+void MainWindow::on_listView_availImages_activated(const QModelIndex &index)
+{
+    QString select = ui->listView_availImages->model()->index(0,0,index).data(Qt::DisplayRole).toString();
+    ui->textBrowser_imageInfo_priority->append(select);
+    ui->textBrowser_imageInfo_priority->append("hello");
+}
+
+void MainWindow::on_listView_availImages_indexesMoved(const QModelIndexList &indexes)
+{
+    //ui->listView_availImages->selectionModel()->selectedIndexes()
+
+    QString select = ui->listView_availImages->model()->index(0,0,indexes.first()).data(Qt::DisplayRole).toString();
+    ui->textBrowser_imageInfo_priority->append(select);
+
+}
+
+void MainWindow::availImageList_selectionChange(const QItemSelection & selected, const QItemSelection & deselected)
+{
+    putSelectedImageToDisplay(watch);
+}
+
+void MainWindow::on_listView_availImages_clicked(const QModelIndex &index)
+{
+    putSelectedImageToDisplay(watch);
+}
+
+void MainWindow::filesInserted(const QModelIndex &parent, int start, int end)
+{
+    ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
+    ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
+}
+
+
+//PRIORITY list view specific signals
+void MainWindow::priorityImageList_selectionChange(const QItemSelection & selected, const QItemSelection & deselected)
+{
+    putSelectedImageToDisplay(priority);
+}
+
+void MainWindow::on_listView_priorityImages_clicked(const QModelIndex &index)
+{
+    putSelectedImageToDisplay(priority);
+}
+
+void MainWindow::priorityFilesInserted(const QModelIndex & parent, int start, int end )
+{
+    ui->listView_priorityImages->setRootIndex(priorityFileModel->index(priorityFileModel->rootPath()));
+    ui->listView_priorityImages->setCurrentIndex(priorityFileModel->index(0,0,ui->listView_priorityImages->rootIndex()));
+}
+
+
+//--misc code that gets used a lot--
 void MainWindow::addPriorityLink(QString watchFilename)
 {
     //keep same filenames across the paths
@@ -300,3 +309,30 @@ void MainWindow::addPriorityLink(QString watchFilename)
     else if(errno == EEXIST)
         std::cout<<"Priority link already exists!"<<std::endl;
 }
+
+void MainWindow::putSelectedImageToDisplay(ImageSource source)
+{
+    QString select;
+
+    //decide where to grab image name from and where to put meta info
+    if(source == watch)
+    {
+        select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
+
+        //set the image information box
+        ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
+    }
+    else
+    {
+        select = imagePath +"/" + ui->listView_priorityImages->currentIndex().data().toString();
+
+        //set the image information box
+        ui->textBrowser_imageInfo_priority->setText(imageView->getFormattedTag());
+    }
+
+    //open the image
+    imageView->openImage(select);
+}
+
+
+

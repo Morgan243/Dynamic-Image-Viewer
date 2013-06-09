@@ -7,6 +7,8 @@
 #include <QHash>
 #include "tag_handler.h"
 
+#define MAX_MARKS 5
+
 class Image_Analyzer : public QGraphicsView
 {
 
@@ -45,6 +47,8 @@ public:
 signals:
     public slots:
         void mousePressEvent(QMouseEvent * e);
+
+        void wheelEvent(QWheelEvent *event);
 
 private:
     int imgWidth, imgHeight;
