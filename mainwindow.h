@@ -84,6 +84,7 @@ private slots:
 
     void addPriorityLink(QString watchFilename);
 
+    void removePriorityLink(QString priorityFilename);
 
     void on_listView_availImages_clicked(const QModelIndex &index);
 

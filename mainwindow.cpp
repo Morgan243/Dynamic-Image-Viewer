@@ -215,8 +215,11 @@ void MainWindow::on_pushBtn_add_clicked()
 
 void MainWindow::on_pushBtn_remove_clicked()
 {
-    ui->listView_priorityImages->model()->removeRow(
-                ui->listView_priorityImages->currentIndex().row());
+    //get image name
+    QString select = ui->listView_priorityImages->currentIndex().data().toString();
+
+    //unlink the image
+    removePriorityLink(select);
 }
 
 void MainWindow::splitterResize(int pos, int index)
@@ -308,6 +311,15 @@ void MainWindow::addPriorityLink(QString watchFilename)
     }
     else if(errno == EEXIST)
         std::cout<<"Priority link already exists!"<<std::endl;
+}
+
+void MainWindow::removePriorityLink(QString priorityFilename)
+{
+    QString priorityLinkPath = priorityPath + "/" + priorityFilename;
+    if(unlink(priorityLinkPath.toStdString().c_str()) != 0)
+    {
+        std::cout<<"Could not remove link at "<<qPrintable(priorityLinkPath)<<std::endl;
+    }
 }
 
 void MainWindow::putSelectedImageToDisplay(ImageSource source)
