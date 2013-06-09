@@ -1,4 +1,7 @@
 Dynamic-Image-Viewer
 ====================
 
-A configurable image viewer intended for use with the easy viewing of incoming images. Developed for VCU's unmanned aerial vehicles.
+A image viewer intended to aid the efficient analysis incoming still images. The DIV is being developed for the Autonomous Robotics Group at Virginia Commonwealth University to assist in the SUAS AUVSI 2013 competition.
+
+![ARG at VCU Logo] BadassLogo.JPG
+
