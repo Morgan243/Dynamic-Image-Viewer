@@ -85,6 +85,13 @@ void Tag_Handler::parseTag()
                       << i->count() << "  "
                       << std::dec << i->value()
                       << "\n";
+
+            //need to reset user comment if hasn't been set before
+            if(i->count() == 264)
+            {
+                 (*exif_data)["Exif.Photo.UserComment"] = "";
+                  image->writeMetadata();
+            }
         }
     }
 

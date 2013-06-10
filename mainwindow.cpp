@@ -13,6 +13,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     load_config();
 
+    //setup watcher
+    file_watcher = new QFileSystemWatcher();
+    //file_watcher->addPath(imagePath);
+
+    connect(file_watcher,SIGNAL(fileChanged(QString)),this,SLOT(fileChangedSlot(QString)));
+    connect(file_watcher,SIGNAL(directoryChanged(QString)),this,SLOT(dirChangedSlot(QString)));
+
+
     //Set up the file model for the directory view (avail images)
     fileModel = new QFileSystemModel(this);
     fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
@@ -326,6 +334,7 @@ void MainWindow::putSelectedImageToDisplay(ImageSource source)
 {
     QString select;
 
+    source_of_view = source;
     //decide where to grab image name from and where to put meta info
     if(source == watch)
     {
@@ -342,9 +351,42 @@ void MainWindow::putSelectedImageToDisplay(ImageSource source)
         ui->textBrowser_imageInfo_priority->setText(imageView->getFormattedTag());
     }
 
+    image_in_view = select;
+
+    file_watcher->addPath(select);
+
     //open the image
     imageView->openImage(select);
 }
 
+void MainWindow::fileChangedSlot(QString path)
+{
+    if(path == image_in_view)
+    {
 
+//        QVector<QPointF> points =imageView->tagger.readPointsFromComment(image_in_view);
+
+//        if(imageView->image_marks[image_in_view] !=points)
+//        {
+//            //putSelectedImageToDisplay(source_of_view);
+//            imageView->tagger.loadTag(image_in_view);
+//            imageView->tagger.parseTag();
+
+
+
+//            //if(points.count())
+//                imageView->drawMarks(imageView->tagger.readPointsFromComment(image_in_view));
+//        }
+//        else
+            putSelectedImageToDisplay(source_of_view);
+    }
+}
+
+void MainWindow::dirChangedSlot(QString path)
+{
+    if(path == image_in_view)
+    {
+        putSelectedImageToDisplay(source_of_view);
+    }
+}
 

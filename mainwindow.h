@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <QFileSystemWatcher>
 // #include <QExifImageHeader>
 //#include "xml_handler.h"
 
@@ -94,10 +95,18 @@ private slots:
 
     void on_actionFrom_ALL_triggered();
 
+
+    void fileChangedSlot(QString path);
+
+    void dirChangedSlot(QString path);
 private:
 
+    QString image_in_view;
+    ImageSource source_of_view;
     QString imagePath;
     QString priorityPath;
+
+    QFileSystemWatcher *file_watcher;
 
     QFileSystemModel *dirModel;
     QFileSystemModel *fileModel;

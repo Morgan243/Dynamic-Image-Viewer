@@ -51,6 +51,7 @@ void Image_Analyzer::openImage(QString fileName)
     drawMarks(points);
     //drawMarks(tagger.readPointsFromComment(fileName));
 
+    image_marks[fileName] = points;
     //if file has been marked, load the marks
 //    if(image_marks.contains(fileName))
 //        drawMarks(image_marks[fileName]);
