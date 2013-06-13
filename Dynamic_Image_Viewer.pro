@@ -13,6 +13,7 @@ TARGET = Dynamic_Image_Viewer
 TEMPLATE = app
 
 LIBS += -lexiv2
+LIBS += -lmarblewidget
 
 SOURCES += main.cpp\
         mainwindow.cpp \

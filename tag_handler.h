@@ -12,6 +12,7 @@ struct GPS_CoOrd
 {
     QString ref;
 
+    qreal dec_form;
     float degrees, minutes, seconds;
 };
 
@@ -31,7 +32,7 @@ private:
     Exiv2::Image::AutoPtr image;
 
 public:
-    bool dumpAllExif;
+    bool dumpAllExif,  gps_found;
     GPS_data gps;
 
     Tag_Handler();
@@ -41,6 +42,7 @@ public:
 
     void convert_degMinSec(QString ratio, GPS_CoOrd &coord);
     QString getDegMinSec(GPS_CoOrd coord);
+    qreal getDecForm(GPS_CoOrd CoOrd, QString ref);
 
     void clearGPSdata();
     void clearGPSdata(GPS_data &gpsData);

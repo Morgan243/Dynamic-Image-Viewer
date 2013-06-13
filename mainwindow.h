@@ -15,6 +15,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <QFileSystemWatcher>
+#include <marble/MarbleWidget.h>
 // #include <QExifImageHeader>
 //#include "xml_handler.h"
 
@@ -47,6 +48,8 @@ private slots:
     void init_fileModels();
 
     void init_view();
+
+    void init_marble();
 
     void init_user_options();
 
@@ -109,9 +112,15 @@ private slots:
     void fileChangedSlot(QString path);
 
     void dirChangedSlot(QString path);
+
+    void showPriorityImagesContext(const QPoint & pos);
 private:
 
     bool auto_select_top;
+
+    Marble::MarbleWidget *mapWidget;
+
+    QMenu *contextMenu_listView;
 
     QString image_in_view;
     ImageSource source_of_view;

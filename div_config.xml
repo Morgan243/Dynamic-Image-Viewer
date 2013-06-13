@@ -1,9 +1,9 @@
 <configuration>
     <watchDir>
-        <path>/home/morgan/Projects/UAV/pics_field_lowRes_run1_4-26</path>
+        <path>/home/morgan/Projects/UAV/crash_pics</path>
     </watchDir>
     <priorityDir>
-        <path>/home/morgan/Projects/UAV/pics_field_lowRes_run1_4-26</path>
+        <path>/home/morgan/Projects/UAV/crash_pics</path>
     </priorityDir>
     <options>
         <auto_select>on</auto_select>

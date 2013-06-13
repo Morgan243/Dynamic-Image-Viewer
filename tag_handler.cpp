@@ -30,7 +30,7 @@ void Tag_Handler::loadTag(QString fileName)
 
 void Tag_Handler::parseTag()
 {
-    bool gps_found = false;
+    gps_found = false;
     Exiv2::ExifData::const_iterator end = exif_data->end();
 
     for(Exiv2::ExifData::const_iterator i = exif_data->begin(); i != end; ++i)
@@ -55,12 +55,15 @@ void Tag_Handler::parseTag()
         {
             gps.lat_ratio = QString::fromStdString(i->value().toString());
             convert_degMinSec(gps.lat_ratio, gps.lat_coord);
+            gps.lat_coord.dec_form = getDecForm(gps.lat_coord, gps.lat_coord.ref);
             gps_found = true;
         }
         else if(i->key() == "Exif.GPSInfo.GPSLongitude" )
         {
             gps.long_ratio = QString::fromStdString(i->value().toString());
             convert_degMinSec(gps.long_ratio, gps.long_coord);
+            gps.long_coord.dec_form = getDecForm(gps.long_coord, gps.long_coord.ref);
+
             gps_found = true;
         }
         else if(i->key() == "Exif.GPSInfo.GPSLatitudeRef")
@@ -123,6 +126,16 @@ QString Tag_Handler::getDegMinSec(GPS_CoOrd coord)
     //parsed.append(QString("%l").arg(coord.degrees));
     //parsed.append(QString("%l  %l  %l").arg(coord.degrees, coord.minutes, coord.seconds));
     return parsed;
+}
+
+qreal Tag_Handler::getDecForm(GPS_CoOrd CoOrd, QString ref)
+{
+    qreal dec_form = CoOrd.degrees + (CoOrd.minutes/60.0) + (CoOrd.seconds/3600.0);
+
+    if((ref == "W") || (ref == "S"))
+        dec_form *= -1;
+
+    return dec_form;
 }
 
 void Tag_Handler::clearGPSdata()

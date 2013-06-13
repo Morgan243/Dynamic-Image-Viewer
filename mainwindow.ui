@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>831</width>
-    <height>728</height>
+    <width>1260</width>
+    <height>749</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -35,12 +35,12 @@
      <widget class="QTabWidget" name="tabWidget">
       <property name="maximumSize">
        <size>
-        <width>600</width>
+        <width>900</width>
         <height>16777215</height>
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -263,6 +263,11 @@
        <attribute name="title">
         <string>Cross Reference Globe</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_Mrable"/>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -274,7 +279,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>831</width>
+     <width>1260</width>
      <height>23</height>
     </rect>
    </property>

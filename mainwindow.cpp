@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     init_view();
 
+    init_marble();
+
     init_user_options();
 
     init_slots_signals();
@@ -95,6 +97,12 @@ void MainWindow::init_fileModels()
     priorityFileModel->setFilter((QDir::NoDotAndDotDot | QDir::Files));
     priorityFileModel->setRootPath(priorityPath);
 
+    //set context menu to custom
+    ui->listView_priorityImages->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->listView_priorityImages, SIGNAL(customContextMenuRequested(QPoint)),
+            SLOT(showPriorityImagesContext(const QPoint &)));
+
+
     ui->listView_priorityImages->setModel(priorityFileModel);
     ui->listView_priorityImages->setRootIndex(priorityFileModel->setRootPath(priorityPath));
 
@@ -121,6 +129,28 @@ void MainWindow::init_view()
 
     //do this or nothing shows up!
     setCentralWidget(splitter);
+
+    //create actions for context menu
+    //QAction goto_gps(tr("Go-to GPS"), this);
+
+    //create context menu for listViews
+    contextMenu_listView = new QMenu(tr("Context Menu"), this);
+    contextMenu_listView->addAction(new QAction(tr("Go-To GPS"), this));
+
+}
+
+void MainWindow::init_marble()
+{
+    // Create a Marble QWidget without a parent
+    mapWidget = new Marble::MarbleWidget();
+
+    // Load the OpenStreetMap map
+    //mapWidget->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
+    //mapWidget->setMapThemeId("earth/mapquest-open-aerial/mapquest-open-aerial.dgml");
+    mapWidget->setMapThemeId("earth/googlesat/googlesat.dgml");
+
+    ui->gridLayout_Mrable->addWidget(mapWidget);
+
 }
 
 void MainWindow::init_user_options()
@@ -446,3 +476,42 @@ void MainWindow::dirChangedSlot(QString path)
     }
 }
 
+void MainWindow::showPriorityImagesContext(const QPoint &pos)
+{
+
+   QAction* selectedItem
+           = contextMenu_listView->exec(ui->listView_priorityImages->mapToGlobal(pos));
+   if(selectedItem)
+   {
+        std::cout<<"Selected: "<<qPrintable(selectedItem->text())<<std::endl;
+        if(selectedItem->text() == "Go-To GPS")
+        {
+            //SOE
+            //qreal lat = 37.54511833;
+            //qreal lng = -77.45010667;
+
+
+            //qreal lat = 37.336218;
+            //qreal lng = -77.236913;
+
+            //SUAS Competition Site
+            qreal lat = 38.150475;
+            qreal lng = -76.424932;
+
+            if(imageView->tagger.gps_found)
+            {
+                lat = imageView->tagger.gps.lat_coord.dec_form;
+                lng = imageView->tagger.gps.long_coord.dec_form;
+            }
+
+            mapWidget->setCenterLatitude(lat);
+            mapWidget->setCenterLongitude(lng);
+
+            mapWidget->zoomViewBy(2500);
+        }
+   }
+   else
+   {
+       std::cout<<"Nothing selected in context menu"<<std::endl;
+   }
+}
