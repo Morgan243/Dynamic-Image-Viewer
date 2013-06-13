@@ -5,4 +5,9 @@
     <priorityDir>
         <path>/home/morgan/Projects/UAV/pics_field_lowRes_run1_4-26</path>
     </priorityDir>
+    <options>
+        <auto_select>on</auto_select>
+        <reverse_sort>on</reverse_sort>
+        <fit_to_window>on</fit_to_window>
+    </options>
 </configuration>
