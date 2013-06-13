@@ -25,7 +25,7 @@ struct Configuration
     QVector<QString> priority_dir;
     bool copy_priority;     //use sym-links if false
     bool reverse_sort;
-
+    bool auto_select;
 };
 
 class Config_Parser : public xml_Handler

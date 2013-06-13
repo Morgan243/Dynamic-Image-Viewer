@@ -23,6 +23,7 @@ void Config_Parser::init_config(Configuration &init_me)
     init_me.priority_dir.push_back("/home/morgan/Projects/UAV/pics_field_lowRes_run1_4-26/priority");
     init_me.reverse_sort = true;
     init_me.copy_priority = false;
+    init_me.auto_select = false;
 }
 
 Configuration Config_Parser::ParseConfig()

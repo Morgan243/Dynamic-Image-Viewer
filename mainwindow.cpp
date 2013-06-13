@@ -91,6 +91,10 @@ void MainWindow::load_config()
     //path for priority directory
     priorityPath = main_config.priority_dir.at(0);
 
+    //set the auto-select check box to match the startup setting
+    auto_select_top = main_config.auto_select;
+    ui->chkBx_autSelectLatest->setChecked(auto_select_top);
+
     //check if the paths are the same
     if(imagePath == priorityPath)
     {
@@ -132,7 +136,11 @@ void MainWindow::on_chkBx_autSelectLatest_stateChanged(int arg1)
         //select the top item in the list
         ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
         ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
+
+        auto_select_top = true;
     }
+    else
+        auto_select_top = false;
 
 }
 
@@ -284,8 +292,11 @@ void MainWindow::on_listView_availImages_clicked(const QModelIndex &index)
 
 void MainWindow::filesInserted(const QModelIndex &parent, int start, int end)
 {
-    ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
-    ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
+    if(auto_select_top)
+    {
+        ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
+        ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
+    }
 }
 
 

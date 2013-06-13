@@ -101,6 +101,8 @@ private slots:
     void dirChangedSlot(QString path);
 private:
 
+    bool auto_select_top;
+
     QString image_in_view;
     ImageSource source_of_view;
     QString imagePath;
