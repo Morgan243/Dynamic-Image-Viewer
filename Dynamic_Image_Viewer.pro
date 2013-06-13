@@ -12,7 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Dynamic_Image_Viewer
 TEMPLATE = app
 
-LIBS += -lexif
+LIBS += -lexiv2
 
 SOURCES += main.cpp\
         mainwindow.cpp \
