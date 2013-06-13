@@ -111,7 +111,8 @@ void MainWindow::init_view()
 
     //add a splitter between the ui and the image
     splitter = new QSplitter();
-    splitter->addWidget(ui->groupBox_options);
+    //splitter->addWidget(ui->groupBox_options);
+    splitter->addWidget(ui->tabWidget);
     splitter->addWidget(imageView);
 
     connect(splitter, SIGNAL(splitterMoved(int,int)), this, SLOT(splitterResize(int,int)));

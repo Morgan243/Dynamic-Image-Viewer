@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>834</width>
-    <height>700</height>
+    <width>831</width>
+    <height>728</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -32,213 +32,238 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QGroupBox" name="groupBox_options">
-      <property name="minimumSize">
-       <size>
-        <width>10</width>
-        <height>0</height>
-       </size>
-      </property>
+     <widget class="QTabWidget" name="tabWidget">
       <property name="maximumSize">
        <size>
-        <width>650</width>
+        <width>600</width>
         <height>16777215</height>
        </size>
       </property>
-      <property name="autoFillBackground">
-       <bool>false</bool>
+      <property name="currentIndex">
+       <number>1</number>
       </property>
-      <property name="title">
-       <string>Options and Information</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="2" column="0" colspan="3">
-        <widget class="QLabel" name="label_AvailableImages">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Available Images</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2" colspan="2">
-        <widget class="QCheckBox" name="chkBox_reverseSort">
-         <property name="text">
-          <string>Reverse Listing</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QPushButton" name="pushBtn_ZoomOut">
-         <property name="text">
-          <string>Zoom Out</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QCheckBox" name="chkBx_autSelectLatest">
-         <property name="text">
-          <string>Auto Select Latest</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="3" colspan="2">
-        <widget class="QTextBrowser" name="textBrowser_imageInfo_priority">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>150</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QPushButton" name="pushBtn_add">
-         <property name="text">
-          <string>Add</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="pushBtn_ZoomIn">
-         <property name="text">
-          <string>Zoom In</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="3" colspan="2">
-        <widget class="QLabel" name="label_imageInfo_priority">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Image Information</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QDoubleSpinBox" name="doubleSpinBx_scaleFactor">
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.200000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QPushButton" name="pushBtn_remove">
-         <property name="text">
-          <string>Remove</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0" colspan="2">
-        <widget class="QTextBrowser" name="textBrowser_ImageInfo">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>150</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3" rowspan="2" colspan="2">
-        <widget class="QListView" name="listView_priorityImages">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>350</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" rowspan="2" colspan="2">
-        <widget class="QListView" name="listView_availImages">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>350</height>
-          </size>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_ImageInformation">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-           <underline>false</underline>
-          </font>
-         </property>
-         <property name="text">
-          <string>Image Information</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3" colspan="2">
-        <widget class="QLabel" name="label_priorityImages">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Priority Images</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="4">
-        <widget class="QCheckBox" name="chkBx_FitToWindow">
-         <property name="text">
-          <string>Fit To Window</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-      <zorder>doubleSpinBx_scaleFactor</zorder>
-      <zorder>pushBtn_ZoomOut</zorder>
-      <zorder>pushBtn_ZoomIn</zorder>
-      <zorder>pushBtn_remove</zorder>
-      <zorder>listView_priorityImages</zorder>
-      <zorder>listView_availImages</zorder>
-      <zorder>pushBtn_add</zorder>
-      <zorder>textBrowser_imageInfo_priority</zorder>
-      <zorder>textBrowser_ImageInfo</zorder>
-      <zorder>label_imageInfo_priority</zorder>
-      <zorder>label_ImageInformation</zorder>
-      <zorder>chkBx_FitToWindow</zorder>
-      <zorder>chkBx_autSelectLatest</zorder>
-      <zorder>chkBox_reverseSort</zorder>
-      <zorder>label_priorityImages</zorder>
-      <zorder>label_AvailableImages</zorder>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Image Management</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QGroupBox" name="groupBox_options">
+          <property name="minimumSize">
+           <size>
+            <width>10</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>650</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="title">
+           <string>Options and Information</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="2" column="0" colspan="3">
+            <widget class="QLabel" name="label_AvailableImages">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Available Images</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2" colspan="2">
+            <widget class="QCheckBox" name="chkBox_reverseSort">
+             <property name="text">
+              <string>Reverse Listing</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QPushButton" name="pushBtn_ZoomOut">
+             <property name="text">
+              <string>Zoom Out</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" colspan="2">
+            <widget class="QCheckBox" name="chkBx_autSelectLatest">
+             <property name="text">
+              <string>Auto Select Latest</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="3" colspan="2">
+            <widget class="QTextBrowser" name="textBrowser_imageInfo_priority">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>150</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QPushButton" name="pushBtn_add">
+             <property name="text">
+              <string>Add</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QPushButton" name="pushBtn_ZoomIn">
+             <property name="text">
+              <string>Zoom In</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="3" colspan="2">
+            <widget class="QLabel" name="label_imageInfo_priority">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Image Information</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QDoubleSpinBox" name="doubleSpinBx_scaleFactor">
+             <property name="minimum">
+              <double>0.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.200000000000000</double>
+             </property>
+             <property name="value">
+              <double>1.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QPushButton" name="pushBtn_remove">
+             <property name="text">
+              <string>Remove</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0" colspan="2">
+            <widget class="QTextBrowser" name="textBrowser_ImageInfo">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>150</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="3" rowspan="2" colspan="2">
+            <widget class="QListView" name="listView_priorityImages">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>350</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0" rowspan="2" colspan="2">
+            <widget class="QListView" name="listView_availImages">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>350</height>
+              </size>
+             </property>
+             <property name="editTriggers">
+              <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_ImageInformation">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+               <underline>false</underline>
+              </font>
+             </property>
+             <property name="text">
+              <string>Image Information</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3" colspan="2">
+            <widget class="QLabel" name="label_priorityImages">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Priority Images</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <widget class="QCheckBox" name="chkBx_FitToWindow">
+             <property name="text">
+              <string>Fit To Window</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+          <zorder>doubleSpinBx_scaleFactor</zorder>
+          <zorder>pushBtn_ZoomOut</zorder>
+          <zorder>pushBtn_ZoomIn</zorder>
+          <zorder>pushBtn_remove</zorder>
+          <zorder>listView_priorityImages</zorder>
+          <zorder>listView_availImages</zorder>
+          <zorder>pushBtn_add</zorder>
+          <zorder>textBrowser_imageInfo_priority</zorder>
+          <zorder>textBrowser_ImageInfo</zorder>
+          <zorder>label_imageInfo_priority</zorder>
+          <zorder>label_ImageInformation</zorder>
+          <zorder>chkBx_FitToWindow</zorder>
+          <zorder>chkBx_autSelectLatest</zorder>
+          <zorder>chkBox_reverseSort</zorder>
+          <zorder>label_priorityImages</zorder>
+          <zorder>label_AvailableImages</zorder>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Cross Reference Globe</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -249,7 +274,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>834</width>
+     <width>831</width>
      <height>23</height>
     </rect>
    </property>
