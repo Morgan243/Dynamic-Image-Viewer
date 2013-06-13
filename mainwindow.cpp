@@ -1,7 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
- #include <QtGui>
+#include <QtGui>
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -173,12 +175,14 @@ void MainWindow::init_user_options()
 
 void MainWindow::init_slots_signals()
 {
+#ifdef FILE_WATCHER_ON
     //setup watcher
     file_watcher = new QFileSystemWatcher();
     //file_watcher->addPath(imagePath);
 
     connect(file_watcher,SIGNAL(fileChanged(QString)),this,SLOT(fileChangedSlot(QString)));
     connect(file_watcher,SIGNAL(directoryChanged(QString)),this,SLOT(dirChangedSlot(QString)));
+#endif
 
     //set up a selection model to be able to alter list view selection programmatically
     availImg_sm = ui->listView_availImages->selectionModel();
@@ -439,7 +443,9 @@ void MainWindow::putSelectedImageToDisplay(ImageSource source)
 
     image_in_view = select;
 
+#ifdef FILE_WATCHER_ON
     file_watcher->addPath(select);
+#endif
 
     //open the image
     imageView->openImage(select);
@@ -491,8 +497,8 @@ void MainWindow::showPriorityImagesContext(const QPoint &pos)
             //qreal lng = -77.45010667;
 
 
-            //qreal lat = 37.336218;
-            //qreal lng = -77.236913;
+           // qreal lat = 37.336218;
+           // qreal lng = -77.236913;
 
             //SUAS Competition Site
             qreal lat = 38.150475;

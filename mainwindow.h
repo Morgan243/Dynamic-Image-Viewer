@@ -16,6 +16,8 @@
 #include <errno.h>
 #include <QFileSystemWatcher>
 #include <marble/MarbleWidget.h>
+//#define FILE_WATCHER_ON 1
+
 // #include <QExifImageHeader>
 //#include "xml_handler.h"
 
@@ -127,7 +129,9 @@ private:
     QString imagePath;
     QString priorityPath;
 
+#ifdef FILE_WATCHER_ON
     QFileSystemWatcher *file_watcher;
+#endif
 
     QFileSystemModel *dirModel;
     QFileSystemModel *fileModel;
