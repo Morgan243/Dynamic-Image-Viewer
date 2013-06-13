@@ -116,6 +116,10 @@ private slots:
     void dirChangedSlot(QString path);
 
     void showPriorityImagesContext(const QPoint & pos);
+
+    void showAvailImagesContext(const QPoint & pos);
+
+    void handleListViewContext(QAction *selectedItem);
 private:
 
     bool auto_select_top;

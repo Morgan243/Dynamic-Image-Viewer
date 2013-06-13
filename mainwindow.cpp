@@ -95,19 +95,28 @@ void MainWindow::init_fileModels()
     ui->listView_availImages->setModel(fileModel);
     ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
 
+    //set context menu to custom
+    ui->listView_availImages->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    //setup a slot for the context menu
+    connect(ui->listView_availImages, SIGNAL(customContextMenuRequested(QPoint)),
+            SLOT(showAvailImagesContext(const QPoint &)));
+
+
+    //setup priority directory fileModel
     priorityFileModel = new QFileSystemModel(this);
     priorityFileModel->setFilter((QDir::NoDotAndDotDot | QDir::Files));
     priorityFileModel->setRootPath(priorityPath);
 
-    //set context menu to custom
-    ui->listView_priorityImages->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->listView_priorityImages, SIGNAL(customContextMenuRequested(QPoint)),
-            SLOT(showPriorityImagesContext(const QPoint &)));
-
-
     ui->listView_priorityImages->setModel(priorityFileModel);
     ui->listView_priorityImages->setRootIndex(priorityFileModel->setRootPath(priorityPath));
 
+    //set context menu to custom
+    ui->listView_priorityImages->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    //setup a slot for the context menu
+    connect(ui->listView_priorityImages, SIGNAL(customContextMenuRequested(QPoint)),
+            SLOT(showPriorityImagesContext(const QPoint &)));
 }
 
 void MainWindow::init_view()
@@ -492,40 +501,49 @@ void MainWindow::dirChangedSlot(QString path)
 
 void MainWindow::showPriorityImagesContext(const QPoint &pos)
 {
+    handleListViewContext
+            (contextMenu_listView->exec(ui->listView_priorityImages->mapToGlobal(pos)));
+}
 
-   QAction* selectedItem
-           = contextMenu_listView->exec(ui->listView_priorityImages->mapToGlobal(pos));
-   if(selectedItem)
-   {
-        std::cout<<"Selected: "<<qPrintable(selectedItem->text())<<std::endl;
-        if(selectedItem->text() == "Go-To GPS")
-        {
-            //SOE
-            //qreal lat = 37.54511833;
-            //qreal lng = -77.45010667;
+void MainWindow::showAvailImagesContext(const QPoint &pos)
+{
+    handleListViewContext
+            (contextMenu_listView->exec(ui->listView_availImages->mapToGlobal(pos)));
+}
+
+void MainWindow::handleListViewContext(QAction *selectedItem)
+{
+    if(selectedItem)
+    {
+         std::cout<<"Selected: "<<qPrintable(selectedItem->text())<<std::endl;
+         if(selectedItem->text() == "Go-To GPS")
+         {
+             //SOE
+             //qreal lat = 37.54511833;
+             //qreal lng = -77.45010667;
 
 
-           // qreal lat = 37.336218;
-           // qreal lng = -77.236913;
+            // qreal lat = 37.336218;
+            // qreal lng = -77.236913;
 
-            //SUAS Competition Site
-            qreal lat = 38.150475;
-            qreal lng = -76.424932;
+             //SUAS Competition Site
+             qreal lat = 38.150475;
+             qreal lng = -76.424932;
 
-            if(imageView->tagger.gps_found)
-            {
-                lat = imageView->tagger.gps.lat_coord.dec_form;
-                lng = imageView->tagger.gps.long_coord.dec_form;
-            }
+             if(imageView->tagger.gps_found)
+             {
+                 lat = imageView->tagger.gps.lat_coord.dec_form;
+                 lng = imageView->tagger.gps.long_coord.dec_form;
+             }
 
-            mapWidget->setCenterLatitude(lat);
-            mapWidget->setCenterLongitude(lng);
+             mapWidget->setCenterLatitude(lat);
+             mapWidget->setCenterLongitude(lng);
 
-            mapWidget->zoomViewBy(2500);
-        }
-   }
-   else
-   {
-       std::cout<<"Nothing selected in context menu"<<std::endl;
-   }
+             mapWidget->zoomViewBy(2500);
+         }
+    }
+    else
+    {
+        std::cout<<"Nothing selected in context menu"<<std::endl;
+    }
 }
