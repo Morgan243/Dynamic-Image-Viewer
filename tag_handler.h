@@ -2,9 +2,6 @@
 #define TAG_HANDLER_H
 #include <exiv2/exiv2.hpp>
 #include <iostream>
-#include "libexif/exif-data.h"
-#include "libexif/exif-ifd.h"
-#include "libexif/exif-loader.h"
 
 #include <QVector>
 #include <QPointF>

@@ -13,7 +13,6 @@ TARGET = Dynamic_Image_Viewer
 TEMPLATE = app
 
 LIBS += -lexif
-LIBS += -lexiv2
 
 SOURCES += main.cpp\
         mainwindow.cpp \
