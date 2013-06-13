@@ -297,6 +297,14 @@ void MainWindow::on_actionOpen_Directory_triggered()
 
     ui->listView_availImages->setModel(fileModel);
     ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
+
+    //set both the same
+    setup_paths(imagePath, imagePath);
+
+    priorityFileModel->setRootPath(priorityPath);
+
+    ui->listView_priorityImages->setModel(priorityFileModel);
+    ui->listView_priorityImages->setRootIndex(priorityFileModel->setRootPath(priorityPath));
 }
 
 void MainWindow::on_pushBtn_add_clicked()
