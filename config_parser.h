@@ -24,6 +24,7 @@ struct Configuration
     QVector<QString> watch_dir;
     QVector<QString> priority_dir;
     bool copy_priority;     //use sym-links if false
+    bool fit_to_window;
     bool reverse_sort;
     bool auto_select;
 };

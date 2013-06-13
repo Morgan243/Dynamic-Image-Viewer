@@ -11,35 +11,11 @@ MainWindow::MainWindow(QWidget *parent) :
     //imageView->imgLoaded = false;
     ui->setupUi(this);
 
-    load_config();
-
-    //setup watcher
-    file_watcher = new QFileSystemWatcher();
-    //file_watcher->addPath(imagePath);
-
-    connect(file_watcher,SIGNAL(fileChanged(QString)),this,SLOT(fileChangedSlot(QString)));
-    connect(file_watcher,SIGNAL(directoryChanged(QString)),this,SLOT(dirChangedSlot(QString)));
-
-
-    //Set up the file model for the directory view (avail images)
-    fileModel = new QFileSystemModel(this);
-    fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
-    fileModel->setRootPath(imagePath);
-
-    //make the filemodel the available images listview's base model
-    ui->listView_availImages->setModel(fileModel);
-    ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
-
-    priorityFileModel = new QFileSystemModel(this);
-    priorityFileModel->setFilter((QDir::NoDotAndDotDot | QDir::Files));
-    priorityFileModel->setRootPath(priorityPath);
-
-    ui->listView_priorityImages->setModel(priorityFileModel);
-    ui->listView_priorityImages->setRootIndex(priorityFileModel->setRootPath(priorityPath));
-
     //Create graphics scene (where images are shown)
     QGraphicsScene *scene = new QGraphicsScene();
     imageView = new Image_Analyzer(scene);
+
+    load_config();
 
     //add the graphics view to the layout
     ui->horizontalLayout->addWidget(imageView);
@@ -91,10 +67,6 @@ void MainWindow::load_config()
     //path for priority directory
     priorityPath = main_config.priority_dir.at(0);
 
-    //set the auto-select check box to match the startup setting
-    auto_select_top = main_config.auto_select;
-    ui->chkBx_autSelectLatest->setChecked(auto_select_top);
-
     //check if the paths are the same
     if(imagePath == priorityPath)
     {
@@ -124,6 +96,48 @@ void MainWindow::load_config()
                  std::cout<<"Directory created!"<<std::endl;
         }
     }
+
+
+    //setup watcher
+    file_watcher = new QFileSystemWatcher();
+    //file_watcher->addPath(imagePath);
+
+    connect(file_watcher,SIGNAL(fileChanged(QString)),this,SLOT(fileChangedSlot(QString)));
+    connect(file_watcher,SIGNAL(directoryChanged(QString)),this,SLOT(dirChangedSlot(QString)));
+
+    //Set up the file model for the directory view (avail images)
+    fileModel = new QFileSystemModel(this);
+    fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
+    fileModel->setRootPath(imagePath);
+
+    //make the filemodel the available images listview's base model
+    ui->listView_availImages->setModel(fileModel);
+    ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
+
+    priorityFileModel = new QFileSystemModel(this);
+    priorityFileModel->setFilter((QDir::NoDotAndDotDot | QDir::Files));
+    priorityFileModel->setRootPath(priorityPath);
+
+    ui->listView_priorityImages->setModel(priorityFileModel);
+    ui->listView_priorityImages->setRootIndex(priorityFileModel->setRootPath(priorityPath));
+
+
+    //set the auto-select check box to match the startup setting
+    auto_select_top = main_config.auto_select;
+    ui->chkBx_autSelectLatest->setChecked(auto_select_top);
+
+    //set the fit to window check box and match the the data member
+    imageView->scaleToWindow = main_config.fit_to_window;
+    ui->chkBx_FitToWindow->setChecked(imageView->scaleToWindow);
+
+    if(main_config.reverse_sort)
+        fileModel->sort(0, Qt::DescendingOrder);
+    else
+        fileModel->sort(0, Qt::AscendingOrder);
+
+    ui->chkBox_reverseSort->setChecked(main_config.reverse_sort);
+
+
 }
 
 

@@ -24,6 +24,7 @@ void Config_Parser::init_config(Configuration &init_me)
     init_me.reverse_sort = true;
     init_me.copy_priority = false;
     init_me.auto_select = false;
+    init_me.fit_to_window = false;
 }
 
 Configuration Config_Parser::ParseConfig()
@@ -33,6 +34,8 @@ Configuration Config_Parser::ParseConfig()
     Parse_watchDir(docElem);
 
     Parse_priorityDir(docElem);
+
+    Parse_options(docElem);
 
     return config;
 }
@@ -84,6 +87,65 @@ void Config_Parser::Parse_priorityDir(QDomElement docElem)
                 config.priority_dir.push_back(peData.text());
                 std::cout<<"New Priority Dir: "<<qPrintable(config.priority_dir.back())<<std::endl;
             }
+            entries = entries.nextSibling();
+        }
+    }
+}
+
+void Config_Parser::Parse_options(QDomElement docElem)
+{
+    QDomNodeList watchDir_list = docElem.elementsByTagName("options");
+
+    for(int i = 0; i < watchDir_list.count(); i++)
+    {
+        QDomElement el = watchDir_list.at(i).toElement();
+        //docElem = watchDir_list.at(i).toElement();
+
+        QDomNode entries = el.firstChild();
+
+        while(!entries.isNull())
+        {
+            QDomElement peData = entries.toElement();
+            QString tagName = peData.tagName();
+
+            if(tagName == "auto_select")
+            {
+                if(peData.text() == "on")
+                {
+                    config.auto_select = true;
+                }
+                else
+                {
+                    config.auto_select = false;
+                }
+
+                std::cout<<"Auto select top image is "<<qPrintable(peData.text())<<std::endl;
+            }
+            else if(tagName == "reverse_sort")
+            {
+                if(peData.text() == "on")
+                {
+                    config.reverse_sort = true;
+                }
+                else
+                {
+                    config.reverse_sort = false;
+                }
+                std::cout<<"Reverse sorting is "<<qPrintable(peData.text())<<std::endl;
+            }
+            else if(tagName == "fit_to_window")
+            {
+                if(peData.text() == "on")
+                {
+                    config.fit_to_window = true;
+                }
+                else
+                {
+                    config.fit_to_window = false;
+                }
+                std::cout<<"Fit-toWindow is "<<qPrintable(peData.text())<<std::endl;
+            }
+
             entries = entries.nextSibling();
         }
     }
