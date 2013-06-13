@@ -7,42 +7,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     config_parser("div_config.xml")
 {
-    //easy way to keep things from happening until an image is loaded
-    //imageView->imgLoaded = false;
     ui->setupUi(this);
-
-    //Create graphics scene (where images are shown)
-    QGraphicsScene *scene = new QGraphicsScene();
-    imageView = new Image_Analyzer(scene);
 
     load_config();
 
-    //add the graphics view to the layout
-    ui->horizontalLayout->addWidget(imageView);
+    setup_paths(main_config.watch_dir.at(0), main_config.priority_dir.at(0));
 
-    //add a splitter between the ui and the image
-    splitter = new QSplitter();
-    splitter->addWidget(ui->groupBox_options);
-    splitter->addWidget(imageView);
+    init_fileModels();
 
-    connect(splitter, SIGNAL(splitterMoved(int,int)), this, SLOT(splitterResize(int,int)));
+    init_view();
 
-    stdModel = new QStandardItemModel(this);
+    init_user_options();
 
-    //do this or nothing shows up!
-    setCentralWidget(splitter);
+    init_slots_signals();
 
-    //set up a selection model to be able to alter list view selection programmatically
-    availImg_sm = ui->listView_availImages->selectionModel();
-    connect(availImg_sm,SIGNAL(selectionChanged(const QItemSelection & , const QItemSelection & )),this, SLOT(availImageList_selectionChange(const QItemSelection & , const QItemSelection & )));
-
-    //connect rowsInserted signal to the filesInserted slot
-    connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(filesInserted(QModelIndex,int,int)));
-
-    priorityImg_sm = ui->listView_priorityImages->selectionModel();
-    connect(priorityImg_sm, SIGNAL(selectionChanged(const QItemSelection & , const QItemSelection &)), this, SLOT(priorityImageList_selectionChange(const QItemSelection & , const QItemSelection & )));
-
-    connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(priorityFilesInserted(QModelIndex,int,int)));
 }
 
 MainWindow::~MainWindow()
@@ -54,18 +32,16 @@ MainWindow::~MainWindow()
 void MainWindow::load_config()
 {
     main_config = config_parser.ParseConfig();
+}
 
-    //set tooltips
-    ui->label_AvailableImages
-            ->setToolTip(main_config.watch_dir.at(0));
-    ui->label_priorityImages
-            ->setToolTip(main_config.priority_dir.at(0));
 
+void MainWindow::setup_paths(QString watch_path, QString priority_path)
+{
     //path for the watch directory (just first watchDir in xml)
-    imagePath = main_config.watch_dir.at(0);
+    imagePath = watch_path;
 
     //path for priority directory
-    priorityPath = main_config.priority_dir.at(0);
+    priorityPath = priority_path;
 
     //check if the paths are the same
     if(imagePath == priorityPath)
@@ -97,14 +73,15 @@ void MainWindow::load_config()
         }
     }
 
+    //set tooltips
+    ui->label_AvailableImages
+            ->setToolTip(imagePath);
+    ui->label_priorityImages
+            ->setToolTip(priorityPath);
+}
 
-    //setup watcher
-    file_watcher = new QFileSystemWatcher();
-    //file_watcher->addPath(imagePath);
-
-    connect(file_watcher,SIGNAL(fileChanged(QString)),this,SLOT(fileChangedSlot(QString)));
-    connect(file_watcher,SIGNAL(directoryChanged(QString)),this,SLOT(dirChangedSlot(QString)));
-
+void MainWindow::init_fileModels()
+{
     //Set up the file model for the directory view (avail images)
     fileModel = new QFileSystemModel(this);
     fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
@@ -121,7 +98,32 @@ void MainWindow::load_config()
     ui->listView_priorityImages->setModel(priorityFileModel);
     ui->listView_priorityImages->setRootIndex(priorityFileModel->setRootPath(priorityPath));
 
+}
 
+void MainWindow::init_view()
+{
+    //Create graphics scene (where images are shown)
+    QGraphicsScene *scene = new QGraphicsScene();
+    imageView = new Image_Analyzer(scene);
+
+    //add the graphics view to the layout
+    ui->horizontalLayout->addWidget(imageView);
+
+    //add a splitter between the ui and the image
+    splitter = new QSplitter();
+    splitter->addWidget(ui->groupBox_options);
+    splitter->addWidget(imageView);
+
+    connect(splitter, SIGNAL(splitterMoved(int,int)), this, SLOT(splitterResize(int,int)));
+
+    stdModel = new QStandardItemModel(this);
+
+    //do this or nothing shows up!
+    setCentralWidget(splitter);
+}
+
+void MainWindow::init_user_options()
+{
     //set the auto-select check box to match the startup setting
     auto_select_top = main_config.auto_select;
     ui->chkBx_autSelectLatest->setChecked(auto_select_top);
@@ -136,10 +138,29 @@ void MainWindow::load_config()
         fileModel->sort(0, Qt::AscendingOrder);
 
     ui->chkBox_reverseSort->setChecked(main_config.reverse_sort);
-
-
 }
 
+void MainWindow::init_slots_signals()
+{
+    //setup watcher
+    file_watcher = new QFileSystemWatcher();
+    //file_watcher->addPath(imagePath);
+
+    connect(file_watcher,SIGNAL(fileChanged(QString)),this,SLOT(fileChangedSlot(QString)));
+    connect(file_watcher,SIGNAL(directoryChanged(QString)),this,SLOT(dirChangedSlot(QString)));
+
+    //set up a selection model to be able to alter list view selection programmatically
+    availImg_sm = ui->listView_availImages->selectionModel();
+    connect(availImg_sm,SIGNAL(selectionChanged(const QItemSelection & , const QItemSelection & )),this, SLOT(availImageList_selectionChange(const QItemSelection & , const QItemSelection & )));
+
+    //connect rowsInserted signal to the filesInserted slot
+    connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(filesInserted(QModelIndex,int,int)));
+
+    priorityImg_sm = ui->listView_priorityImages->selectionModel();
+    connect(priorityImg_sm, SIGNAL(selectionChanged(const QItemSelection & , const QItemSelection &)), this, SLOT(priorityImageList_selectionChange(const QItemSelection & , const QItemSelection & )));
+
+    connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(priorityFilesInserted(QModelIndex,int,int)));
+}
 
 //--Signals and slots for gui interfaces--
 void MainWindow::on_chkBx_autSelectLatest_stateChanged(int arg1)
@@ -157,6 +178,7 @@ void MainWindow::on_chkBx_autSelectLatest_stateChanged(int arg1)
         auto_select_top = false;
 
 }
+
 
 void MainWindow::on_chkBx_FitToWindow_stateChanged(int arg1)
 {
@@ -222,10 +244,18 @@ void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 
 void MainWindow::on_actionOpen_Directory_triggered()
 {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                "/home",
+     QString dir;
+
+    if(!main_config.watch_dir.empty())
+        dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                               main_config.watch_dir.at(0),
                                                 QFileDialog::ShowDirsOnly
                                                 | QFileDialog::DontResolveSymlinks);
+    else
+        dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                        "/home",                                                QFileDialog::ShowDirsOnly
+                                                | QFileDialog::DontResolveSymlinks);
+
 
     imagePath = dir;
     fileModel->setRootPath(imagePath);

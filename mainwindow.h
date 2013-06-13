@@ -42,6 +42,16 @@ private slots:
 
     void load_config();
 
+    void setup_paths(QString watch_path, QString priority_path);
+
+    void init_fileModels();
+
+    void init_view();
+
+    void init_user_options();
+
+    void init_slots_signals();
+
     //general methods: UI and basic options
     void adjustScrollBar(QScrollBar *scrollBar, double factor);
 
