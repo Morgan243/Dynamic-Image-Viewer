@@ -341,6 +341,7 @@ GPS_data Tag_Handler::getGPS_fromFilename(QString filename)
         else if(word == "LON")
         {
             lng = atof(filename.toStdString().substr(colon+1, underscore_right -1 -colon).c_str());
+            gps_found = true;
         }
     }
 
