@@ -129,11 +129,13 @@ QString Image_Analyzer::getFormattedTag()
 {
     QString formattedTag;
 
-    formattedTag = "LAT:" + tagger.gps.lat_ratio;
+    //formattedTag = "LAT:" + tagger.gps.lat_ratio;
+    formattedTag = "LAT:" + QString::number(tagger.gps.lat_coord.dec_form);
     formattedTag = formattedTag + "\n>> (" + tagger.gps.lat_coord.ref
                     +") [" + tagger.getDegMinSec(tagger.gps.lat_coord) + "]";
 
-    formattedTag = formattedTag + "\n\nLONG: " + tagger.gps.long_ratio;
+    //formattedTag = formattedTag + "\n\nLONG: " + tagger.gps.long_ratio;
+    formattedTag = formattedTag + "\n\nLON: " + QString::number(tagger.gps.long_coord.dec_form);
     formattedTag = formattedTag + "\n>> (" + tagger.gps.long_coord.ref +
             +") [" + tagger.getDegMinSec(tagger.gps.long_coord) + "]";
 

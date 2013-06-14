@@ -3,10 +3,16 @@
 Tag_Handler::Tag_Handler()
 {
     dumpAllExif = true;
+    gps_from_filename = false;
 }
 
 void Tag_Handler::loadTag(QString fileName)
 {
+
+    //are we avoiding exif data?
+    if(gps_from_filename)
+        gps = getGPS_fromFilename(fileName);
+
     try
     {
         image = Exiv2::ImageFactory::open(fileName.toStdString());
@@ -30,7 +36,9 @@ void Tag_Handler::loadTag(QString fileName)
 
 void Tag_Handler::parseTag()
 {
-    gps_found = false;
+    if(!gps_from_filename)
+        gps_found = false;
+
     Exiv2::ExifData::const_iterator end = exif_data->end();
 
     for(Exiv2::ExifData::const_iterator i = exif_data->begin(); i != end; ++i)
@@ -51,14 +59,14 @@ void Tag_Handler::parseTag()
                       << "\n";
         }
 
-        if(i->key() == "Exif.GPSInfo.GPSLatitude" )
+        if(i->key() == "Exif.GPSInfo.GPSLatitude" && !gps_from_filename)
         {
             gps.lat_ratio = QString::fromStdString(i->value().toString());
             convert_degMinSec(gps.lat_ratio, gps.lat_coord);
             gps.lat_coord.dec_form = getDecForm(gps.lat_coord, gps.lat_coord.ref);
             gps_found = true;
         }
-        else if(i->key() == "Exif.GPSInfo.GPSLongitude" )
+        else if(i->key() == "Exif.GPSInfo.GPSLongitude" && !gps_from_filename)
         {
             gps.long_ratio = QString::fromStdString(i->value().toString());
             convert_degMinSec(gps.long_ratio, gps.long_coord);
@@ -66,11 +74,11 @@ void Tag_Handler::parseTag()
 
             gps_found = true;
         }
-        else if(i->key() == "Exif.GPSInfo.GPSLatitudeRef")
+        else if(i->key() == "Exif.GPSInfo.GPSLatitudeRef" && !gps_from_filename)
         {
             gps.lat_coord.ref = QString::fromStdString(i->value().toString());
         }
-        else if(i->key() == "Exif.GPSInfo.GPSLongitudeRef")
+        else if(i->key() == "Exif.GPSInfo.GPSLongitudeRef" && !gps_from_filename)
         {
             gps.long_coord.ref = QString::fromStdString(i->value().toString());
         }
@@ -301,4 +309,44 @@ void Tag_Handler::removePointInComment(QString fileName, QPointF point)
         //write back contents
         image->writeMetadata();
     }
+}
+
+GPS_data Tag_Handler::getGPS_fromFilename(QString filename)
+{
+    gps_found = false;
+    GPS_data gps_ret;
+    QString word;
+    int start, colon, underscore_left = 0, underscore_right = 0;
+
+    float lat = 0, lng = 0;
+
+    start = filename.toStdString().find_last_of('/');
+
+    underscore_right = underscore_left = start;
+
+    while((underscore_left = filename.toStdString().find('_',underscore_right)) != -1
+          && underscore_right != -1 && colon != -1)
+    {
+        colon = filename.toStdString().find(':',underscore_left);
+
+        underscore_right = filename.toStdString().find('_',colon);
+
+        word = QString::fromStdString(filename.toStdString().substr(underscore_left+1, 3));
+
+        if(word == "LAT")
+        {
+            lat = atof(filename.toStdString().substr(colon+1, underscore_right -1 -colon).c_str());
+            gps_found = true;
+        }
+        else if(word == "LON")
+        {
+            lng = atof(filename.toStdString().substr(colon+1, underscore_right -1 -colon).c_str());
+        }
+    }
+
+    clearGPSdata(gps_ret);
+    gps_ret.lat_coord.dec_form = lat;
+    gps_ret.long_coord.dec_form = lng;
+
+    return gps_ret;
 }

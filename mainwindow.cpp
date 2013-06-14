@@ -125,6 +125,10 @@ void MainWindow::init_view()
     QGraphicsScene *scene = new QGraphicsScene();
     imageView = new Image_Analyzer(scene);
 
+#ifdef GPS_FROM_FILENAME
+    imageView->tagger.gps_from_filename = true;
+#endif
+
     //add the graphics view to the layout
     ui->horizontalLayout->addWidget(imageView);
 
@@ -141,18 +145,12 @@ void MainWindow::init_view()
     //do this or nothing shows up!
     setCentralWidget(splitter);
 
-    //create actions for context menu
-    //QAction goto_gps(tr("Go-to GPS"), this);
-
-    //create context menu for listViews
-//    contextMenu_listView = new QMenu(tr("Context Menu"), this);
-//    contextMenu_listView->addAction(new QAction(tr("Go-To GPS"), this));
-
+    //create actions for available (watch) list view context menu
     contextMenu_availView = new QMenu(tr("Watch Context Menu"), this);
     contextMenu_availView->addAction(new QAction(tr("Go-To GPS"), this));
     contextMenu_availView->addAction(new QAction(tr("Add to priority"), this));
 
-
+    //create actions for priority list view context menu
     contextMenu_priorityView = new QMenu(tr("Priority Context Menu"), this);
     contextMenu_priorityView->addAction(new QAction(tr("Go-To GPS"), this));
     contextMenu_priorityView->addAction(new QAction(tr("Remove from priority"), this));
@@ -455,12 +453,18 @@ void MainWindow::putSelectedImageToDisplay(ImageSource source)
     {
         select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
 
+        //open the image
+        imageView->openImage(select);
+
         //set the image information box
         ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
     }
     else
     {
         select = imagePath +"/" + ui->listView_priorityImages->currentIndex().data().toString();
+
+        //open the image
+        imageView->openImage(select);
 
         //set the image information box
         ui->textBrowser_imageInfo_priority->setText(imageView->getFormattedTag());
@@ -472,8 +476,8 @@ void MainWindow::putSelectedImageToDisplay(ImageSource source)
     file_watcher->addPath(select);
 #endif
 
-    //open the image
-    imageView->openImage(select);
+//    //open the image
+//    imageView->openImage(select);
 }
 
 void MainWindow::fileChangedSlot(QString path)

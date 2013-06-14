@@ -32,7 +32,7 @@ private:
     Exiv2::Image::AutoPtr image;
 
 public:
-    bool dumpAllExif,  gps_found;
+    bool dumpAllExif, gps_found, gps_from_filename;
     GPS_data gps;
 
     Tag_Handler();
@@ -43,6 +43,8 @@ public:
     void convert_degMinSec(QString ratio, GPS_CoOrd &coord);
     QString getDegMinSec(GPS_CoOrd coord);
     qreal getDecForm(GPS_CoOrd CoOrd, QString ref);
+
+    GPS_data getGPS_fromFilename(QString filename);
 
     void clearGPSdata();
     void clearGPSdata(GPS_data &gpsData);

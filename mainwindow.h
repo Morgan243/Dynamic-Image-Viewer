@@ -17,7 +17,7 @@
 #include <QFileSystemWatcher>
 #include <marble/MarbleWidget.h>
 //#define FILE_WATCHER_ON 1
-
+#define GPS_FROM_FILENAME 1
 // #include <QExifImageHeader>
 //#include "xml_handler.h"
 
