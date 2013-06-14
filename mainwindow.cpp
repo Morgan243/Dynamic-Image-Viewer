@@ -145,9 +145,17 @@ void MainWindow::init_view()
     //QAction goto_gps(tr("Go-to GPS"), this);
 
     //create context menu for listViews
-    contextMenu_listView = new QMenu(tr("Context Menu"), this);
-    contextMenu_listView->addAction(new QAction(tr("Go-To GPS"), this));
+//    contextMenu_listView = new QMenu(tr("Context Menu"), this);
+//    contextMenu_listView->addAction(new QAction(tr("Go-To GPS"), this));
 
+    contextMenu_availView = new QMenu(tr("Watch Context Menu"), this);
+    contextMenu_availView->addAction(new QAction(tr("Go-To GPS"), this));
+    contextMenu_availView->addAction(new QAction(tr("Add to priority"), this));
+
+
+    contextMenu_priorityView = new QMenu(tr("Priority Context Menu"), this);
+    contextMenu_priorityView->addAction(new QAction(tr("Go-To GPS"), this));
+    contextMenu_priorityView->addAction(new QAction(tr("Remove from priority"), this));
 }
 
 void MainWindow::init_marble()
@@ -501,14 +509,16 @@ void MainWindow::dirChangedSlot(QString path)
 
 void MainWindow::showPriorityImagesContext(const QPoint &pos)
 {
+    //contextMenu_listView->addAction(new QAction(tr("Remove from priority"), this));
     handleListViewContext
-            (contextMenu_listView->exec(ui->listView_priorityImages->mapToGlobal(pos)));
+            (contextMenu_priorityView->exec(ui->listView_priorityImages->mapToGlobal(pos)));
 }
 
 void MainWindow::showAvailImagesContext(const QPoint &pos)
 {
+    //contextMenu_listView->addAction(new QAction(tr("Add to priority"), this));
     handleListViewContext
-            (contextMenu_listView->exec(ui->listView_availImages->mapToGlobal(pos)));
+            (contextMenu_availView->exec(ui->listView_availImages->mapToGlobal(pos)));
 }
 
 void MainWindow::handleListViewContext(QAction *selectedItem)
@@ -541,6 +551,15 @@ void MainWindow::handleListViewContext(QAction *selectedItem)
 
              mapWidget->zoomViewBy(2500);
          }
+         else if(selectedItem->text() == "Add to priority")
+         {
+            addPriorityLink(ui->listView_availImages->currentIndex().data().toString());
+         }
+         else if(selectedItem->text() == "Remove from priority")
+         {
+            removePriorityLink(ui->listView_priorityImages->currentIndex().data().toString());
+         }
+
     }
     else
     {

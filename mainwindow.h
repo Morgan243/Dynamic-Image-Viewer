@@ -127,6 +127,9 @@ private:
     Marble::MarbleWidget *mapWidget;
 
     QMenu *contextMenu_listView;
+    QMenu *contextMenu_availView, *contextMenu_priorityView;
+
+
 
     QString image_in_view;
     ImageSource source_of_view;
