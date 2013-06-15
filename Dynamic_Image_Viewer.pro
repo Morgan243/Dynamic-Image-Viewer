@@ -28,6 +28,7 @@ HEADERS  += mainwindow.h \
     config_parser.h \
     image_analyzer.h \
     tag_handler.h \
-    divfilesystemmodel.h
+    divfilesystemmodel.h \
+    Descriptors.h
 
 FORMS    += mainwindow.ui

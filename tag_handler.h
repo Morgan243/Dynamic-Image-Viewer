@@ -37,7 +37,7 @@ public:
 
     Tag_Handler();
     Tag_Handler(bool dumpExif); //true to output entire exif on parse
-    void loadTag(QString fileName);
+    bool loadTag(QString fileName);
     void parseTag();
 
     void convert_degMinSec(QString ratio, GPS_CoOrd &coord);

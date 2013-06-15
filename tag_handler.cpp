@@ -6,7 +6,7 @@ Tag_Handler::Tag_Handler()
     gps_from_filename = false;
 }
 
-void Tag_Handler::loadTag(QString fileName)
+bool Tag_Handler::loadTag(QString fileName)
 {
 
     //are we avoiding exif data?
@@ -20,18 +20,22 @@ void Tag_Handler::loadTag(QString fileName)
         image->readMetadata();
 
         exif_data = &image->exifData();
+
+        if(exif_data->empty())
+        {
+            std::cout<<"Exif tag empty!\n";
+            return false;
+        }
     }
     catch(Exiv2::AnyError& e)
     {
         std::cout<<e.what()<<std::endl;
         clearGPSdata();
+
+        return false;
     }
 
-    if(exif_data->empty())
-    {
-        std::cout<<"Exif tag empty!\n";
-        return;
-    }
+    return true;
 }
 
 void Tag_Handler::parseTag()

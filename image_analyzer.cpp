@@ -32,26 +32,28 @@ void Image_Analyzer::openImage(QString fileName)
     //scale window if needed
     fitToWindow(scaleToWindow);
 
-    tagger.loadTag(fileName);
-    tagger.parseTag();
-
-    QVector<QPointF> points = tagger.readPointsFromComment(fileName);
-
-    if(points.count() > MAX_MARKS)
+    if(tagger.loadTag(fileName))
     {
-        std::cout<< "Removing extra marks..."<<std::endl;
-        while(points.count() > MAX_MARKS)
+        tagger.parseTag();
+
+        QVector<QPointF> points = tagger.readPointsFromComment(fileName);
+
+        if(points.count() > MAX_MARKS)
         {
-            tagger.removePointInComment(fileName, points.at(0));
+            std::cout<< "Removing extra marks..."<<std::endl;
+            while(points.count() > MAX_MARKS)
+            {
+                tagger.removePointInComment(fileName, points.at(0));
 
-            points.remove(0);
+                points.remove(0);
+            }
         }
+
+        drawMarks(points);
+        //drawMarks(tagger.readPointsFromComment(fileName));
+
+        image_marks[fileName] = points;
     }
-
-    drawMarks(points);
-    //drawMarks(tagger.readPointsFromComment(fileName));
-
-    image_marks[fileName] = points;
     //if file has been marked, load the marks
 //    if(image_marks.contains(fileName))
 //        drawMarks(image_marks[fileName]);

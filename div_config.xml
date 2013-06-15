@@ -1,9 +1,9 @@
 <configuration>
     <watchDir>
-        <path>/home/morgan/Projects/UAV/crash_pics</path>
+        <path>/home/</path>
     </watchDir>
     <priorityDir>
-        <path>/home/morgan/Projects/UAV/crash_pics</path>
+        <path>/home/</path>
     </priorityDir>
     <options>
         <auto_select>on</auto_select>

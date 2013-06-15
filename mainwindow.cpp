@@ -4,10 +4,10 @@
 #include <QtGui>
 
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent, CLI_options *options) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    config_parser("div_config.xml")
+    config_parser(options->path_to_config)
 {
 
     ui->setupUi(this);

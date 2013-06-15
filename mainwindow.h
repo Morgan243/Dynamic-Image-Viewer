@@ -17,6 +17,7 @@
 #include <QFileSystemWatcher>
 #include <marble/MarbleWidget.h>
 #include "divfilesystemmodel.h"
+#include "Descriptors.h"
 //#define FILE_WATCHER_ON 1
 #define GPS_FROM_FILENAME 1
 // #include <QExifImageHeader>
@@ -39,7 +40,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0, CLI_options *options = 0);
     ~MainWindow();
     
 private slots:
