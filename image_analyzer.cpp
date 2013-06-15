@@ -2,11 +2,71 @@
 
 Image_Analyzer::Image_Analyzer(QGraphicsScene *scene)
     :QGraphicsView(scene) //init parent class
+
 {
     image_scene = scene;
     imgLoaded = scaleToWindow = false;
     scaleFactor = 1.0;
     mark_rad = 75;
+}
+
+Image_Analyzer::~Image_Analyzer()
+{
+    done = true;
+    loader_thread->join();
+}
+
+void Image_Analyzer::addEvent(ImgEvent event)
+{
+    event_lock.lock();
+        events.enqueue(event);
+    event_lock.unlock();
+}
+
+void Image_Analyzer::launchLoaderThread()
+{
+    loader_thread = new std::thread(&Image_Analyzer::runLoaderThread, this);
+}
+
+void Image_Analyzer::runLoaderThread()
+{
+    bool handle_ev = false;
+    ImgEvent current_event;
+        current_event.priorityImage = false;
+
+    while(!done)
+    {
+        //check the events queue
+        event_lock.lock();
+            if(!events.empty())
+            {
+                handle_ev = true;
+                current_event = events.dequeue();
+            }
+        event_lock.unlock();
+
+        //got a new event, parse it and do it
+        if(handle_ev)
+        {
+            std::cout<<"Loading an image: "<<qPrintable(current_event.option)<<std::endl;
+            //load image event
+            if(current_event.event == load)
+            {
+                //open the image! (time consuming part)
+                openImage(current_event.option);
+
+                //inform whoever connected
+                emit imageLoaded(current_event.option, current_event.priorityImage);
+            }
+            handle_ev = false;
+        }
+        //not ne event, do something else?
+        else
+        {
+
+        }
+        usleep(1500);
+    }
 }
 
 void Image_Analyzer::openImage(QString fileName)
@@ -54,9 +114,7 @@ void Image_Analyzer::openImage(QString fileName)
 
         image_marks[fileName] = points;
     }
-    //if file has been marked, load the marks
-//    if(image_marks.contains(fileName))
-//        drawMarks(image_marks[fileName]);
+
 
 }
 
@@ -221,3 +279,5 @@ void Image_Analyzer::drawMarks(QVector<QPointF> points)
         drawMark(points.at(i));
     }
 }
+
+

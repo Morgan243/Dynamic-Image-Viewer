@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent, CLI_options *options) :
 
     init_slots_signals();
 
+    imageView->launchLoaderThread();
+
 }
 
 MainWindow::~MainWindow()
@@ -138,6 +140,9 @@ void MainWindow::init_view()
 #ifdef GPS_FROM_FILENAME
     imageView->tagger.gps_from_filename = true;
 #endif
+
+    //connect to the the signal that lets us know the image loading thread finished loading
+    connect(imageView, SIGNAL(imageLoaded(QString, bool)),this, SLOT(imageFinishedLoading(QString, bool)));
 
     //add the graphics view to the layout
     ui->horizontalLayout->addWidget(imageView);
@@ -475,27 +480,38 @@ void MainWindow::putSelectedImageToDisplay(ImageSource source)
 {
     QString select;
 
+    ImgEvent ev;
+    ev.event = load;
+
+
     source_of_view = source;
     //decide where to grab image name from and where to put meta info
     if(source == watch)
     {
-        select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
+        ev.option = select = imagePath +"/" + ui->listView_availImages->currentIndex().data().toString();
+
+        ev.priorityImage = false;
+
+        //create event for loader thread
+        imageView->addEvent(ev);
 
         //open the image
-        imageView->openImage(select);
+        //imageView->openImage(select);
 
         //set the image information box
-        ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
+        //ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
     }
     else
     {
-        select = imagePath +"/" + ui->listView_priorityImages->currentIndex().data().toString();
+        ev.option = select = imagePath +"/" + ui->listView_priorityImages->currentIndex().data().toString();
 
+        //give event to loader
+        imageView->addEvent(ev);
         //open the image
-        imageView->openImage(select);
+        //imageView->openImage(select);
 
         //set the image information box
-        ui->textBrowser_imageInfo_priority->setText(imageView->getFormattedTag());
+        //ui->textBrowser_imageInfo_priority->setText(imageView->getFormattedTag());
     }
 
     image_in_view = select;
@@ -607,4 +623,16 @@ void MainWindow::updateFileLists()
 
     priorityFileModel->setRootPath("");
     priorityFileModel->setRootPath(priorityPath);
+}
+
+void MainWindow::imageFinishedLoading(QString filename, bool priorityImage)
+{
+    if(priorityImage)
+    {
+        //ui->textBrowser_imageInfo_priority->setText(imageView->getFormattedTag());
+    }
+    else
+    {
+        //ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
+    }
 }

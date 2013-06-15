@@ -15,6 +15,10 @@ TEMPLATE = app
 LIBS += -lexiv2
 LIBS += -lmarblewidget
 
+#for stdC++11 threads
+QMAKE_CXXFLAGS = -std=c++11
+LIBS += -pthread
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     xml_handler.cpp \

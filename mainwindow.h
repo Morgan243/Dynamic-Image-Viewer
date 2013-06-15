@@ -124,6 +124,8 @@ private slots:
     void handleListViewContext(QAction *selectedItem);
 
     void updateFileLists();
+
+    void imageFinishedLoading(QString filename, bool priorityImage);
 private:
 
     bool auto_select_top;
