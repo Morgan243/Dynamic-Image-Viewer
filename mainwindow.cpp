@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     config_parser("div_config.xml")
 {
+
     ui->setupUi(this);
 
     load_config();
@@ -86,14 +87,23 @@ void MainWindow::setup_paths(QString watch_path, QString priority_path)
 
 void MainWindow::init_fileModels()
 {
+//    //Set up the file model for the directory view (avail images)
+//    fileModel = new QFileSystemModel(this);
+//    fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
+//    fileModel->setRootPath(imagePath);
+
+//    //make the filemodel the available images listview's base model
+//    ui->listView_availImages->setModel(fileModel);
+//    ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
+
     //Set up the file model for the directory view (avail images)
-    fileModel = new QFileSystemModel(this);
-    fileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
-    fileModel->setRootPath(imagePath);
+    availFileModel = new DIVFileSystemModel(this);
+    availFileModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
+    availFileModel->setRootPath(imagePath);
 
     //make the filemodel the available images listview's base model
-    ui->listView_availImages->setModel(fileModel);
-    ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
+    ui->listView_availImages->setModel(availFileModel);
+    ui->listView_availImages->setRootIndex(availFileModel->setRootPath(imagePath));
 
     //set context menu to custom
     ui->listView_availImages->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -181,9 +191,9 @@ void MainWindow::init_user_options()
     ui->chkBx_FitToWindow->setChecked(imageView->scaleToWindow);
 
     if(main_config.reverse_sort)
-        fileModel->sort(0, Qt::DescendingOrder);
+        availFileModel->sort(0, Qt::DescendingOrder);
     else
-        fileModel->sort(0, Qt::AscendingOrder);
+        availFileModel->sort(0, Qt::AscendingOrder);
 
     ui->chkBox_reverseSort->setChecked(main_config.reverse_sort);
 }
@@ -204,12 +214,19 @@ void MainWindow::init_slots_signals()
     connect(availImg_sm,SIGNAL(selectionChanged(const QItemSelection & , const QItemSelection & )),this, SLOT(availImageList_selectionChange(const QItemSelection & , const QItemSelection & )));
 
     //connect rowsInserted signal to the filesInserted slot
-    connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(filesInserted(QModelIndex,int,int)));
+    //connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(filesInserted(QModelIndex,int,int)));
+    connect(availFileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(filesInserted(QModelIndex,int,int)));
 
     priorityImg_sm = ui->listView_priorityImages->selectionModel();
     connect(priorityImg_sm, SIGNAL(selectionChanged(const QItemSelection & , const QItemSelection &)), this, SLOT(priorityImageList_selectionChange(const QItemSelection & , const QItemSelection & )));
 
-    connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(priorityFilesInserted(QModelIndex,int,int)));
+    //connect(fileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(priorityFilesInserted(QModelIndex,int,int)));
+    connect(priorityFileModel,SIGNAL(rowsInserted(const QModelIndex & , int , int  )), this, SLOT(priorityFilesInserted(QModelIndex,int,int)));
+
+    file_poll = new QTimer(this);
+    connect(file_poll, SIGNAL(timeout()), this, SLOT(updateFileLists()));
+
+    file_poll->start(500);
 }
 
 //--Signals and slots for gui interfaces--
@@ -219,8 +236,10 @@ void MainWindow::on_chkBx_autSelectLatest_stateChanged(int arg1)
     if(arg1)
     {
         //select the top item in the list
-        ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
-        ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
+        //ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
+        //ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
+        ui->listView_availImages->setRootIndex(availFileModel->index(availFileModel->rootPath()));
+        ui->listView_availImages->setCurrentIndex(availFileModel->index(0,0,ui->listView_availImages->rootIndex()));
 
         auto_select_top = true;
     }
@@ -308,10 +327,14 @@ void MainWindow::on_actionOpen_Directory_triggered()
 
 
     imagePath = dir;
-    fileModel->setRootPath(imagePath);
+    //fileModel->setRootPath(imagePath);
+    availFileModel->setRootPath(imagePath);
 
-    ui->listView_availImages->setModel(fileModel);
-    ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
+    //ui->listView_availImages->setModel(fileModel);
+    //ui->listView_availImages->setRootIndex(fileModel->setRootPath(imagePath));
+
+    ui->listView_availImages->setModel(availFileModel);
+    ui->listView_availImages->setRootIndex(availFileModel->setRootPath(imagePath));
 
     //set both the same
     setup_paths(imagePath, imagePath);
@@ -353,9 +376,11 @@ void MainWindow::resizeEvent(QResizeEvent *)
 void MainWindow::on_chkBox_reverseSort_stateChanged(int arg1)
 {
     if(arg1)
-        fileModel->sort(0,Qt::DescendingOrder);
+        //fileModel->sort(0,Qt::DescendingOrder);
+        availFileModel->sort(0,Qt::DescendingOrder);
     else
-        fileModel->sort(0,Qt::AscendingOrder);
+        //fileModel->sort(0,Qt::AscendingOrder);
+        availFileModel->sort(0,Qt::AscendingOrder);
 }
 
 //remove userComment tag from all images
@@ -370,7 +395,7 @@ void MainWindow::on_listView_availImages_activated(const QModelIndex &index)
 {
     QString select = ui->listView_availImages->model()->index(0,0,index).data(Qt::DisplayRole).toString();
     ui->textBrowser_imageInfo_priority->append(select);
-    ui->textBrowser_imageInfo_priority->append("hello");
+    //ui->textBrowser_imageInfo_priority->append("hello");
 }
 
 void MainWindow::on_listView_availImages_indexesMoved(const QModelIndexList &indexes)
@@ -396,8 +421,11 @@ void MainWindow::filesInserted(const QModelIndex &parent, int start, int end)
 {
     if(auto_select_top)
     {
-        ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
-        ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
+        ui->listView_availImages->setRootIndex(availFileModel->index(availFileModel->rootPath()));
+        ui->listView_availImages->setCurrentIndex(availFileModel->index(0,0,ui->listView_availImages->rootIndex()));
+
+        //ui->listView_availImages->setRootIndex(fileModel->index(fileModel->rootPath()));
+        //ui->listView_availImages->setCurrentIndex(fileModel->index(0,0,ui->listView_availImages->rootIndex()));
     }
 }
 
@@ -569,4 +597,14 @@ void MainWindow::handleListViewContext(QAction *selectedItem)
     {
         std::cout<<"Nothing selected in context menu"<<std::endl;
     }
+}
+
+void MainWindow::updateFileLists()
+{
+   //init_fileModels();
+    availFileModel->setRootPath("");
+    availFileModel->setRootPath(imagePath);
+
+    priorityFileModel->setRootPath("");
+    priorityFileModel->setRootPath(priorityPath);
 }

@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <QFileSystemWatcher>
 #include <marble/MarbleWidget.h>
+#include "divfilesystemmodel.h"
 //#define FILE_WATCHER_ON 1
 #define GPS_FROM_FILENAME 1
 // #include <QExifImageHeader>
@@ -120,9 +121,13 @@ private slots:
     void showAvailImagesContext(const QPoint & pos);
 
     void handleListViewContext(QAction *selectedItem);
+
+    void updateFileLists();
 private:
 
     bool auto_select_top;
+
+    QTimer *file_poll;
 
     Marble::MarbleWidget *mapWidget;
 
@@ -143,6 +148,7 @@ private:
     QFileSystemModel *dirModel;
     QFileSystemModel *fileModel;
 
+    DIVFileSystemModel *availFileModel;
     QFileSystemModel *priorityFileModel;
 
     Image_Analyzer *imageView;

@@ -20,12 +20,14 @@ SOURCES += main.cpp\
     xml_handler.cpp \
     config_parser.cpp \
     image_analyzer.cpp \
-    tag_handler.cpp
+    tag_handler.cpp \
+    divfilesystemmodel.cpp
 
 HEADERS  += mainwindow.h \
     xml_handler.h \
     config_parser.h \
     image_analyzer.h \
-    tag_handler.h
+    tag_handler.h \
+    divfilesystemmodel.h
 
 FORMS    += mainwindow.ui
