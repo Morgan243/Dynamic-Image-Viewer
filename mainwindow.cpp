@@ -169,6 +169,8 @@ void MainWindow::init_view()
     contextMenu_priorityView = new QMenu(tr("Priority Context Menu"), this);
     contextMenu_priorityView->addAction(new QAction(tr("Go-To GPS"), this));
     contextMenu_priorityView->addAction(new QAction(tr("Remove from priority"), this));
+
+
 }
 
 void MainWindow::init_marble()
@@ -237,7 +239,7 @@ void MainWindow::init_slots_signals()
     file_poll = new QTimer(this);
     connect(file_poll, SIGNAL(timeout()), this, SLOT(updateFileLists()));
 
-    file_poll->start(500);
+    file_poll->start(800);
 }
 
 //--Signals and slots for gui interfaces--
