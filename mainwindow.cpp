@@ -169,6 +169,8 @@ void MainWindow::init_view()
     contextMenu_priorityView = new QMenu(tr("Priority Context Menu"), this);
     contextMenu_priorityView->addAction(new QAction(tr("Go-To GPS"), this));
     contextMenu_priorityView->addAction(new QAction(tr("Remove from priority"), this));
+
+
 }
 
 void MainWindow::init_marble()

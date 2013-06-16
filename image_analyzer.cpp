@@ -4,6 +4,7 @@ Image_Analyzer::Image_Analyzer(QGraphicsScene *scene)
     :QGraphicsView(scene) //init parent class
 
 {
+    done = false;
     image_scene = scene;
     imgLoaded = scaleToWindow = false;
     scaleFactor = 1.0;
@@ -14,6 +15,7 @@ Image_Analyzer::~Image_Analyzer()
 {
     done = true;
     loader_thread->join();
+
 }
 
 void Image_Analyzer::addEvent(ImgEvent event)
@@ -56,6 +58,7 @@ void Image_Analyzer::runLoaderThread()
             {
                 //open the image! (time consuming part)
                 item = openImage(current_event.option);
+
                 //inform whoever connected
                 emit imageLoaded(item, current_event.option, current_event.priorityImage);
             }
