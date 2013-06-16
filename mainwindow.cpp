@@ -239,7 +239,7 @@ void MainWindow::init_slots_signals()
     file_poll = new QTimer(this);
     connect(file_poll, SIGNAL(timeout()), this, SLOT(updateFileLists()));
 
-    //file_poll->start(1000);
+    file_poll->start(800);
 }
 
 //--Signals and slots for gui interfaces--
