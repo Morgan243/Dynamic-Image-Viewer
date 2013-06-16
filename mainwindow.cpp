@@ -142,7 +142,7 @@ void MainWindow::init_view()
 #endif
 
     //connect to the the signal that lets us know the image loading thread finished loading
-    connect(imageView, SIGNAL(imageLoaded(QString, bool)),this, SLOT(imageFinishedLoading(QString, bool)));
+    connect(imageView, SIGNAL(imageLoaded(QImage, QString, bool)),this, SLOT(imageFinishedLoading(QImage, QString, bool)));
 
     //add the graphics view to the layout
     ui->horizontalLayout->addWidget(imageView);
@@ -625,8 +625,11 @@ void MainWindow::updateFileLists()
     priorityFileModel->setRootPath(priorityPath);
 }
 
-void MainWindow::imageFinishedLoading(QString filename, bool priorityImage)
+void MainWindow::imageFinishedLoading(QImage item, QString filename, bool priorityImage)
 {
+    //convert to pixmap and apply
+    imageView->applyImage(item, filename);
+
     if(priorityImage)
     {
         //ui->textBrowser_imageInfo_priority->setText(imageView->getFormattedTag());

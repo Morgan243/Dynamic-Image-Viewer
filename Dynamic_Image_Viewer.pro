@@ -14,6 +14,7 @@ TEMPLATE = app
 
 LIBS += -lexiv2
 LIBS += -lmarblewidget
+LIBS += -lX11
 
 #for stdC++11 threads
 QMAKE_CXXFLAGS = -std=c++11

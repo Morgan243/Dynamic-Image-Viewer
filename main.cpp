@@ -2,6 +2,7 @@
 #include <QApplication>
 #include "Descriptors.h"
 #include "stdlib.h"
+#include <X11/Xlib.h>
 
 bool handleArgs(int argc, char *argv[], CLI_options &options);
 void printHelp();
@@ -9,6 +10,14 @@ QString GetEnv( const QString & var );
 
 int main(int argc, char *argv[])
 {
+    int x_o = XInitThreads();
+
+    if(!x_o)
+    {
+        std::cout<<"ERROR INITIALIZING X THREADS! EXITING!"<<std::endl;
+        return 0;
+    }
+
     CLI_options options;
     options.path_to_config = GetEnv("HOME") + "/.local/share/div_config.xml";
 

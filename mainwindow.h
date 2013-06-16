@@ -125,7 +125,7 @@ private slots:
 
     void updateFileLists();
 
-    void imageFinishedLoading(QString filename, bool priorityImage);
+    void imageFinishedLoading(QImage item, QString filename, bool priorityImage);
 private:
 
     bool auto_select_top;

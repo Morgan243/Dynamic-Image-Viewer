@@ -44,7 +44,9 @@ public:
 
     void runLoaderThread();
 
-    void openImage(QString fileName);
+    QImage openImage(QString fileName);
+
+    void applyImage(QImage item, QString fileName);
 
     void fitToWindow(bool fitToWindow);
 
@@ -63,7 +65,7 @@ public:
     void drawMark(QPointF point);
 
 signals:
-        void imageLoaded(QString fileName, bool priorityImg);
+        void imageLoaded(QImage item, QString fileName, bool priorityImg);
 
     public slots:
         void mousePressEvent(QMouseEvent * e);
