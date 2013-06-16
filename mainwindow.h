@@ -16,6 +16,11 @@
 #include <errno.h>
 #include <QFileSystemWatcher>
 #include <marble/MarbleWidget.h>
+#include <marble/GeoDataDocument.h>
+#include <marble/GeoDataPlacemark.h>
+#include <marble/GeoDataLineString.h>
+#include <marble/GeoDataTreeModel.h>
+#include <marble/MarbleModel.h>
 #include "divfilesystemmodel.h"
 #include "Descriptors.h"
 //#define FILE_WATCHER_ON 1
@@ -124,6 +129,10 @@ private slots:
     void handleListViewContext(QAction *selectedItem);
 
     void updateFileLists();
+
+    void geoUpdate(const QString st);
+
+    //void geoClick(qreal lon, qreal lat, GeoDataCoordinates::Unit unit);
 
     void imageFinishedLoading(QImage item, QString filename, bool priorityImage);
 private:

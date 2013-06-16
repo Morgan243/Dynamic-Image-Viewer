@@ -173,6 +173,8 @@ void MainWindow::init_view()
 
 void MainWindow::init_marble()
 {
+
+
     // Create a Marble QWidget without a parent
     mapWidget = new Marble::MarbleWidget();
 
@@ -181,8 +183,12 @@ void MainWindow::init_marble()
     //mapWidget->setMapThemeId("earth/mapquest-open-aerial/mapquest-open-aerial.dgml");
     mapWidget->setMapThemeId("earth/googlesat/googlesat.dgml");
 
-    ui->gridLayout_Mrable->addWidget(mapWidget);
+    //ui->gridLayout_Mrable->addWidget(mapWidget);
+    ui->verticalLayout->addWidget(mapWidget);
 
+    //mapWidget->projectionChanged();
+//    connect(mapWidget,SIGNAL(mouseMoveGeoPosition(QString)), this, SLOT(geoUpdate(QString)));
+    //connect(mapWidget, SIGNAL(mouseClickGeoPosition(qreal,qreal,GeoDataCoordinates::Unit)),thi, geoClick(qreal, qreal, GeoDataCoordinates::Unit);
 }
 
 void MainWindow::init_user_options()
@@ -595,7 +601,10 @@ void MainWindow::handleListViewContext(QAction *selectedItem)
              }
 
              mapWidget->setCenterLatitude(lat);
+             ui->doubleSpinBox_lat->setValue(lat);
+
              mapWidget->setCenterLongitude(lng);
+             ui->doubleSpinBox_lon->setValue(lng);
 
              mapWidget->zoomViewBy(2500);
          }
@@ -624,6 +633,13 @@ void MainWindow::updateFileLists()
     priorityFileModel->setRootPath("");
     priorityFileModel->setRootPath(priorityPath);
 }
+
+void MainWindow::geoUpdate(const QString st)
+{
+    std::cout<<"HERE: "<<qPrintable(st)<<std::endl;
+}
+
+
 
 void MainWindow::imageFinishedLoading(QImage item, QString filename, bool priorityImage)
 {
