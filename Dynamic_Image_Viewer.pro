@@ -14,6 +14,11 @@ TEMPLATE = app
 
 LIBS += -lexiv2
 LIBS += -lmarblewidget
+LIBS += -lX11
+
+#for stdC++11 threads
+QMAKE_CXXFLAGS = -std=c++11
+LIBS += -pthread
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -28,6 +33,7 @@ HEADERS  += mainwindow.h \
     config_parser.h \
     image_analyzer.h \
     tag_handler.h \
-    divfilesystemmodel.h
+    divfilesystemmodel.h \
+    Descriptors.h
 
 FORMS    += mainwindow.ui
