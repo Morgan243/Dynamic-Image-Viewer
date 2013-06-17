@@ -764,3 +764,12 @@ void MainWindow::on_actionExit_triggered()
 {
    QApplication::quit();
 }
+
+void MainWindow::on_pushButton_writeToCSV_clicked()
+{
+    QString file;
+
+    file = QFileDialog::getSaveFileName(0, "Save CSV of target spreadsheet", imagePath, "*.csv");
+
+    std::cout<<"You've selected "<<qPrintable(file)<<std::endl;
+}

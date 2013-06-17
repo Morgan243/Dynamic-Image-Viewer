@@ -29,6 +29,7 @@ class Image_Analyzer : public QGraphicsView
 public:
     double scaleFactor;
     bool scaleToWindow, imgLoaded, done;
+    bool file_is_priority;
 
     //image filenames as keys, list of points (for marks) as value
     QHash<QString, QVector<QPointF> > image_marks;
@@ -84,6 +85,7 @@ private:
     QQueue<ImgEvent> events;
 
     QString file_in_view;
+
 
     //pointer to images as loaded
     QGraphicsPixmapItem *item;

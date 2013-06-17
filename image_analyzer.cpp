@@ -60,6 +60,8 @@ void Image_Analyzer::runLoaderThread()
                 //open the image! (time consuming part)
                 item = openImage(current_event.option);
 
+                file_is_priority = current_event.priorityImage;
+
                 //inform whoever connected
                 emit imageLoaded(item, current_event.option, current_event.priorityImage);
             }
@@ -290,7 +292,12 @@ void Image_Analyzer::mousePressEvent(QMouseEvent *e)
     {
         tagger.clearComment(file_in_view);
 
-        openImage(file_in_view);
+        ImgEvent ev;
+        ev.event = load;
+        ev.option = file_in_view;
+        ev.priorityImage = file_is_priority;
+
+        addEvent(ev);
     }
 }
 

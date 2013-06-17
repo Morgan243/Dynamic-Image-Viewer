@@ -151,6 +151,8 @@ private slots:
 
     void on_actionExit_triggered();
 
+    void on_pushButton_writeToCSV_clicked();
+
 private:
 
     bool auto_select_top;
