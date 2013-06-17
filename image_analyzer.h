@@ -10,6 +10,7 @@
 #include <mutex>
 #include <QQueue>
 #include <unistd.h>
+#include <QLabel>
 #define MAX_MARKS 5
 
 enum Image_Event {load};
@@ -64,6 +65,8 @@ public:
 
     void drawMark(QPointF point);
 
+    QLabel *status_label;
+
 signals:
         void imageLoaded(QImage item, QString fileName, bool priorityImg);
 
@@ -86,6 +89,7 @@ private:
     QGraphicsPixmapItem *item;
 
     QGraphicsScene *image_scene;
+
 
 
 };

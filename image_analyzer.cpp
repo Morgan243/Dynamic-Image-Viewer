@@ -4,6 +4,7 @@ Image_Analyzer::Image_Analyzer(QGraphicsScene *scene)
     :QGraphicsView(scene) //init parent class
 
 {
+    status_label = new QLabel("Loading....");
     done = false;
     image_scene = scene;
     imgLoaded = scaleToWindow = false;
@@ -138,6 +139,7 @@ void Image_Analyzer::applyImage(QImage image, QString fileName)
     //scale window if needed
     fitToWindow(scaleToWindow);
 
+    status_label->setText("Viewing: " + fileName);
     if(tagger.loadTag(fileName))
     {
         tagger.parseTag();
@@ -295,10 +297,25 @@ void Image_Analyzer::wheelEvent(QWheelEvent *event)
 {
     if (event->modifiers().testFlag(Qt::ControlModifier))
     {
-        //setResizeAnchor(QGraphicsView::AnchorUnderMouse);
-        centerOn( mapToScene(event->pos()));
+        QRect portRect = this->viewport()->rect();
+        qreal width = portRect.width();//image_scene->width();
+        qreal height = portRect.height();//image_scene->height();
+        QPointF mouse_in_scene = mapToScene(event->pos());
+        qreal scale = 1.0 + event->delta()/1800.0;
+        mouse_in_scene.rx() -= width/2.0;
+        mouse_in_scene.ry() -= height/2.0;
+        mouse_in_scene *= scale;
 
-        scaleImage(1.0 + event->delta()/1800.0);
+        std::cout<<"Mouse X:"<< mouse_in_scene.rx()<<std::endl;
+        std::cout<<"Mouse Y:"<<mouse_in_scene.ry()<<std::endl;
+
+        std::cout<<"Width:"<<width<<std::endl;
+        std::cout<<"Height:"<<height<<std::endl;
+
+        //setResizeAnchor(QGraphicsView::AnchorUnderMouse);
+
+        scaleImage(scale);
+        centerOn( mouse_in_scene );
     }
     else
     {

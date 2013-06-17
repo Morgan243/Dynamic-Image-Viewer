@@ -355,11 +355,71 @@
        <layout class="QGridLayout" name="gridLayout_8">
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="0">
-           <widget class="QGroupBox" name="groupBox_imageName">
-            <property name="title">
-             <string>Image Containing Target</string>
+          <item row="1" column="0">
+           <widget class="QGroupBox" name="groupBox_GPS_Coord">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>145</height>
+             </size>
             </property>
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="title">
+             <string>GPS Coordinates of Target in Image</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_10">
+             <item row="1" column="0">
+              <widget class="QGroupBox" name="groupBox">
+               <property name="font">
+                <font>
+                 <italic>true</italic>
+                </font>
+               </property>
+               <property name="title">
+                <string>Latitude</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_11">
+                <item row="0" column="0">
+                 <widget class="QLineEdit" name="lineEdit_targetLat"/>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QPushButton" name="pushButton_grabFromGlobe">
+               <property name="text">
+                <string>Grab GPS from Globe</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QGroupBox" name="groupBox_2">
+               <property name="font">
+                <font>
+                 <italic>true</italic>
+                </font>
+               </property>
+               <property name="title">
+                <string>Longitude</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_12">
+                <item row="0" column="0">
+                 <widget class="QLineEdit" name="lineEdit_targetLon"/>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+            <zorder>groupBox_imageName</zorder>
+            <zorder>groupBox_imageName</zorder>
+            <zorder>pushButton_grabFromGlobe</zorder>
+            <zorder>groupBox</zorder>
+            <zorder>groupBox_2</zorder>
            </widget>
           </item>
           <item row="2" column="0">
@@ -374,8 +434,22 @@
              <item row="1" column="0">
               <widget class="QLineEdit" name="lineEdit"/>
              </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="label_alphaColor">
+               <property name="text">
+                <string>Alpha Numeric Color</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_backgroundColor">
+               <property name="text">
+                <string>Background color</string>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="0">
-              <widget class="QLabel" name="label">
+              <widget class="QLabel" name="label_backgroundShape">
                <property name="maximumSize">
                 <size>
                  <width>16777215</width>
@@ -383,21 +457,101 @@
                 </size>
                </property>
                <property name="text">
-                <string>TextLabel</string>
+                <string>Background Shape</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLineEdit" name="lineEdit_5"/>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_alphanumeric">
+               <property name="text">
+                <string>Alphanumeric</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="0">
+              <widget class="QLabel" name="label_orientation">
+               <property name="text">
+                <string>Orientation</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLineEdit" name="lineEdit_6"/>
+             </item>
+             <item row="7" column="0">
+              <widget class="QLineEdit" name="lineEdit_7"/>
+             </item>
+             <item row="10" column="0">
+              <widget class="QLineEdit" name="lineEdit_8"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QGroupBox" name="groupBox_imageName">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>100</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="title">
+             <string>Image Containing Target</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QComboBox" name="comboBox_priorityImageSelect">
+               <property name="minimumSize">
+                <size>
+                 <width>150</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEdit_2">
+               <property name="maximumSize">
+                <size>
+                 <width>500</width>
+                 <height>16777215</height>
+                </size>
                </property>
               </widget>
              </item>
             </layout>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QGroupBox" name="groupBox_GPS_Coord">
-            <property name="title">
-             <string>GPS Coordinates of Target in Image</string>
-            </property>
-           </widget>
-          </item>
          </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="pushButton_WriteTarget">
+          <property name="text">
+           <string>CONFIRM TARGET</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>Colored_Bullseye.png</normaloff>Colored_Bullseye.png</iconset>
+          </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QTableWidget" name="tableWidget_targets"/>
         </item>
        </layout>
       </widget>
@@ -405,7 +559,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -446,6 +599,7 @@
    <addaction name="menuSettings"/>
    <addaction name="menuActions"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen_Image">
    <property name="text">
     <string>Open Image</string>

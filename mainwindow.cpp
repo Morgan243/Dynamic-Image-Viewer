@@ -3,6 +3,19 @@
 
 #include <QtGui>
 
+//SOE
+//qreal lat = 37.54511833;
+//qreal lng = -77.45010667;
+
+
+//qreal lat = 37.336218;
+//qreal lng = -77.236913;
+
+//SUAS Competition Site
+//qreal lat = 38.150475;
+//qreal lng = -76.424932;
+#define DEF_LAT 37.336218
+#define DEF_LON -77.236913
 
 MainWindow::MainWindow(QWidget *parent, CLI_options *options) :
     QMainWindow(parent),
@@ -20,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent, CLI_options *options) :
 
     init_view();
 
+    init_table();
+
     init_marble();
 
     init_user_options();
@@ -27,7 +42,6 @@ MainWindow::MainWindow(QWidget *parent, CLI_options *options) :
     init_slots_signals();
 
     imageView->launchLoaderThread();
-
 }
 
 MainWindow::~MainWindow()
@@ -123,12 +137,19 @@ void MainWindow::init_fileModels()
     ui->listView_priorityImages->setModel(priorityFileModel);
     ui->listView_priorityImages->setRootIndex(priorityFileModel->setRootPath(priorityPath));
 
+    ui->comboBox_priorityImageSelect->setModel(priorityFileModel);
+    ui->comboBox_priorityImageSelect->setRootModelIndex(priorityFileModel->setRootPath(priorityPath));
+
     //set context menu to custom
     ui->listView_priorityImages->setContextMenuPolicy(Qt::CustomContextMenu);
 
     //setup a slot for the context menu
     connect(ui->listView_priorityImages, SIGNAL(customContextMenuRequested(QPoint)),
             SLOT(showPriorityImagesContext(const QPoint &)));
+
+    //QLabel *status_label = new QLabel("Hi There");
+
+
 }
 
 void MainWindow::init_view()
@@ -136,6 +157,8 @@ void MainWindow::init_view()
     //Create graphics scene (where images are shown)
     QGraphicsScene *scene = new QGraphicsScene();
     imageView = new Image_Analyzer(scene);
+
+    ui->statusBar->addWidget(imageView->status_label);
 
 #ifdef GPS_FROM_FILENAME
     imageView->tagger.gps_from_filename = true;
@@ -173,10 +196,16 @@ void MainWindow::init_view()
 
 }
 
+void MainWindow::init_table()
+{
+    QStringList header = {"Image Alpha. Alpha. ","Color Back. Shape Back. color"};
+
+    ui->tableWidget_targets->setHorizontalHeaderLabels(header);
+
+}
+
 void MainWindow::init_marble()
 {
-
-
     // Create a Marble QWidget without a parent
     mapWidget = new Marble::MarbleWidget();
 
@@ -188,9 +217,18 @@ void MainWindow::init_marble()
     //ui->gridLayout_Mrable->addWidget(mapWidget);
     ui->verticalLayout->addWidget(mapWidget);
 
+
     //mapWidget->projectionChanged();
 //    connect(mapWidget,SIGNAL(mouseMoveGeoPosition(QString)), this, SLOT(geoUpdate(QString)));
     //connect(mapWidget, SIGNAL(mouseClickGeoPosition(qreal,qreal,GeoDataCoordinates::Unit)),thi, geoClick(qreal, qreal, GeoDataCoordinates::Unit);
+
+    //mapWidget->setCenterLatitude(lat);
+    ui->doubleSpinBox_lat->setValue(DEF_LAT);
+
+    //mapWidget->setCenterLongitude(lng);
+    ui->doubleSpinBox_lon->setValue(DEF_LON);
+
+    mapWidget->zoomViewBy(2500);
 }
 
 void MainWindow::init_user_options()
@@ -241,6 +279,7 @@ void MainWindow::init_slots_signals()
 
     file_poll->start(800);
 }
+
 
 //--Signals and slots for gui interfaces--
 void MainWindow::on_chkBx_autSelectLatest_stateChanged(int arg1)
@@ -593,8 +632,8 @@ void MainWindow::handleListViewContext(QAction *selectedItem)
             // qreal lng = -77.236913;
 
              //SUAS Competition Site
-             qreal lat = 38.150475;
-             qreal lng = -76.424932;
+             qreal lat = DEF_LAT;
+             qreal lng = DEF_LON;
 
              if(imageView->tagger.gps_found)
              {
@@ -602,10 +641,10 @@ void MainWindow::handleListViewContext(QAction *selectedItem)
                  lng = imageView->tagger.gps.long_coord.dec_form;
              }
 
-             mapWidget->setCenterLatitude(lat);
+             //mapWidget->setCenterLatitude(lat);
              ui->doubleSpinBox_lat->setValue(lat);
 
-             mapWidget->setCenterLongitude(lng);
+             //mapWidget->setCenterLongitude(lng);
              ui->doubleSpinBox_lon->setValue(lng);
 
              mapWidget->zoomViewBy(2500);
@@ -641,8 +680,6 @@ void MainWindow::geoUpdate(const QString st)
     std::cout<<"HERE: "<<qPrintable(st)<<std::endl;
 }
 
-
-
 void MainWindow::imageFinishedLoading(QImage item, QString filename, bool priorityImage)
 {
     //convert to pixmap and apply
@@ -656,4 +693,25 @@ void MainWindow::imageFinishedLoading(QImage item, QString filename, bool priori
     {
         //ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
     }
+}
+
+void MainWindow::on_doubleSpinBox_lat_valueChanged(double arg1)
+{
+    mapWidget->setCenterLatitude(arg1);
+}
+
+void MainWindow::on_doubleSpinBox_lon_valueChanged(double arg1)
+{
+    mapWidget->setCenterLongitude(arg1);
+}
+
+void MainWindow::on_mouseMoveGeoPosition(QString st)
+{
+
+}
+
+void MainWindow::on_pushButton_grabFromGlobe_clicked()
+{
+    ui->lineEdit_targetLat->setText(QString::number(mapWidget->centerLatitude()));
+    ui->lineEdit_targetLon->setText(QString::number(mapWidget->centerLongitude()));
 }

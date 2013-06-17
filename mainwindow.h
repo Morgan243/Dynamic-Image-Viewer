@@ -58,6 +58,8 @@ private slots:
 
     void init_view();
 
+    void init_table();
+
     void init_marble();
 
     void init_user_options();
@@ -135,6 +137,14 @@ private slots:
     //void geoClick(qreal lon, qreal lat, GeoDataCoordinates::Unit unit);
 
     void imageFinishedLoading(QImage item, QString filename, bool priorityImage);
+    void on_doubleSpinBox_lat_valueChanged(double arg1);
+
+    void on_doubleSpinBox_lon_valueChanged(double arg1);
+
+    void on_mouseMoveGeoPosition(QString st);
+
+    void on_pushButton_grabFromGlobe_clicked();
+
 private:
 
     bool auto_select_top;
@@ -145,8 +155,6 @@ private:
 
     QMenu *contextMenu_listView;
     QMenu *contextMenu_availView, *contextMenu_priorityView;
-
-
 
     QString image_in_view;
     ImageSource source_of_view;
