@@ -140,6 +140,7 @@ void Image_Analyzer::applyImage(QImage image, QString fileName)
     fitToWindow(scaleToWindow);
 
     status_label->setText("Viewing: " + fileName);
+
     if(tagger.loadTag(fileName))
     {
         tagger.parseTag();

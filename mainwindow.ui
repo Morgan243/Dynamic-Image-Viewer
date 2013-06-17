@@ -40,9 +40,13 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
+       <attribute name="icon">
+        <iconset>
+         <normaloff>Camera.png</normaloff>Camera.png</iconset>
+       </attribute>
        <attribute name="title">
         <string>Image Management</string>
        </attribute>
@@ -93,6 +97,10 @@
              <property name="text">
               <string>Zoom Out</string>
              </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>zoom_out.png</normaloff>zoom_out.png</iconset>
+             </property>
             </widget>
            </item>
            <item row="0" column="0" colspan="2">
@@ -117,12 +125,20 @@
              <property name="text">
               <string>Add</string>
              </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>arrow_right.png</normaloff>arrow_right.png</iconset>
+             </property>
             </widget>
            </item>
            <item row="1" column="1">
             <widget class="QPushButton" name="pushBtn_ZoomIn">
              <property name="text">
               <string>Zoom In</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>zoom_in.png</normaloff>zoom_in.png</iconset>
              </property>
             </widget>
            </item>
@@ -156,6 +172,16 @@
             <widget class="QPushButton" name="pushBtn_remove">
              <property name="text">
               <string>Remove</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>arrow_left.png</normaloff>arrow_left.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -260,6 +286,10 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tab_2">
+       <attribute name="icon">
+        <iconset>
+         <normaloff>globe.png</normaloff>globe.png</iconset>
+       </attribute>
        <attribute name="title">
         <string>Cross Reference Globe</string>
        </attribute>
@@ -349,6 +379,10 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tab_3">
+       <attribute name="icon">
+        <iconset>
+         <normaloff>document_folder.png</normaloff>document_folder.png</iconset>
+       </attribute>
        <attribute name="title">
         <string>Target Documentation</string>
        </attribute>
@@ -359,7 +393,7 @@
            <widget class="QGroupBox" name="groupBox_GPS_Coord">
             <property name="maximumSize">
              <size>
-              <width>16777215</width>
+              <width>300</width>
               <height>145</height>
              </size>
             </property>
@@ -415,8 +449,6 @@
               </widget>
              </item>
             </layout>
-            <zorder>groupBox_imageName</zorder>
-            <zorder>groupBox_imageName</zorder>
             <zorder>pushButton_grabFromGlobe</zorder>
             <zorder>groupBox</zorder>
             <zorder>groupBox_2</zorder>
@@ -424,6 +456,12 @@
           </item>
           <item row="2" column="0">
            <widget class="QGroupBox" name="groupBox_targetDescription">
+            <property name="maximumSize">
+             <size>
+              <width>300</width>
+              <height>300</height>
+             </size>
+            </property>
             <property name="title">
              <string>Target Descritption</string>
             </property>
@@ -432,7 +470,7 @@
             </property>
             <layout class="QGridLayout" name="gridLayout_9">
              <item row="1" column="0">
-              <widget class="QLineEdit" name="lineEdit"/>
+              <widget class="QLineEdit" name="lineEdit_backgroundShape"/>
              </item>
              <item row="6" column="0">
               <widget class="QLabel" name="label_alphaColor">
@@ -462,7 +500,7 @@
               </widget>
              </item>
              <item row="3" column="0">
-              <widget class="QLineEdit" name="lineEdit_5"/>
+              <widget class="QLineEdit" name="lineEdit_backgroundColor"/>
              </item>
              <item row="4" column="0">
               <widget class="QLabel" name="label_alphanumeric">
@@ -479,13 +517,13 @@
               </widget>
              </item>
              <item row="5" column="0">
-              <widget class="QLineEdit" name="lineEdit_6"/>
+              <widget class="QLineEdit" name="lineEdit_alpha"/>
              </item>
              <item row="7" column="0">
-              <widget class="QLineEdit" name="lineEdit_7"/>
+              <widget class="QLineEdit" name="lineEdit_alphaColor"/>
              </item>
              <item row="10" column="0">
-              <widget class="QLineEdit" name="lineEdit_8"/>
+              <widget class="QLineEdit" name="lineEdit_orientation"/>
              </item>
             </layout>
            </widget>
@@ -494,7 +532,7 @@
            <widget class="QGroupBox" name="groupBox_imageName">
             <property name="maximumSize">
              <size>
-              <width>16777215</width>
+              <width>300</width>
               <height>100</height>
              </size>
             </property>
@@ -507,24 +545,44 @@
             <property name="title">
              <string>Image Containing Target</string>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
+            <layout class="QGridLayout" name="gridLayout_13">
+             <item row="1" column="0">
               <widget class="QComboBox" name="comboBox_priorityImageSelect">
                <property name="minimumSize">
                 <size>
-                 <width>150</width>
+                 <width>120</width>
                  <height>0</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>Image Path</string>
+               </property>
               </widget>
              </item>
-             <item>
-              <widget class="QLineEdit" name="lineEdit_2">
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="lineEdit_imageName">
                <property name="maximumSize">
                 <size>
                  <width>500</width>
                  <height>16777215</height>
                 </size>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QRadioButton" name="radioButton_fromPriority">
+               <property name="text">
+                <string>Select from Priority</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QRadioButton" name="radioButton_customImageString">
+               <property name="text">
+                <string>Manual Image Name</string>
                </property>
               </widget>
              </item>
@@ -553,6 +611,17 @@
         <item row="0" column="1">
          <widget class="QTableWidget" name="tableWidget_targets"/>
         </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="pushButton_writeToCSV">
+          <property name="text">
+           <string>Export to CSV</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>move-waiting-down-alternative.png</normaloff>move-waiting-down-alternative.png</iconset>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </widget>
@@ -574,6 +643,7 @@
     </property>
     <addaction name="actionOpen_Image"/>
     <addaction name="actionOpen_Directory"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -623,6 +693,11 @@
   <action name="actionFrom_ALL">
    <property name="text">
     <string>From ALL</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
    </property>
   </action>
  </widget>

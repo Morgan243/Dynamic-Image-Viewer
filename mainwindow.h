@@ -145,9 +145,16 @@ private slots:
 
     void on_pushButton_grabFromGlobe_clicked();
 
+    void on_comboBox_priorityImageSelect_currentIndexChanged(const QString &arg1);
+
+    void on_pushButton_WriteTarget_clicked();
+
+    void on_actionExit_triggered();
+
 private:
 
     bool auto_select_top;
+    int current_row;
 
     QTimer *file_poll;
 

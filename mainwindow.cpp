@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent, CLI_options *options) :
     config_parser(options->path_to_config)
 {
 
+    current_row = 0;
+
     ui->setupUi(this);
 
     load_config();
@@ -198,10 +200,12 @@ void MainWindow::init_view()
 
 void MainWindow::init_table()
 {
-    QStringList header = {"Image Alpha. Alpha. ","Color Back. Shape Back. color"};
+    QStringList header = {"Image Name","LAT, LON", "Alpha.", "Alpha. Color", "Back. Shape", "Back. color", "Orientation"};
 
+
+    ui->tableWidget_targets->setRowCount(20);
+    ui->tableWidget_targets->setColumnCount(7);
     ui->tableWidget_targets->setHorizontalHeaderLabels(header);
-
 }
 
 void MainWindow::init_marble()
@@ -351,18 +355,6 @@ void MainWindow::on_actionOpen_Image_triggered()
     ui->textBrowser_ImageInfo->setText(imageView->getFormattedTag());
 }
 
-void MainWindow::on_doubleSpinBx_scaleFactor_valueChanged(double arg1)
-{
-    //scale to the spin box value
-    imageView->scaleImage(arg1/imageView->scaleFactor);
-}
-
-void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
-{
-    scrollBar->setValue(int(factor * scrollBar->value()
-                            + ((factor - 1) * scrollBar->pageStep()/2)));
-}
-
 void MainWindow::on_actionOpen_Directory_triggered()
 {
      QString dir;
@@ -395,7 +387,24 @@ void MainWindow::on_actionOpen_Directory_triggered()
 
     ui->listView_priorityImages->setModel(priorityFileModel);
     ui->listView_priorityImages->setRootIndex(priorityFileModel->setRootPath(priorityPath));
+
+    ui->comboBox_priorityImageSelect->setModel(priorityFileModel);
+    ui->comboBox_priorityImageSelect->setRootModelIndex(priorityFileModel->setRootPath(priorityPath));
 }
+
+void MainWindow::on_doubleSpinBx_scaleFactor_valueChanged(double arg1)
+{
+    //scale to the spin box value
+    imageView->scaleImage(arg1/imageView->scaleFactor);
+}
+
+void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
+{
+    scrollBar->setValue(int(factor * scrollBar->value()
+                            + ((factor - 1) * scrollBar->pageStep()/2)));
+}
+
+
 
 void MainWindow::on_pushBtn_add_clicked()
 {
@@ -712,6 +721,46 @@ void MainWindow::on_mouseMoveGeoPosition(QString st)
 
 void MainWindow::on_pushButton_grabFromGlobe_clicked()
 {
-    ui->lineEdit_targetLat->setText(QString::number(mapWidget->centerLatitude()));
-    ui->lineEdit_targetLon->setText(QString::number(mapWidget->centerLongitude()));
+    ui->lineEdit_targetLat->setText(QString::number(mapWidget->centerLatitude(), 'f', 10));
+    ui->lineEdit_targetLon->setText(QString::number(mapWidget->centerLongitude(), 'f', 10));
+}
+
+void MainWindow::on_comboBox_priorityImageSelect_currentIndexChanged(const QString &arg1)
+{
+    ui->comboBox_priorityImageSelect->setToolTip(arg1);
+}
+
+void MainWindow::on_pushButton_WriteTarget_clicked()
+{
+    if(ui->radioButton_fromPriority->isChecked())
+        ui->tableWidget_targets->setItem(current_row,0,
+                                         new QTableWidgetItem(ui->comboBox_priorityImageSelect->currentText()));
+    else
+        ui->tableWidget_targets->setItem(current_row,0,
+                                         new QTableWidgetItem(ui->lineEdit_imageName->text()));
+
+    ui->tableWidget_targets->setItem(current_row,1,
+                                     new QTableWidgetItem(ui->lineEdit_targetLat->text() +" , " + ui->lineEdit_targetLon->text()));
+
+    ui->tableWidget_targets->setItem(current_row, 2,
+                                     new QTableWidgetItem(ui->lineEdit_alpha->text()));
+
+    ui->tableWidget_targets->setItem(current_row, 3,
+                                     new QTableWidgetItem(ui->lineEdit_alphaColor->text()));
+
+    ui->tableWidget_targets->setItem(current_row,4,
+                                     new QTableWidgetItem(ui->lineEdit_backgroundShape->text()));
+
+    ui->tableWidget_targets->setItem(current_row,5,
+                                     new QTableWidgetItem(ui->lineEdit_backgroundColor->text()));
+
+    ui->tableWidget_targets->setItem(current_row,6,
+                                     new QTableWidgetItem(ui->lineEdit_orientation->text()));
+
+    current_row++;
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+   QApplication::quit();
 }
