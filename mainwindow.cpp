@@ -195,6 +195,8 @@ void MainWindow::init_view()
     contextMenu_priorityView->addAction(new QAction(tr("Go-To GPS"), this));
     contextMenu_priorityView->addAction(new QAction(tr("Remove from priority"), this));
 
+    splitter->setSizes({150,500});
+    //splitter->setStretchFactor(0,0);
 
 }
 

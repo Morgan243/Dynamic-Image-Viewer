@@ -35,7 +35,7 @@
      <widget class="QTabWidget" name="tabWidget">
       <property name="maximumSize">
        <size>
-        <width>900</width>
+        <width>1070</width>
         <height>16777215</height>
        </size>
       </property>
