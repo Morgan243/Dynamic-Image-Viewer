@@ -612,14 +612,55 @@
          <widget class="QTableWidget" name="tableWidget_targets"/>
         </item>
         <item row="1" column="1">
-         <widget class="QPushButton" name="pushButton_writeToCSV">
-          <property name="text">
-           <string>Export to CSV</string>
+         <widget class="QGroupBox" name="groupBox_exportOptions">
+          <property name="title">
+           <string>Target Export Options</string>
           </property>
-          <property name="icon">
-           <iconset>
-            <normaloff>move-waiting-down-alternative.png</normaloff>move-waiting-down-alternative.png</iconset>
-          </property>
+          <layout class="QGridLayout" name="gridLayout_14">
+           <item row="0" column="5">
+            <widget class="QPushButton" name="pushButton_reload">
+             <property name="text">
+              <string>Refresh</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>refresh.png</normaloff>refresh.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLineEdit" name="lineEdit">
+             <property name="maximumSize">
+              <size>
+               <width>200</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="6">
+            <widget class="QPushButton" name="pushButton_updateCSV">
+             <property name="text">
+              <string>Update CSV</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>move-waiting-down-alternative.png</normaloff>move-waiting-down-alternative.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QPushButton" name="pushButton_selectCSV">
+             <property name="text">
+              <string>Select Output File</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>folder.png</normaloff>folder.png</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>

@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent, CLI_options *options) :
     config_parser(options->path_to_config)
 {
 
+    csv_selected = false;
+
     current_row = 0;
 
     ui->setupUi(this);
@@ -769,9 +771,30 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_pushButton_writeToCSV_clicked()
 {
+
+    while(!csv_selected)
+    {
+        on_pushButton_selectCSV_clicked();
+    }
+
+    if(csv_selected)
+    {
+
+    }
+}
+
+void MainWindow::on_pushButton_selectCSV_clicked()
+{
     QString file;
 
     file = QFileDialog::getSaveFileName(0, "Save CSV of target spreadsheet", imagePath, "*.csv");
 
     std::cout<<"You've selected "<<qPrintable(file)<<std::endl;
+
+    csv_selected = true;
+}
+
+void MainWindow::on_pushButton_reload_clicked()
+{
+
 }

@@ -153,9 +153,13 @@ private slots:
 
     void on_pushButton_writeToCSV_clicked();
 
+    void on_pushButton_selectCSV_clicked();
+
+    void on_pushButton_reload_clicked();
+
 private:
 
-    bool auto_select_top;
+    bool auto_select_top, csv_selected;
     int current_row;
 
     QTimer *file_poll;
