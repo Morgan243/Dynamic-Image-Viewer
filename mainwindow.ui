@@ -389,73 +389,17 @@
        <layout class="QGridLayout" name="gridLayout_8">
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_7">
-          <item row="1" column="0">
-           <widget class="QGroupBox" name="groupBox_GPS_Coord">
-            <property name="maximumSize">
-             <size>
-              <width>300</width>
-              <height>145</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="title">
-             <string>GPS Coordinates of Target in Image</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_10">
-             <item row="1" column="0">
-              <widget class="QGroupBox" name="groupBox">
-               <property name="font">
-                <font>
-                 <italic>true</italic>
-                </font>
-               </property>
-               <property name="title">
-                <string>Latitude</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_11">
-                <item row="0" column="0">
-                 <widget class="QLineEdit" name="lineEdit_targetLat"/>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QPushButton" name="pushButton_grabFromGlobe">
-               <property name="text">
-                <string>Grab GPS from Globe</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QGroupBox" name="groupBox_2">
-               <property name="font">
-                <font>
-                 <italic>true</italic>
-                </font>
-               </property>
-               <property name="title">
-                <string>Longitude</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_12">
-                <item row="0" column="0">
-                 <widget class="QLineEdit" name="lineEdit_targetLon"/>
-                </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
-            <zorder>pushButton_grabFromGlobe</zorder>
-            <zorder>groupBox</zorder>
-            <zorder>groupBox_2</zorder>
-           </widget>
-          </item>
+          <property name="horizontalSpacing">
+           <number>6</number>
+          </property>
           <item row="2" column="0">
            <widget class="QGroupBox" name="groupBox_targetDescription">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="maximumSize">
              <size>
               <width>300</width>
@@ -470,7 +414,14 @@
             </property>
             <layout class="QGridLayout" name="gridLayout_9">
              <item row="1" column="0">
-              <widget class="QLineEdit" name="lineEdit_backgroundShape"/>
+              <widget class="QLineEdit" name="lineEdit_backgroundShape">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </widget>
              </item>
              <item row="6" column="0">
               <widget class="QLabel" name="label_alphaColor">
@@ -500,7 +451,14 @@
               </widget>
              </item>
              <item row="3" column="0">
-              <widget class="QLineEdit" name="lineEdit_backgroundColor"/>
+              <widget class="QLineEdit" name="lineEdit_backgroundColor">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </widget>
              </item>
              <item row="4" column="0">
               <widget class="QLabel" name="label_alphanumeric">
@@ -517,23 +475,217 @@
               </widget>
              </item>
              <item row="5" column="0">
-              <widget class="QLineEdit" name="lineEdit_alpha"/>
+              <widget class="QLineEdit" name="lineEdit_alpha">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </widget>
              </item>
              <item row="7" column="0">
-              <widget class="QLineEdit" name="lineEdit_alphaColor"/>
+              <widget class="QLineEdit" name="lineEdit_alphaColor">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </widget>
              </item>
              <item row="10" column="0">
-              <widget class="QLineEdit" name="lineEdit_orientation"/>
+              <widget class="QLineEdit" name="lineEdit_orientation">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QGroupBox" name="groupBox_GPS_Coord">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>340</width>
+              <height>129</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="title">
+             <string>GPS Coordinates of Target in Image</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_10">
+             <item row="1" column="0">
+              <widget class="QGroupBox" name="groupBox">
+               <property name="font">
+                <font>
+                 <italic>true</italic>
+                </font>
+               </property>
+               <property name="title">
+                <string>Latitude</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_11">
+                <item row="0" column="0">
+                 <widget class="QLineEdit" name="lineEdit_targetLat">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QPushButton" name="pushButton_grabFromGlobe">
+               <property name="text">
+                <string>Grab GPS from Globe</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QGroupBox" name="groupBox_2">
+               <property name="font">
+                <font>
+                 <italic>true</italic>
+                </font>
+               </property>
+               <property name="title">
+                <string>Longitude</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_12">
+                <item row="0" column="0">
+                 <widget class="QLineEdit" name="lineEdit_targetLon">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+            <zorder>pushButton_grabFromGlobe</zorder>
+            <zorder>groupBox</zorder>
+            <zorder>groupBox_2</zorder>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QGroupBox" name="groupBox_exportOptions">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>300</width>
+              <height>90</height>
+             </size>
+            </property>
+            <property name="title">
+             <string>Target Export Options</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_14">
+             <item row="0" column="5">
+              <widget class="QPushButton" name="pushButton_reload">
+               <property name="maximumSize">
+                <size>
+                 <width>100</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Refresh</string>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>refresh.png</normaloff>refresh.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLineEdit" name="lineEdit_csvOutput">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QPushButton" name="pushButton_selectCSV">
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Select Output File</string>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>folder.png</normaloff>folder.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="5">
+              <widget class="QPushButton" name="pushButton_updateCSV">
+               <property name="text">
+                <string>Update CSV</string>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>move-waiting-down-alternative.png</normaloff>move-waiting-down-alternative.png</iconset>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
           </item>
           <item row="0" column="0">
            <widget class="QGroupBox" name="groupBox_imageName">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>300</width>
-              <height>100</height>
+              <width>340</width>
+              <height>85</height>
              </size>
             </property>
             <property name="font">
@@ -561,6 +713,12 @@
              </item>
              <item row="1" column="1">
               <widget class="QLineEdit" name="lineEdit_imageName">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
                <property name="maximumSize">
                 <size>
                  <width>500</width>
@@ -581,87 +739,53 @@
              </item>
              <item row="0" column="1">
               <widget class="QRadioButton" name="radioButton_customImageString">
+               <property name="minimumSize">
+                <size>
+                 <width>150</width>
+                 <height>0</height>
+                </size>
+               </property>
                <property name="text">
-                <string>Manual Image Name</string>
+                <string>Manual Name</string>
                </property>
               </widget>
              </item>
             </layout>
            </widget>
           </item>
+          <item row="3" column="0">
+           <widget class="QPushButton" name="pushButton_WriteTarget">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>290</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>CONFIRM TARGET</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>Colored_Bullseye.png</normaloff>Colored_Bullseye.png</iconset>
+            </property>
+            <property name="default">
+             <bool>false</bool>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
-        </item>
-        <item row="1" column="0">
-         <widget class="QPushButton" name="pushButton_WriteTarget">
-          <property name="text">
-           <string>CONFIRM TARGET</string>
-          </property>
-          <property name="icon">
-           <iconset>
-            <normaloff>Colored_Bullseye.png</normaloff>Colored_Bullseye.png</iconset>
-          </property>
-          <property name="default">
-           <bool>false</bool>
-          </property>
-          <property name="flat">
-           <bool>false</bool>
-          </property>
-         </widget>
         </item>
         <item row="0" column="1">
          <widget class="QTableWidget" name="tableWidget_targets"/>
-        </item>
-        <item row="1" column="1">
-         <widget class="QGroupBox" name="groupBox_exportOptions">
-          <property name="title">
-           <string>Target Export Options</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_14">
-           <item row="0" column="5">
-            <widget class="QPushButton" name="pushButton_reload">
-             <property name="text">
-              <string>Refresh</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>refresh.png</normaloff>refresh.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLineEdit" name="lineEdit">
-             <property name="maximumSize">
-              <size>
-               <width>200</width>
-               <height>16777215</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="6">
-            <widget class="QPushButton" name="pushButton_updateCSV">
-             <property name="text">
-              <string>Update CSV</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>move-waiting-down-alternative.png</normaloff>move-waiting-down-alternative.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QPushButton" name="pushButton_selectCSV">
-             <property name="text">
-              <string>Select Output File</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>folder.png</normaloff>folder.png</iconset>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
         </item>
        </layout>
       </widget>

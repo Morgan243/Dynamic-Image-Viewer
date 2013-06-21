@@ -25,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent, CLI_options *options) :
 
     csv_selected = false;
 
+    csvFilename = "";
+
     current_row = 0;
 
     ui->setupUi(this);
@@ -199,13 +201,11 @@ void MainWindow::init_view()
 
     splitter->setSizes({150,500});
     //splitter->setStretchFactor(0,0);
-
 }
 
 void MainWindow::init_table()
 {
-    QStringList header = {"Image Name","LAT, LON", "Alpha.", "Alpha. Color", "Back. Shape", "Back. color", "Orientation"};
-
+    header = {"Image Name","LAT, LON", "Alpha.", "Alpha. Color", "Back. Shape", "Back. color", "Orientation"};
 
     ui->tableWidget_targets->setRowCount(20);
     ui->tableWidget_targets->setColumnCount(7);
@@ -736,32 +736,37 @@ void MainWindow::on_comboBox_priorityImageSelect_currentIndexChanged(const QStri
 
 void MainWindow::on_pushButton_WriteTarget_clicked()
 {
+    QStringList fields;
+
+    //populate a list of the fields
     if(ui->radioButton_fromPriority->isChecked())
-        ui->tableWidget_targets->setItem(current_row,0,
-                                         new QTableWidgetItem(ui->comboBox_priorityImageSelect->currentText()));
+    {
+        fields = {ui->comboBox_priorityImageSelect->currentText(),
+                  ui->lineEdit_targetLat->text() +" :: " + ui->lineEdit_targetLon->text(),
+                  ui->lineEdit_alpha->text(),
+                  ui->lineEdit_alphaColor->text(),
+                  ui->lineEdit_backgroundShape->text(),
+                  ui->lineEdit_backgroundColor->text(),
+                  ui->lineEdit_orientation->text()};
+
+    }
     else
-        ui->tableWidget_targets->setItem(current_row,0,
-                                         new QTableWidgetItem(ui->lineEdit_imageName->text()));
+    {
+        fields = {ui->lineEdit_imageName->text(),
+                  ui->lineEdit_targetLat->text() +" :: " + ui->lineEdit_targetLon->text(),
+                  ui->lineEdit_alpha->text(),
+                  ui->lineEdit_alphaColor->text(),
+                  ui->lineEdit_backgroundShape->text(),
+                  ui->lineEdit_backgroundColor->text(),
+                  ui->lineEdit_orientation->text()};
+    }
 
-    ui->tableWidget_targets->setItem(current_row,1,
-                                     new QTableWidgetItem(ui->lineEdit_targetLat->text() +" , " + ui->lineEdit_targetLon->text()));
+    //add it to the table
+    appendRowToTable(fields);
 
-    ui->tableWidget_targets->setItem(current_row, 2,
-                                     new QTableWidgetItem(ui->lineEdit_alpha->text()));
+    rows.push_back(fields);
 
-    ui->tableWidget_targets->setItem(current_row, 3,
-                                     new QTableWidgetItem(ui->lineEdit_alphaColor->text()));
-
-    ui->tableWidget_targets->setItem(current_row,4,
-                                     new QTableWidgetItem(ui->lineEdit_backgroundShape->text()));
-
-    ui->tableWidget_targets->setItem(current_row,5,
-                                     new QTableWidgetItem(ui->lineEdit_backgroundColor->text()));
-
-    ui->tableWidget_targets->setItem(current_row,6,
-                                     new QTableWidgetItem(ui->lineEdit_orientation->text()));
-
-    current_row++;
+    //current_row++;
 }
 
 void MainWindow::on_actionExit_triggered()
@@ -779,22 +784,119 @@ void MainWindow::on_pushButton_writeToCSV_clicked()
 
     if(csv_selected)
     {
-
+        for(int i = 0; i < rows.count(); i++)
+        {
+            appendRowToFile(rows.at(i));
+        }
     }
 }
 
 void MainWindow::on_pushButton_selectCSV_clicked()
 {
-    QString file;
+    csvFilename = QFileDialog::getSaveFileName(0, "Save CSV of target spreadsheet", imagePath, "*.csv");
 
-    file = QFileDialog::getSaveFileName(0, "Save CSV of target spreadsheet", imagePath, "*.csv");
-
-    std::cout<<"You've selected "<<qPrintable(file)<<std::endl;
+    std::cout<<"You've selected "<<qPrintable(csvFilename)<<std::endl;
 
     csv_selected = true;
+
+    ui->lineEdit_csvOutput->setText(csvFilename);
+
+    ui->lineEdit_csvOutput->setToolTip(csvFilename);
+
+    on_pushButton_reload_clicked();
 }
 
 void MainWindow::on_pushButton_reload_clicked()
 {
+    //open the csv
+    QFile csv(csvFilename);
+    rows.clear();
 
+    if(!csv.open(QIODevice::ReadOnly))
+    {
+        QMessageBox::information(0,"error opening: "+ csvFilename,csv.errorString());
+        return;
+    }
+    else
+    {
+        ui->tableWidget_targets->clear();
+        writeHeaderToTable();
+        current_row = 0;
+    }
+
+    QTextStream inStream(&csv);
+    QString line;
+    QStringList fields;
+    while(!inStream.atEnd())
+    {
+        line = inStream.readLine();
+        fields = line.split(",");
+        appendRowToTable(fields);
+    }
+
+    csv.close();
+}
+
+void MainWindow::appendRowToTable(QStringList row)
+{
+    for(int i = 0; i < 7; i++)
+    {
+        ui->tableWidget_targets->setItem(current_row, i,
+                                         new QTableWidgetItem(row[i]));
+    }
+
+    current_row++;
+}
+
+void MainWindow::appendRowToFile(QStringList row)
+{
+    //open the csv
+    QFile csv(csvFilename);
+
+    if(!csv.open(QIODevice::ReadWrite| QIODevice::Append | QIODevice::Text))
+    {
+        QMessageBox::information(0,"error opening: "+ csvFilename,csv.errorString());
+    }
+//    else
+//        ui->tableWidget_targets->clear();
+
+    QTextStream out(&csv);
+
+    out<<row[0]<<","<<row[1]<<","<<row[2]<<","<<row[3]<<","<<row[4]<<","<<row[5]<<","<<row[6]<<"\n";
+
+
+    csv.close();
+}
+
+void MainWindow::on_pushButton_updateCSV_clicked()
+{
+    while(!csv_selected)
+    {
+        on_pushButton_selectCSV_clicked();
+    }
+
+    if(csv_selected)
+    {
+        for(int i = 0; i < rows.count(); i++)
+        {
+            appendRowToFile(rows.at(i));
+        }
+    }
+}
+
+void MainWindow::on_lineEdit_csvOutput_editingFinished()
+{
+    csvFilename = ui->lineEdit_csvOutput->text();
+
+    ui->lineEdit_csvOutput->setToolTip(csvFilename);
+}
+
+void MainWindow::writeHeaderToFile()
+{
+    appendRowToFile(header);
+}
+
+void MainWindow::writeHeaderToTable()
+{
+    ui->tableWidget_targets->setHorizontalHeaderLabels(header);
 }

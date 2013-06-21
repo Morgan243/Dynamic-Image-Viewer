@@ -157,6 +157,17 @@ private slots:
 
     void on_pushButton_reload_clicked();
 
+    void appendRowToTable(QStringList row);
+
+    void appendRowToFile(QStringList row);
+    void on_pushButton_updateCSV_clicked();
+
+    void on_lineEdit_csvOutput_editingFinished();
+
+    void writeHeaderToFile();
+
+    void writeHeaderToTable();
+
 private:
 
     bool auto_select_top, csv_selected;
@@ -201,6 +212,11 @@ private:
     Configuration main_config;
 
     Config_Parser config_parser;
+
+    QString csvFilename;
+    QVector<QStringList> rows;
+    QStringList header;
+
 };
 
 #endif // MAINWINDOW_H
