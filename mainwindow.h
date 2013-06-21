@@ -168,6 +168,8 @@ private slots:
 
     void writeHeaderToTable();
 
+    void on_pushButton_updateGPS_clicked();
+
 private:
 
     bool auto_select_top, csv_selected;

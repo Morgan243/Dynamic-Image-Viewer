@@ -14,8 +14,8 @@
 //SUAS Competition Site
 //qreal lat = 38.150475;
 //qreal lng = -76.424932;
-#define DEF_LAT 37.336218
-#define DEF_LON -77.236913
+#define DEF_LAT 38.150475
+#define DEF_LON -76.424932
 
 MainWindow::MainWindow(QWidget *parent, CLI_options *options) :
     QMainWindow(parent),
@@ -899,4 +899,10 @@ void MainWindow::writeHeaderToFile()
 void MainWindow::writeHeaderToTable()
 {
     ui->tableWidget_targets->setHorizontalHeaderLabels(header);
+}
+
+void MainWindow::on_pushButton_updateGPS_clicked()
+{
+    ui->doubleSpinBox_lat->setValue(mapWidget->centerLatitude());
+    ui->doubleSpinBox_lon->setValue(mapWidget->centerLongitude());
 }
